@@ -1,5 +1,8 @@
 module.exports = {
     extends: './node_modules/@megafon/frontend-presets/eslint',
+    rules: {
+        'react/react-in-jsx-scope': ['off'],
+    },
     settings: {
         'import/resolver': {
             node: {
