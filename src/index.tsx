@@ -1,12 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './styles/normalize.css';
+import { Provider } from 'react-redux';
+import './styles/normalize.pcss';
 import './styles/variables.css';
 import App from './components/App/App';
+import { store } from './store';
 
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <Provider store={store}>
+            <App />
+        </Provider>
     </React.StrictMode>,
     document.getElementById('root'),
 );

@@ -2,6 +2,7 @@ module.exports = {
     extends: './node_modules/@megafon/frontend-presets/eslint',
     rules: {
         'react/react-in-jsx-scope': ['off'],
+        'no-param-reassign': ['off'],
     },
     settings: {
         'import/resolver': {
