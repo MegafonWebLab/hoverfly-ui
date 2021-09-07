@@ -5,8 +5,8 @@ import {
     useSelector as moduleSelector,
     useStore as moduleStore,
 } from 'react-redux';
-import type { ApiType } from '../api';
 import type { RootState, AppDispatch } from '.';
+import { ApiType } from '../api/types';
 
 export const useDispatch = (): ThunkDispatch<RootState, ApiType, AnyAction> & Dispatch<AnyAction> =>
     moduleDispatch<AppDispatch>();

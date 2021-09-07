@@ -1,7 +1,5 @@
 import hoverfly from 'api/hoverfly';
-import type { IHoverflyApi } from './hoverfly/types';
-
-export type ApiType = { hoverfly: IHoverflyApi };
+import { ApiType } from './types';
 
 const baseURL = 'http://localhost:8888';
 

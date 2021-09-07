@@ -1,17 +1,17 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import type { MainInfo, ThunkApiConfig } from 'api/types';
+import type { DeleteCache, ThunkApiConfig } from 'api/types';
 import { IRequestState, IRequestStateFailed, IRequestStateSuccess } from '../types';
 
-export type IMainState = IRequestState<MainInfo>;
+export type ICacheState = IRequestState<DeleteCache>;
 
-const initialState: IMainState = {
+const initialState: ICacheState = {
     type: 'idle',
 };
 
-export const loadMainAsync = createAsyncThunk<MainInfo, void, ThunkApiConfig>(
-    'main/fetchMain',
+export const deleteCacheAsync = createAsyncThunk<DeleteCache, void, ThunkApiConfig>(
+    'cache/deleteCache',
     async (_: unknown, thunkAPI) => {
-        const { data } = await thunkAPI.extra.hoverfly.fetchMainInfo();
+        const { data } = await thunkAPI.extra.hoverfly.fetchDeleteCache();
 
         if (data) {
             return data;
@@ -22,24 +22,24 @@ export const loadMainAsync = createAsyncThunk<MainInfo, void, ThunkApiConfig>(
 );
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export const mainSlice = createSlice<IMainState, {}, 'main'>({
-    name: 'main',
+export const cacheSlice = createSlice<ICacheState, {}, 'cache'>({
+    name: 'cache',
     initialState,
     reducers: {},
     extraReducers: builder => {
         builder
-            .addCase(loadMainAsync.pending, state => {
+            .addCase(deleteCacheAsync.pending, state => {
                 state.type = 'pending';
             })
-            .addCase(loadMainAsync.fulfilled, (state: IRequestStateSuccess<MainInfo>, action) => {
+            .addCase(deleteCacheAsync.fulfilled, (state: IRequestStateSuccess<DeleteCache>, action) => {
                 state.type = 'success';
                 state.value = action.payload;
             })
-            .addCase(loadMainAsync.rejected, (state: IRequestStateFailed, action) => {
+            .addCase(deleteCacheAsync.rejected, (state: IRequestStateFailed, action) => {
                 state.type = 'failed';
                 state.error = action.error.message || '';
             });
     },
 });
 
-export default mainSlice.reducer;
+export default cacheSlice.reducer;

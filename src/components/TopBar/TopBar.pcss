@@ -1,5 +1,36 @@
+$b: .topbar;
 
-$b: '.topbar';
-.topbar {
-    background: #cccccc;
+$(b) {
+    padding: 16px;
+
+    background: #DEF7FA;
+
+    &__version {
+        font-size: 12px;
+    }
+
+    &__buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+
+        @media (--mobileBU) {
+            flex-direction: row;
+            justify-content: flex-end;
+        }
+    }
+
+    &__button {
+        display: block;
+        width: 150px;
+
+        &:first-child {
+            margin-bottom: 8px;
+
+            @media (--mobileBU) {
+                margin-right: 8px;
+                margin-bottom: 0;
+            }
+        }
+    }
 }

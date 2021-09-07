@@ -1,8 +1,8 @@
 import React from 'react';
 import './App.css';
-import { useDispatch } from '../../store/hooks';
-import { loadMainAsync } from '../../store/main/mainSlice';
-import TopBar from '../TopBar/TopBar';
+import TopBar from 'components/TopBar/TopBar';
+import { useDispatch } from 'store/hooks';
+import { loadMainAsync } from 'store/main/mainSlice';
 
 function App(): JSX.Element {
     const dispatch = useDispatch();
