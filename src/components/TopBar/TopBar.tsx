@@ -31,7 +31,7 @@ const TopBar: React.FC = () => {
             <GridColumn all="6">
                 <Header as="h2">Hoverfly-ui</Header>
                 <div className={cn('version')}>Server: {server}</div>
-                <div className={cn('version')}>UI: v1.0.0</div>
+                <div className={cn('version')}>UI: v0.0.1-beta</div>
             </GridColumn>
             <GridColumn all="6">
                 <div className={cn('buttons')}>
