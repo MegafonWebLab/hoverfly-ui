@@ -3,12 +3,14 @@ import api from 'api';
 import cache from './cache/cacheSlicet';
 import main from './main/mainSlice';
 import shutdown from './shutdown/shutdownSlice';
+import status from './status/statusSlice';
 
 export const store = configureStore({
     reducer: {
         main,
         shutdown,
         cache,
+        status,
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({

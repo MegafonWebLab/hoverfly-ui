@@ -74,4 +74,5 @@ export interface IHoverflyApi {
     fetchMainInfo(): Promise<IRequestResponse<MainInfo>>;
     fetchDeleteCache(): Promise<IRequestResponse<DeleteCache>>;
     fetchShutdown(): Promise<IRequestResponse<void>>;
+    fetchHealtCheck(): Promise<IRequestResponse<{ message: string }>>;
 }

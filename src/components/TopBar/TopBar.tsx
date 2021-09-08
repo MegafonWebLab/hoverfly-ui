@@ -12,7 +12,8 @@ const TopBar: React.FC = () => {
     const mainInfo = useSelector(state => state.main);
     const cacheState = useSelector(state => state.cache);
     const shutdownState = useSelector(state => state.shutdown);
-    const server = mainInfo.type === 'success' ? mainInfo.value.version : '';
+    const statusState = useSelector(state => state.status.value);
+    const server = mainInfo.type === 'success' ? mainInfo.value.version : '*.*.*';
     const hasCachePending = cacheState.type === 'pending';
     const hasShutdownPending = shutdownState.type === 'pending';
 
@@ -30,7 +31,9 @@ const TopBar: React.FC = () => {
         <Grid className={cn()} vAlign="center">
             <GridColumn all="6">
                 <Header as="h2">Hoverfly-ui</Header>
-                <div className={cn('version')}>Server: {server}</div>
+                <div className={cn('version')}>
+                    Server: {server}, status: {statusState ? 'green' : 'red'}
+                </div>
                 <div className={cn('version')}>UI: v0.0.1-beta</div>
             </GridColumn>
             <GridColumn all="6">
@@ -41,6 +44,7 @@ const TopBar: React.FC = () => {
                         type="outline"
                         theme="purple"
                         showLoader={hasCachePending}
+                        disabled={!statusState}
                         onClick={handleClickCache}
                     >
                         Clear cache
@@ -51,6 +55,7 @@ const TopBar: React.FC = () => {
                         type="outline"
                         theme="black"
                         showLoader={hasShutdownPending}
+                        disabled={!statusState}
                         onClick={handleClickShutdown}
                     >
                         Shutdown
