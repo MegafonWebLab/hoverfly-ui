@@ -1,9 +1,14 @@
 import React from 'react';
-import './App.css';
+import './App.pcss';
+import { Grid, GridColumn } from '@megafon/ui-core';
+import { cnCreate } from '@megafon/ui-helpers';
+import Layout from 'components/Layout/Layout';
 import TopBar from 'components/TopBar/TopBar';
 import { useDispatch } from 'store/hooks';
 import { fetchStatusAsync } from 'store/status/statusSlice';
+import StateManagement from '../StateManagement/StateManagement';
 
+const cn = cnCreate('app');
 function App(): JSX.Element {
     const dispatch = useDispatch();
 
@@ -12,10 +17,17 @@ function App(): JSX.Element {
     }, [dispatch]);
 
     return (
-        <div>
+        <Layout>
             <TopBar />
-            <div>Hoverfly-ui</div>
-        </div>
+            <div>
+                <Grid>
+                    <GridColumn className={cn('left-column')} all="3">
+                        <StateManagement />
+                    </GridColumn>
+                    <GridColumn all="9">content</GridColumn>
+                </Grid>
+            </div>
+        </Layout>
     );
 }
 

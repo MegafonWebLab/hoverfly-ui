@@ -25,6 +25,8 @@ export interface IRequest {
     instance: any;
     get: <T>(url: string, options?: IRequestConfig) => Promise<IRequestResponse<T>>;
     post: <T>(url: string, params: any, options?: IRequestConfig) => Promise<IRequestResponse<T>>;
+    put: <T>(url: string, params: any, options?: IRequestConfig) => Promise<IRequestResponse<T>>;
+    patch: <T>(url: string, params: any, options?: IRequestConfig) => Promise<IRequestResponse<T>>;
     delete: <T>(url: string, options?: IRequestConfig) => Promise<IRequestResponse<T>>;
 }
 
@@ -69,10 +71,15 @@ export type MainInfo = {
 };
 
 export type DeleteCache = { cache: string | null };
+export type ServerState = { state: Record<string, string> };
 
 export interface IHoverflyApi {
     fetchMainInfo(): Promise<IRequestResponse<MainInfo>>;
     fetchDeleteCache(): Promise<IRequestResponse<DeleteCache>>;
     fetchShutdown(): Promise<IRequestResponse<void>>;
     fetchHealtCheck(): Promise<IRequestResponse<{ message: string }>>;
+    fetchServerState(): Promise<IRequestResponse<ServerState>>;
+    deleteServerState(): Promise<IRequestResponse<void>>;
+    addServerState(data: ServerState): Promise<IRequestResponse<ServerState>>;
+    updateServerState(data: ServerState): Promise<IRequestResponse<ServerState>>;
 }

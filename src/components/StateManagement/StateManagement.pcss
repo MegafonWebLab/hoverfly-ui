@@ -1,0 +1,72 @@
+$b: .state-management;
+
+$(b) {
+    &__title {
+        margin-bottom: 8px;
+    }
+
+    &__list {
+        margin-bottom: 16px;
+    }
+
+    &__list-item {
+        display: flex;
+        align-items: center;
+
+        margin-bottom: 8px;
+    }
+
+    &__edit-buttons {
+        margin-right: 16px;
+    }
+
+    &__icon-button {
+        width: 24px;
+        height: 24px;
+
+        &:first-child {
+            margin-right: 4px;
+        }
+    }
+
+    &__minus-icon,
+    &__edit-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    &__key-value {
+        display: flex;
+
+        font-size: 16px;
+    }
+
+    &__name,
+    &__value {
+        display: inline-block;
+        max-width: 70px;
+        overflow: hidden;
+
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    &__field {
+        max-width: 70px;
+        min-height: 24px;
+
+        padding: 0;
+    }
+
+    &__plus-button {
+        margin-bottom: 8px;
+    }
+
+    &__action-buttons {
+        display: flex;
+    }
+
+    &__add-button {
+        margin-right: 8px;
+    }
+}

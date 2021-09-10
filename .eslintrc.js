@@ -9,6 +9,15 @@ module.exports = {
                 allowFunctions: true,
             },
         ],
+        '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+        'no-magic-numbers': [
+            'error',
+            {
+                ignore: [0, 1],
+                ignoreArrayIndexes: true,
+                ignoreDefaultValues: true,
+            },
+        ],
         'import/order': [
             'error',
             {

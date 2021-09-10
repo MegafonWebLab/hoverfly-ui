@@ -17,6 +17,14 @@ class AxiosRequest implements IRequest {
         return this.instance.post(url, data, options);
     }
 
+    put<T>(url: string, data: any, options?: IRequestConfig): Promise<T> {
+        return this.instance.put(url, data, options);
+    }
+
+    patch<T>(url: string, data: any, options?: IRequestConfig): Promise<T> {
+        return this.instance.patch(url, data, options);
+    }
+
     delete<T>(url: string, options?: IRequestConfig): Promise<T> {
         return this.instance.delete(url, options);
     }

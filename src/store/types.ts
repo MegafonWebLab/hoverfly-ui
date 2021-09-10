@@ -13,4 +13,8 @@ export interface IRequestStateSuccess<T> {
     type: 'success';
 }
 
-export type IRequestState<T> = IRequestStateSuccess<T> | IRequestStateIdle | IRequestStatePending | IRequestStateFailed;
+export type IRequestState<T = null> =
+    | IRequestStateSuccess<T>
+    | IRequestStateIdle
+    | IRequestStatePending
+    | IRequestStateFailed;

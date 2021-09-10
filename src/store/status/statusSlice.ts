@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { ThunkApiConfig } from 'api/types';
 import { loadMainAsync } from 'store/main/mainSlice';
+import { getServerStateAsync } from '../serverState/serverStateSlice';
 
 const DISPATCH_SECODS = 10000;
 
@@ -20,6 +21,7 @@ export const fetchStatusAsync = createAsyncThunk<IStatusState, void, ThunkApiCon
         await thunkAPI.extra.hoverfly.fetchHealtCheck();
         if (!thunkAPI.getState().status.value) {
             thunkAPI.dispatch(loadMainAsync());
+            thunkAPI.dispatch(getServerStateAsync());
         }
 
         return { value: true };
