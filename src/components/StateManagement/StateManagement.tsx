@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Header, TextField } from '@megafon/ui-core';
+import { Button, Grid, GridColumn, Header, TextField } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
 import { ReactComponent as Edit } from '@megafon/ui-icons/basic-16-edit_16.svg';
 import { ReactComponent as Minus } from '@megafon/ui-icons/system-16-minus_16.svg';
@@ -149,12 +149,23 @@ const StateManagement: React.FC = () => {
             </div>
             <Button className={cn('plus-button')} sizeAll="small" icon={<Plus />} onClick={handleClickPlus} />
             <div className={cn('action-buttons')}>
-                <Button className={cn('add-button')} onClick={handleClickAdd} sizeAll="small" disabled={!statusState}>
-                    {hasServerState ? 'Update' : 'Add'}
-                </Button>
-                <Button onClick={handleClickClear} sizeAll="small" theme="purple" disabled={!statusState}>
-                    Clear
-                </Button>
+                <Grid>
+                    <GridColumn all="5" mobile="12" tablet="12">
+                        <Button
+                            className={cn('add-button')}
+                            onClick={handleClickAdd}
+                            sizeAll="small"
+                            disabled={!statusState}
+                        >
+                            {hasServerState ? 'Update' : 'Add'}
+                        </Button>
+                    </GridColumn>
+                    <GridColumn all="5" mobile="12" tablet="12">
+                        <Button onClick={handleClickClear} sizeAll="small" theme="purple" disabled={!statusState}>
+                            Clear
+                        </Button>
+                    </GridColumn>
+                </Grid>
             </div>
         </div>
     );
