@@ -1,5 +1,5 @@
 import createRequest from '../axiosRequest';
-import type { DeleteCache, IHoverflyApi, IRequestResponse, MainInfo, ServerState } from '../types';
+import type { DeleteCache, IHoverflyApi, IRequestResponse, MainInfo, ModeState, ServerState } from '../types';
 
 type ApiCreate = {
     baseURL: string;
@@ -34,6 +34,12 @@ const hoverflyApi = ({ baseURL }: ApiCreate): IHoverflyApi => {
         },
         deleteServerState(): Promise<IRequestResponse<void>> {
             return instance.delete('/v2/state');
+        },
+        fetchMode(): Promise<IRequestResponse<ModeState>> {
+            return instance.get('/v2/hoverfly/mode');
+        },
+        updateMode(data: ModeState): Promise<IRequestResponse<ModeState>> {
+            return instance.put('/v2/hoverfly/mode', data);
         },
     };
 };

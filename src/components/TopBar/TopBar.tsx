@@ -2,7 +2,7 @@ import React from 'react';
 import './TopBar.pcss';
 import { Button, Grid, GridColumn, Header } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
-import { deleteCacheAsync } from 'store/cache/cacheSlicet';
+import { deleteCacheAsync } from 'store/cache/cacheSlice';
 import { useDispatch, useSelector } from 'store/hooks';
 import { deleteShutdownAsync } from 'store/shutdown/shutdownSlice';
 

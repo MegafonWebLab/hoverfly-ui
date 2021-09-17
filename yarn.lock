@@ -1495,10 +1495,10 @@
   resolved "https://registry.yarnpkg.com/@megafon/frontend-presets/-/frontend-presets-3.1.0.tgz#9ae92e72b3fe07bcd9f16922fe251d2c9445d70d"
   integrity sha512-bulfSV0u0/KYDv90XUlGPMJ6ka/KiJxlsqdXzs0SGeABW2v402/RcrbQZKKJ+IEYGJ0O8YQ9ZVP4dOxmKndk7Q==
 
-"@megafon/ui-core@^2.0.0-beta.154":
-  version "2.0.0-beta.154"
-  resolved "https://registry.yarnpkg.com/@megafon/ui-core/-/ui-core-2.0.0-beta.154.tgz#58a67826587b4ab96397d7caac4ba0a873b9abc7"
-  integrity sha512-DLvNgVDSePlpEjh468ePv0bXhKOdCIcZFcw5ehvINroYtFQDF6a3NE/5NCZvMCRZJvXm6iE5PMJoqEWR/kMCIQ==
+"@megafon/ui-core@^2.0.0-beta.155":
+  version "2.0.0-beta.155"
+  resolved "https://registry.yarnpkg.com/@megafon/ui-core/-/ui-core-2.0.0-beta.155.tgz#bf050f22bf2b04d9eb9f4f041787f0cb5a42d288"
+  integrity sha512-Ja0gpaTdSUmrHYI+vspYDCBIdFC4rx6evAAA5siVm7fvahCoce7QmixOSvTgdQgQ3qmW9erxVAREA7OBTmYU5w==
   dependencies:
     "@babel/runtime" "^7.8.4"
     "@datepicker-react/hooks" "^2.7.0"

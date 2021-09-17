@@ -51,10 +51,8 @@ export type MainInfo = {
         script: string;
         remote: string;
     };
-    mode: string;
-    arguments: {
-        matchingStrategy: string;
-    };
+    mode: ModeState['mode'];
+    arguments: ModeState['arguments'];
     isWebServer: boolean;
     usage: {
         counters: {
@@ -70,6 +68,16 @@ export type MainInfo = {
     upstreamProxy: string;
 };
 
+export type ModeState = {
+    mode: 'simulate' | 'synthesize' | 'modify' | 'capture' | 'spy' | 'diff';
+    arguments: {
+        matchingStrategy: string;
+        headersWhitelist?: string[];
+        stateful?: boolean;
+        overwriteDuplicate?: boolean;
+    };
+};
+
 export type DeleteCache = { cache: string | null };
 export type ServerState = { state: Record<string, string> };
 
@@ -82,4 +90,6 @@ export interface IHoverflyApi {
     deleteServerState(): Promise<IRequestResponse<void>>;
     addServerState(data: ServerState): Promise<IRequestResponse<ServerState>>;
     updateServerState(data: ServerState): Promise<IRequestResponse<ServerState>>;
+    fetchMode(): Promise<IRequestResponse<ModeState>>;
+    updateMode(data: ModeState): Promise<IRequestResponse<ModeState>>;
 }
