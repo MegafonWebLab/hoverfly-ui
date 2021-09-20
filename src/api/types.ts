@@ -80,16 +80,26 @@ export type ModeState = {
 
 export type DeleteCache = { cache: string | null };
 export type ServerState = { state: Record<string, string> };
+export type Middleware = {
+    binary: string;
+    script: string;
+    remote: string;
+};
 
 export interface IHoverflyApi {
     fetchMainInfo(): Promise<IRequestResponse<MainInfo>>;
     fetchDeleteCache(): Promise<IRequestResponse<DeleteCache>>;
     fetchShutdown(): Promise<IRequestResponse<void>>;
     fetchHealtCheck(): Promise<IRequestResponse<{ message: string }>>;
+
     fetchServerState(): Promise<IRequestResponse<ServerState>>;
     deleteServerState(): Promise<IRequestResponse<void>>;
     addServerState(data: ServerState): Promise<IRequestResponse<ServerState>>;
     updateServerState(data: ServerState): Promise<IRequestResponse<ServerState>>;
+
     fetchMode(): Promise<IRequestResponse<ModeState>>;
     updateMode(data: ModeState): Promise<IRequestResponse<ModeState>>;
+
+    fetchMiddleware(): Promise<IRequestResponse<Middleware>>;
+    updateMiddleware(data: Middleware): Promise<IRequestResponse<Middleware>>;
 }

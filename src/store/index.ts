@@ -2,6 +2,7 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import api from 'api';
 import cache from './cache/cacheSlice';
 import main from './main/mainSlice';
+import middleware from './middleware/middlewareSlice';
 import mode from './mode/modeSlice';
 import serverState from './serverState/serverStateSlice';
 import shutdown from './shutdown/shutdownSlice';
@@ -15,6 +16,7 @@ export const store = configureStore({
         status,
         serverState,
         mode,
+        middleware,
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({

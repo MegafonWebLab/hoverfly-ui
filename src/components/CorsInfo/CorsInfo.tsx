@@ -16,14 +16,16 @@ const CorsInfo: React.FC = () => {
                 Cors
             </Header>
             <table className={cn('table')}>
-                {corsList.map(({ key, value }) => (
-                    <tr key={key}>
-                        <td className={cn('cell')} width="35%">
-                            {key}:
-                        </td>
-                        <td className={cn('cell')}>{String(value)}</td>
-                    </tr>
-                ))}
+                <tbody>
+                    {corsList.map(({ key, value }) => (
+                        <tr key={key}>
+                            <td className={cn('cell')} width="35%">
+                                {key}:
+                            </td>
+                            <td className={cn('cell')}>{String(value)}</td>
+                        </tr>
+                    ))}
+                </tbody>
             </table>
         </div>
     );

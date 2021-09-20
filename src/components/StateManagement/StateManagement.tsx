@@ -31,10 +31,11 @@ const cn = cnCreate('state-management');
 const StateManagement: React.FC = () => {
     const dispatch = useDispatch();
     const serverState = useSelector(state => state.serverState);
+    const statusState = useSelector(state => state.status.value);
+
     const stateLoads = React.useRef<number>(0);
     const [localState, setLocalState] = React.useState<LocalStateItem[]>(stateToList(serverState.value));
     const hasServerState = !!Object.keys(serverState.value.state).length;
-    const statusState = useSelector(state => state.status.value);
 
     function handleClickAdd(_e: React.MouseEvent<HTMLButtonElement>) {
         dispatch(addServerStateAsync(listToState(localState)));

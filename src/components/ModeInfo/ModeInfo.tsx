@@ -23,6 +23,7 @@ const ModeInfo: React.FC = () => {
     const dispatch = useDispatch();
     const mainState = useSelector(state => state.main);
     const modeState = useSelector(state => state.mode);
+    const statusState = useSelector(state => state.status.value);
     const mode = modeState.type === 'success' ? modeState.value.mode : 'simulate';
     const isWebserver = mainState.type === 'success' ? mainState.value.isWebServer : false;
     const modeItems = isWebserver ? modeWebser : modeValues;
@@ -186,7 +187,7 @@ const ModeInfo: React.FC = () => {
                 </tbody>
             </table>
             <div className={cn('submit-wrapper')}>
-                <Button sizeAll="small" onClick={handleSubmit}>
+                <Button sizeAll="small" disabled={!statusState} onClick={handleSubmit}>
                     Change
                 </Button>
             </div>
