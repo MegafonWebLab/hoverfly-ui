@@ -9,6 +9,7 @@ import { fetchStatusAsync } from 'store/status/statusSlice';
 import CorsInfo from '../CorsInfo/CorsInfo';
 import Middleware from '../Middleware/Middleware';
 import ModeInfo from '../ModeInfo/ModeInfo';
+import ProxyInfo from '../ProxyInfo/ProxyInfo';
 import StateManagement from '../StateManagement/StateManagement';
 
 const cn = cnCreate('app');
@@ -32,6 +33,8 @@ function App(): JSX.Element {
                         <StateManagement />
                         <hr />
                         <Middleware />
+                        <hr />
+                        <ProxyInfo />
                     </GridColumn>
                     <GridColumn all="9">content</GridColumn>
                 </Grid>

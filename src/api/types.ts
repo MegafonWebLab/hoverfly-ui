@@ -85,6 +85,8 @@ export type Middleware = {
     script: string;
     remote: string;
 };
+export type Destination = { destination: string };
+export type UpstreamProxy = { upstreamProxy: string };
 
 export interface IHoverflyApi {
     fetchMainInfo(): Promise<IRequestResponse<MainInfo>>;
@@ -102,4 +104,8 @@ export interface IHoverflyApi {
 
     fetchMiddleware(): Promise<IRequestResponse<Middleware>>;
     updateMiddleware(data: Middleware): Promise<IRequestResponse<Middleware>>;
+
+    fetchDestination(): Promise<IRequestResponse<Destination>>;
+    updateDestination(data: Destination): Promise<IRequestResponse<Destination>>;
+    fetchUpstreamProxy(): Promise<IRequestResponse<UpstreamProxy>>;
 }

@@ -1,12 +1,14 @@
 import createRequest from '../axiosRequest';
 import type {
     DeleteCache,
+    Destination,
     IHoverflyApi,
     IRequestResponse,
     MainInfo,
     Middleware,
     ModeState,
     ServerState,
+    UpstreamProxy,
 } from '../types';
 
 type ApiCreate = {
@@ -54,6 +56,15 @@ const hoverflyApi = ({ baseURL }: ApiCreate): IHoverflyApi => {
         },
         updateMiddleware(data: Middleware): Promise<IRequestResponse<Middleware>> {
             return instance.put('/v2/hoverfly/middleware', data);
+        },
+        fetchDestination(): Promise<IRequestResponse<Destination>> {
+            return instance.get('/v2/hoverfly/destination');
+        },
+        updateDestination(data: Destination): Promise<IRequestResponse<Destination>> {
+            return instance.put('/v2/hoverfly/destination', data);
+        },
+        fetchUpstreamProxy(): Promise<IRequestResponse<UpstreamProxy>> {
+            return instance.get('/v2/hoverfly/upstream-proxy');
         },
     };
 };

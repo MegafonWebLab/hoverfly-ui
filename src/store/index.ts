@@ -4,6 +4,8 @@ import cache from './cache/cacheSlice';
 import main from './main/mainSlice';
 import middleware from './middleware/middlewareSlice';
 import mode from './mode/modeSlice';
+import destination from './proxy/destinationSlice';
+import upstreamProxy from './proxy/upstreamProxySlice';
 import serverState from './serverState/serverStateSlice';
 import shutdown from './shutdown/shutdownSlice';
 import status from './status/statusSlice';
@@ -17,6 +19,8 @@ export const store = configureStore({
         serverState,
         mode,
         middleware,
+        destination,
+        upstreamProxy,
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({

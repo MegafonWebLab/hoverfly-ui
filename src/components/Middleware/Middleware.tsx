@@ -110,8 +110,10 @@ const Middleware: React.FC = () => {
         <>
             <tr>
                 <td className={cn('cell')} width="45%">
-                    {renderEditButton('binary')}
-                    Binary
+                    <div className={cn('cell-box')}>
+                        {renderEditButton('binary')}
+                        Binary
+                    </div>
                 </td>
                 <td className={cn('cell')}>
                     {state.binary.edited ? (
@@ -127,8 +129,10 @@ const Middleware: React.FC = () => {
             </tr>
             <tr>
                 <td className={cn('cell')} width="45%">
-                    {renderEditButton('script')}
-                    Script
+                    <div className={cn('cell-box')}>
+                        {renderEditButton('script')}
+                        Script
+                    </div>
                 </td>
                 <td className={cn('cell')}>
                     {state.script.edited ? (
@@ -149,8 +153,10 @@ const Middleware: React.FC = () => {
     const renderRemote = (
         <tr>
             <td className={cn('cell')} width="45%">
-                {renderEditButton('remote')}
-                Remote
+                <div className={cn('cell-box')}>
+                    {renderEditButton('remote')}
+                    Remote
+                </div>
             </td>
             <td className={cn('cell')}>
                 {state.remote.edited ? (

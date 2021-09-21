@@ -1,6 +1,7 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { Middleware, ThunkApiConfig } from 'api/types';
 import type { IRequestState } from '../types';
+import { defaultFulfilledCase, defaultPendingCase, defaultRejectedCase } from '../utils';
 
 export type IMiddlewareState = IRequestState<Middleware>;
 
@@ -34,28 +35,6 @@ export const updateMiddlewareAsync = createAsyncThunk<Middleware, Middleware, Th
     },
 );
 
-const pendingCase = (state: IMiddlewareState): void => {
-    state.type = 'pending';
-};
-
-const fulfilledCase = (
-    state: IMiddlewareState,
-    action: PayloadAction<
-        Middleware,
-        string,
-        { arg: Middleware | void; requestId: string; requestStatus: 'fulfilled' }
-    >,
-): void => {
-    state.type = 'success';
-    if (state.type === 'success') {
-        state.value = action.payload;
-    }
-};
-
-const rejectedCase = (state: IMiddlewareState) => {
-    state.type = 'failed';
-};
-
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const middlewareSlice = createSlice<IMiddlewareState, {}, 'middleware'>({
     name: 'middleware',
@@ -63,12 +42,12 @@ export const middlewareSlice = createSlice<IMiddlewareState, {}, 'middleware'>({
     reducers: {},
     extraReducers: builder => {
         builder
-            .addCase(getMiddlewareAsync.pending, pendingCase)
-            .addCase(getMiddlewareAsync.fulfilled, fulfilledCase)
-            .addCase(getMiddlewareAsync.rejected, rejectedCase)
-            .addCase(updateMiddlewareAsync.pending, pendingCase)
-            .addCase(updateMiddlewareAsync.fulfilled, fulfilledCase)
-            .addCase(updateMiddlewareAsync.rejected, rejectedCase);
+            .addCase(getMiddlewareAsync.pending, defaultPendingCase<IMiddlewareState>())
+            .addCase(getMiddlewareAsync.fulfilled, defaultFulfilledCase<IMiddlewareState, Middleware>())
+            .addCase(getMiddlewareAsync.rejected, defaultRejectedCase<IMiddlewareState>())
+            .addCase(updateMiddlewareAsync.pending, defaultPendingCase<IMiddlewareState>())
+            .addCase(updateMiddlewareAsync.fulfilled, defaultFulfilledCase<IMiddlewareState, Middleware>())
+            .addCase(updateMiddlewareAsync.rejected, defaultRejectedCase<IMiddlewareState>());
     },
 });
 

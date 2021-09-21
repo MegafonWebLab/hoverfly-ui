@@ -1,6 +1,7 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { ThunkApiConfig, ModeState } from 'api/types';
 import type { IRequestState } from '../types';
+import { defaultFulfilledCase, defaultPendingCase, defaultRejectedCase } from '../utils';
 
 export type IModeState = IRequestState<ModeState>;
 
@@ -34,24 +35,6 @@ export const updateModeAsync = createAsyncThunk<ModeState, ModeState, ThunkApiCo
     },
 );
 
-const pendingCase = (state: IModeState): void => {
-    state.type = 'pending';
-};
-
-const fulfilledCase = (
-    state: IModeState,
-    action: PayloadAction<ModeState, string, { arg: ModeState | void; requestId: string; requestStatus: 'fulfilled' }>,
-): void => {
-    state.type = 'success';
-    if (state.type === 'success') {
-        state.value = action.payload;
-    }
-};
-
-const rejectedCase = (state: IModeState) => {
-    state.type = 'failed';
-};
-
 // eslint-disable-next-line @typescript-eslint/ban-types
 export const modeSlice = createSlice<IModeState, {}, 'mode'>({
     name: 'mode',
@@ -59,12 +42,12 @@ export const modeSlice = createSlice<IModeState, {}, 'mode'>({
     reducers: {},
     extraReducers: builder => {
         builder
-            .addCase(getModeAsync.pending, pendingCase)
-            .addCase(getModeAsync.fulfilled, fulfilledCase)
-            .addCase(getModeAsync.rejected, rejectedCase)
-            .addCase(updateModeAsync.pending, pendingCase)
-            .addCase(updateModeAsync.fulfilled, fulfilledCase)
-            .addCase(updateModeAsync.rejected, rejectedCase);
+            .addCase(getModeAsync.pending, defaultPendingCase<IModeState>())
+            .addCase(getModeAsync.fulfilled, defaultFulfilledCase<IModeState, ModeState>())
+            .addCase(getModeAsync.rejected, defaultRejectedCase<IModeState>())
+            .addCase(updateModeAsync.pending, defaultPendingCase<IModeState>())
+            .addCase(updateModeAsync.fulfilled, defaultFulfilledCase<IModeState, ModeState>())
+            .addCase(updateModeAsync.rejected, defaultRejectedCase<IModeState>());
     },
 });
 

@@ -1,4 +1,4 @@
-$b: .middleware;
+$b: .proxy-info;
 
 $(b) {
     &__table {
@@ -10,22 +10,6 @@ $(b) {
         margin-bottom: 8px;
 
         font-weight: bold;
-    }
-
-    &__select-contol {
-        height: 28px;
-    }
-
-    $(b)__select-item-title::after {
-        background: none;
-    }
-
-    &__select-arrow-wrap {
-        right: 5px;
-    }
-
-    &__select-title-inner:after {
-        background: none;
     }
 
     &__cell {
@@ -46,26 +30,22 @@ $(b) {
         text-overflow: ellipsis;
     }
 
-    &__edit-icon {
-        width: 16px;
-        height: 16px;
-    }
-
-    &__icon-button {
-        width: 24px;
-        height: 24px;
-
-        margin-right: 8px;
-    }
-
     &__field {
         min-height: 24px;
 
         padding: 0;
     }
 
-    &__textarea {
-        padding: 0;
+    &__edit-icon {
+        width: 16px;
+        height: 16px;
+    }
+
+    &__edit-button {
+        width: 24px;
+        height: 24px;
+
+        margin-right: 8px;
     }
 
     &__footer {
