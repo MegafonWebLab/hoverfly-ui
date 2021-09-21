@@ -17,7 +17,6 @@ const ProxyInfo: React.FC = () => {
     const [editable, setEditable] = React.useState<boolean>(false);
     const [destination, setDestination] = React.useState<string>('');
     const [upstream, setUpstream] = React.useState<string>('');
-    console.log('destination', destination);
 
     function handleChangeEdit(_e: React.MouseEvent<HTMLButtonElement>) {
         setEditable(prev => !prev);
