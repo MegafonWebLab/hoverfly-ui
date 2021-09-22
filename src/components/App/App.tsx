@@ -9,6 +9,7 @@ import { fetchStatusAsync } from 'store/status/statusSlice';
 import CorsInfo from '../CorsInfo/CorsInfo';
 import Middleware from '../Middleware/Middleware';
 import ModeInfo from '../ModeInfo/ModeInfo';
+import PacInfo from '../PacInfo/PacInfo';
 import ProxyInfo from '../ProxyInfo/ProxyInfo';
 import StateManagement from '../StateManagement/StateManagement';
 
@@ -35,6 +36,8 @@ function App(): JSX.Element {
                         <Middleware />
                         <hr />
                         <ProxyInfo />
+                        <hr />
+                        <PacInfo />
                     </GridColumn>
                     <GridColumn all="9">content</GridColumn>
                 </Grid>

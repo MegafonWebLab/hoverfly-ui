@@ -87,6 +87,7 @@ export type Middleware = {
 };
 export type Destination = { destination: string };
 export type UpstreamProxy = { upstreamProxy: string };
+export type Pac = { error: 'string' } | string;
 
 export interface IHoverflyApi {
     fetchMainInfo(): Promise<IRequestResponse<MainInfo>>;
@@ -108,4 +109,8 @@ export interface IHoverflyApi {
     fetchDestination(): Promise<IRequestResponse<Destination>>;
     updateDestination(data: Destination): Promise<IRequestResponse<Destination>>;
     fetchUpstreamProxy(): Promise<IRequestResponse<UpstreamProxy>>;
+
+    fetchPac(): Promise<IRequestResponse<Pac>>;
+    updatePac(code: string): Promise<IRequestResponse<string>>;
+    deletePac(): Promise<IRequestResponse<void>>;
 }

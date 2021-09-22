@@ -7,6 +7,7 @@ import type {
     MainInfo,
     Middleware,
     ModeState,
+    Pac,
     ServerState,
     UpstreamProxy,
 } from '../types';
@@ -65,6 +66,15 @@ const hoverflyApi = ({ baseURL }: ApiCreate): IHoverflyApi => {
         },
         fetchUpstreamProxy(): Promise<IRequestResponse<UpstreamProxy>> {
             return instance.get('/v2/hoverfly/upstream-proxy');
+        },
+        fetchPac(): Promise<IRequestResponse<Pac>> {
+            return instance.get('/v2/hoverfly/pac');
+        },
+        updatePac(code: string): Promise<IRequestResponse<string>> {
+            return instance.put('/v2/hoverfly/pac', code);
+        },
+        deletePac(): Promise<IRequestResponse<void>> {
+            return instance.delete('/v2/hoverfly/pac');
         },
     };
 };

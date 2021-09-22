@@ -8,7 +8,7 @@ export const defaultPendingCase =
     };
 
 export const defaultFulfilledCase =
-    <State extends IRequestState<unknown>, Data extends Record<string, unknown>>() =>
+    <State extends IRequestState<unknown>, Data>() =>
     (
         state: State,
         action: PayloadAction<Data, string, { arg: Data | void; requestId: string; requestStatus: 'fulfilled' }>,
