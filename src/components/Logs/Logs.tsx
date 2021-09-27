@@ -116,57 +116,14 @@ const Logs: React.FC = () => {
     }, [logsStore]);
 
     const renderAdditional = (log: LogsItem) => {
-        if (log.Destination && log.Mode && log.WebserverPort) {
-            return (
-                <div className={cn('item-additional')}>
-                    Destination={log.Destination} Mode={log.Mode} WebserverPort={log.WebserverPort}
-                </div>
-            );
-        }
+        const {time, level,msg, ...other } = log;
+        const fieldList = Object.entries(other);
 
-        if (log.destination && log.mode && log.port) {
-            return (
-                <div className={cn('item-additional')}>
-                    destination={log.destination} mode={log.mode} port={log.port}
-                </div>
-            );
-        }
-
-        if (log.middleware && log.payload) {
-            return (
-                <>
-                    <div className={cn('item-additional')}>middleware={log.middleware}</div>
-                    <div className={cn('item-additional')}>payload={log.payload}</div>
-                </>
-            );
-        }
-
-        if (log.command && log.stdin) {
-            return (
-                <>
-                    <div className={cn('item-additional')}>command={log.command}</div>
-                    <div className={cn('item-additional')}>stdin={log.stdin}</div>
-                </>
-            );
-        }
-
-        if (log.failed !== undefined && log.successful !== undefined && log.total !== undefined) {
-            return (
-                <div className={cn('item-additional')}>
-                    failed={log.failed} successful={log.successful} total={log.total}
-                </div>
-            );
-        }
-
-        if (log.AdminPort) {
-            return <div className={cn('item-additional')}>AdminPort={log.AdminPort}</div>;
-        }
-
-        if (log.json) {
-            return <div className={cn('item-additional')}>json={log.json}</div>;
-        }
-
-        return null;
+        return fieldList.map(([key, value]) => (
+            <div className={cn('item-additional')}>
+                {key}={value}
+            </div>
+        ));
     };
 
     const renderTime = (date: Date) => {
@@ -227,6 +184,10 @@ const Logs: React.FC = () => {
         ),
         [time, hourState, minuteState],
     );
+
+    if (logsStore.type === 'failed') {
+        return null;
+    }
 
     return (
         <div className={cn()}>
