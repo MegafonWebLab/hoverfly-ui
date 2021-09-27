@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { MainInfo, ThunkApiConfig } from 'api/types';
-import { IRequestState, IRequestStateFailed, IRequestStateSuccess } from '../types';
+import type { IRequestState, IRequestStateFailed, IRequestStateSuccess } from '../types';
 
 export type IMainState = IRequestState<MainInfo>;
 

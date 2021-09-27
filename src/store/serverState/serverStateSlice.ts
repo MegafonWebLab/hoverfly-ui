@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { ServerState, ThunkApiConfig } from 'api/types';
-import { IRequestState } from '../types';
+import type { IRequestState } from '../types';
 
 export type IServerState = {
     value: { state: Record<string, string> };

@@ -27,6 +27,7 @@ const ProxyInfo: React.FC = () => {
     }
 
     function handleClickSubmit(_e: React.MouseEvent<HTMLButtonElement>) {
+        setEditable(false);
         dispatch(updateDestinationAsync({ destination }));
     }
 

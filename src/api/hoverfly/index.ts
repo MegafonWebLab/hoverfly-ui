@@ -4,6 +4,8 @@ import type {
     Destination,
     IHoverflyApi,
     IRequestResponse,
+    LogsRequest,
+    LogsResponse,
     MainInfo,
     Middleware,
     ModeState,
@@ -75,6 +77,12 @@ const hoverflyApi = ({ baseURL }: ApiCreate): IHoverflyApi => {
         },
         deletePac(): Promise<IRequestResponse<void>> {
             return instance.delete('/v2/hoverfly/pac');
+        },
+        fetchLogs(data?: LogsRequest): Promise<IRequestResponse<LogsResponse>> {
+            return instance.get('/v2/logs', {
+                params: data,
+                headers: { Accept: 'application/json' },
+            });
         },
     };
 };

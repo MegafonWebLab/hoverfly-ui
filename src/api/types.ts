@@ -7,8 +7,11 @@ export interface IRequestCreateOptions {
     baseURL: string;
 }
 export interface IRequestConfig {
-    headers: {
+    headers?: {
         [key: string]: string;
+    };
+    params?: {
+        [key: string]: string | number;
     };
 }
 
@@ -87,7 +90,42 @@ export type Middleware = {
 };
 export type Destination = { destination: string };
 export type UpstreamProxy = { upstreamProxy: string };
-export type Pac = { error: 'string' } | string;
+export type Pac = { error: string } | string;
+export type LogsRequest = {
+    limit?: number;
+    from?: number;
+};
+
+export type LogsItem = {
+    Destination: string;
+    Mode?: string;
+    WebserverPort: string;
+
+    destination?: string;
+    mode?: string;
+    port?: string;
+    ProxyPort?: string;
+    AdminPort?: string;
+
+    json?: string;
+
+    stdin?: string;
+    command?: string;
+
+    failed?: number;
+    successful?: string;
+    total?: number;
+
+    middleware?: string;
+    payload?: string;
+
+    level: string;
+    msg: string;
+    time: string;
+};
+export type LogsResponse = {
+    logs: LogsItem[];
+};
 
 export interface IHoverflyApi {
     fetchMainInfo(): Promise<IRequestResponse<MainInfo>>;
@@ -113,4 +151,6 @@ export interface IHoverflyApi {
     fetchPac(): Promise<IRequestResponse<Pac>>;
     updatePac(code: string): Promise<IRequestResponse<string>>;
     deletePac(): Promise<IRequestResponse<void>>;
+
+    fetchLogs(data?: LogsRequest): Promise<IRequestResponse<LogsResponse>>;
 }

@@ -1,0 +1,74 @@
+$b: .logs;
+
+$(b) {
+    &__title {
+        margin-bottom: 16px;
+    }
+
+    &__info {
+        height: 500px;
+        padding: 8px;
+
+        overflow: scroll;
+
+        background: #000000;
+    }
+
+    &__item {
+        margin-bottom: 8px;
+
+        color: #FFFFFF;
+    }
+
+    &__item-additional {
+        padding-left: 48px;
+    }
+
+    &__header-wrapper {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__calendar-icon {
+        width: 32px;
+        height: 32px;
+
+        cursor: pointer;
+    }
+
+    &__time {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__cancel-icon {
+        width: 32px;
+        height: 32px;
+
+        cursor: pointer;
+    }
+
+    &__calendar-footer {
+        display: flex;
+        justify-content: space-around;
+    }
+
+    &__select {
+        width: 100px;
+    }
+
+    &__select-title {
+        background: none;
+    }
+
+    &__select-item {
+        padding: 8px 24px;
+    }
+
+    &__select-item-title {
+        &:after {
+            background: none;
+        }
+    }
+}
