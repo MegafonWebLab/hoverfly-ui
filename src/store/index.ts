@@ -1,6 +1,7 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import api from 'api';
 import cache from './cache/cacheSlice';
+import journal from './journal/journalSlice';
 import logs from './logs/logsSlice';
 import main from './main/mainSlice';
 import middleware from './middleware/middlewareSlice';
@@ -25,6 +26,7 @@ export const store = configureStore({
         upstreamProxy,
         pac,
         logs,
+        journal,
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({

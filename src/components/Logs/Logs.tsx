@@ -4,13 +4,13 @@ import type { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Se
 import { cnCreate } from '@megafon/ui-helpers';
 import { ReactComponent as CalendarIcon } from '@megafon/ui-icons/basic-16-calendar_16.svg';
 import { ReactComponent as Cancel } from '@megafon/ui-icons/system-16-cancel_16.svg';
+import { format } from 'date-fns';
 import type { LogsItem, LogsResponse } from 'api/types';
+import { REQUEST_TIMER_SECONDS } from 'constants/timers';
 import { useDispatch, useSelector } from 'store/hooks';
 import { getLogsAsync } from 'store/logs/logsSlice';
-import { format } from "date-fns";
 import './Logs.pcss';
 
-const GET_LOGS_TIMER_SECONDS = 10000;
 const TIMESTAMP_DIVIDER = 1000;
 const HOURS = 24;
 const MINUTES = 60;
@@ -34,6 +34,7 @@ const Logs: React.FC = () => {
     const [time, setTime] = React.useState<Date | null>(null);
     const timeRef = React.useRef<Date | null>(null);
     const iconRef = React.useRef<HTMLElement | null>(null);
+    const tmpDiv = React.useRef<HTMLDivElement>(document.createElement('div'));
 
     function getRef(node: SVGSVGElement) {
         iconRef.current = node as unknown as HTMLElement;
@@ -83,25 +84,30 @@ const Logs: React.FC = () => {
         }
 
         if (time) {
-            dispatch(getLogsAsync({
-                from: getDate(time).getTime() / TIMESTAMP_DIVIDER
-            }));
-
+            dispatch(
+                getLogsAsync({
+                    from: getDate(time).getTime() / TIMESTAMP_DIVIDER,
+                }),
+            );
         }
     }, [statusState, time, hourState, minuteState]);
 
     React.useEffect(() => {
         if (statusState) {
-            dispatch(getLogsAsync(timeRef.current ? { from: timeRef.current.getTime() / TIMESTAMP_DIVIDER } : undefined));
+            dispatch(
+                getLogsAsync(timeRef.current ? { from: timeRef.current.getTime() / TIMESTAMP_DIVIDER } : undefined),
+            );
         }
 
         const timer = statusState
             ? setInterval(() => {
-                  const formData = timeRef.current ? { from: timeRef.current.getTime() / TIMESTAMP_DIVIDER } : undefined;
+                  const formData = timeRef.current
+                      ? { from: timeRef.current.getTime() / TIMESTAMP_DIVIDER }
+                      : undefined;
                   if (statusState) {
                       dispatch(getLogsAsync(formData));
                   }
-              }, GET_LOGS_TIMER_SECONDS)
+              }, REQUEST_TIMER_SECONDS)
             : undefined;
 
         return () => {
@@ -116,14 +122,22 @@ const Logs: React.FC = () => {
     }, [logsStore]);
 
     const renderAdditional = (log: LogsItem) => {
-        const {time, level,msg, ...other } = log;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { time: logTime, level, msg, ...other } = log;
         const fieldList = Object.entries(other);
 
-        return fieldList.map(([key, value]) => (
-            <div className={cn('item-additional')}>
-                {key}={value}
-            </div>
-        ));
+        return fieldList.map(([key, value], index) => {
+            // default value can crash react render
+            tmpDiv.current.innerHTML = value;
+            const b = tmpDiv.current.textContent || tmpDiv.current.innerText || '';
+
+            return (
+                // eslint-disable-next-line react/no-array-index-key
+                <div className={cn('item-additional')} key={index}>
+                    {key}={b}
+                </div>
+            );
+        });
     };
 
     const renderTime = (date: Date) => {
@@ -132,7 +146,7 @@ const Logs: React.FC = () => {
         newDate.setMinutes(minuteState);
 
         return format(newDate, 'dd.MM.yyyy: HH.mm');
-    }
+    };
 
     const header = React.useMemo(
         () => (
@@ -146,9 +160,7 @@ const Logs: React.FC = () => {
                     </div>
                     <Tooltip triggerElement={iconRef} triggerEvent="click">
                         <div className={cn('time')}>
-                            <div>
-                                {time && renderTime(time)}
-                            </div>
+                            <div>{time && renderTime(time)}</div>
                             <Cancel className={cn('cancel-icon')} onClick={handleClickReset} />
                         </div>
                         <Calendar onChange={handleChangeTime} isSingleDate />

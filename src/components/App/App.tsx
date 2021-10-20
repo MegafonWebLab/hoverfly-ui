@@ -7,6 +7,7 @@ import TopBar from 'components/TopBar/TopBar';
 import { useDispatch } from 'store/hooks';
 import { fetchStatusAsync } from 'store/status/statusSlice';
 import CorsInfo from '../CorsInfo/CorsInfo';
+import Journal from '../Journal/Journal';
 import Logs from '../Logs/Logs';
 import Middleware from '../Middleware/Middleware';
 import ModeInfo from '../ModeInfo/ModeInfo';
@@ -41,6 +42,8 @@ function App(): JSX.Element {
                         <PacInfo />
                     </GridColumn>
                     <GridColumn all="9" className={cn('right-column')}>
+                        <Journal />
+                        <hr />
                         <Logs />
                     </GridColumn>
                 </Grid>

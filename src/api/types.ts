@@ -127,6 +127,62 @@ export type LogsResponse = {
     logs: LogsItem[];
 };
 
+export type JournalItem = {
+    request: {
+        path: string;
+        method: string;
+        destination: string;
+        scheme: string;
+        query: string;
+        body: string;
+        headers: Record<string, string[]>;
+    };
+    response: {
+        status: number;
+        body: string;
+        encodedBody: boolean;
+        headers: Record<string, string[]>;
+    };
+    mode: string;
+    timeStarted: string;
+    latency: number;
+};
+export type JournalRequest = {
+    limit?: number;
+    offset?: number;
+    to?: number;
+    from?: number;
+    sort?: string;
+};
+export type JournalResponse = {
+    journal: JournalItem[];
+    offset: number;
+    limit: number;
+    total: number;
+};
+
+export type JournalSearchDataRequest = {
+    status?: string;
+    mode?: string;
+};
+
+export type JournalSearchRequest = {
+    response: {
+        status?: [
+            {
+                matcher: 'exact';
+                value: string;
+            },
+        ];
+        mode?: [
+            {
+                matcher: 'exact';
+                value: string;
+            },
+        ];
+    };
+};
+
 export interface IHoverflyApi {
     fetchMainInfo(): Promise<IRequestResponse<MainInfo>>;
     fetchDeleteCache(): Promise<IRequestResponse<DeleteCache>>;
@@ -153,4 +209,8 @@ export interface IHoverflyApi {
     deletePac(): Promise<IRequestResponse<void>>;
 
     fetchLogs(data?: LogsRequest): Promise<IRequestResponse<LogsResponse>>;
+
+    fetchJournal(data?: JournalRequest): Promise<IRequestResponse<JournalResponse>>;
+    deleteJournal(): Promise<IRequestResponse<void>>;
+    searchJournal(data: JournalSearchDataRequest): Promise<IRequestResponse<JournalResponse>>;
 }

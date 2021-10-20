@@ -4,6 +4,9 @@ import type {
     Destination,
     IHoverflyApi,
     IRequestResponse,
+    JournalRequest,
+    JournalResponse,
+    JournalSearchRequest,
     LogsRequest,
     LogsResponse,
     MainInfo,
@@ -12,6 +15,7 @@ import type {
     Pac,
     ServerState,
     UpstreamProxy,
+    JournalSearchDataRequest,
 } from '../types';
 
 type ApiCreate = {
@@ -83,6 +87,19 @@ const hoverflyApi = ({ baseURL }: ApiCreate): IHoverflyApi => {
                 params: data,
                 headers: { Accept: 'application/json' },
             });
+        },
+        fetchJournal(data?: JournalRequest): Promise<IRequestResponse<JournalResponse>> {
+            return instance.get('/v2/journal', { params: data });
+        },
+        deleteJournal(): Promise<IRequestResponse<void>> {
+            return instance.delete('/v2/journal');
+        },
+        searchJournal(_data: JournalSearchDataRequest): Promise<IRequestResponse<JournalResponse>> {
+            const formData: JournalSearchRequest = {
+                response: {},
+            };
+
+            return instance.post('/v2/journal', formData);
         },
     };
 };

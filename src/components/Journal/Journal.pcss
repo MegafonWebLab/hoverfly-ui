@@ -1,0 +1,59 @@
+$b: .journal;
+
+$(b) {
+    &__content {
+        margin-bottom: 16px;
+    }
+
+    &__filter {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__filter-left {
+        display: flex;
+        align-items: baseline;
+    }
+
+    &__filter-right {
+        display: flex;
+        align-items: center;
+    }
+
+    &__filter-item {
+        margin-right: 8px;
+
+        &_status {
+            width: 180px;
+        }
+
+        &_mode {
+            width: 150px;
+        }
+
+        &_time {
+            width: 120px;
+        }
+
+        &_format {
+            width: 150px;
+        }
+    }
+
+    &__time-title-inner {
+        margin-left: 8px;
+    }
+
+    &__time-list-item {
+        padding-left: 20px;
+    }
+
+    &__refresh {
+        margin-right: 8px;
+    }
+
+    &__select-icon {
+        width: 24px;
+        height: 24px;
+    }
+}
