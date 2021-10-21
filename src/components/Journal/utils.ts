@@ -1,24 +1,16 @@
-import { Chart, ChartType, registerables } from 'chart.js';
+import { Chart, registerables } from 'chart.js';
 import addDays from 'date-fns/addDays';
 import addHours from 'date-fns/addHours';
 import closestIndexTo from 'date-fns/closestIndexTo';
 import differenceInHours from 'date-fns/differenceInHours';
 import eachMinuteOfInterval from 'date-fns/eachMinuteOfInterval';
 import format from 'date-fns/format';
+import type { JournalItem } from 'api/types';
+import { TIMESTAMP_DIVIDER } from 'constants/date';
+import type { DrawChartOptions, IJournalFilterState } from './types';
 
-export type ChartDatasetItem = {
-    label: string;
-    data: number[];
-    borderColor: string;
-};
-
-export type DrawChartOptions = {
-    labels: Array<string | number>;
-    datasets: ChartDatasetItem[];
-    type?: ChartType;
-};
-
-const TIME_DIVIDER = 1000;
+export const SUCCESS_STATUS_CODE = 200;
+const TIME_MULTIPLIER = 5;
 
 const drawChart = (data: DrawChartOptions, diagram: HTMLCanvasElement): Chart => {
     Chart.register(...registerables);
@@ -49,15 +41,14 @@ export const getFromUnix = (formatType: FromType): number | undefined => {
             return undefined;
     }
 
-    return +(time / TIME_DIVIDER).toFixed(0);
+    return +(time / TIMESTAMP_DIVIDER).toFixed(0);
 };
 
 export const getDates = (fromDate?: string): Date[] => {
     const date = new Date();
     const pastDate = fromDate ? new Date(fromDate) : addHours(date, -1);
     const differentHours = differenceInHours(date, pastDate);
-    // eslint-disable-next-line no-magic-numbers
-    const delimiter = differentHours < 1 ? 5 : differentHours * 5;
+    const delimiter = differentHours < 1 ? TIME_MULTIPLIER : differentHours * TIME_MULTIPLIER;
 
     return eachMinuteOfInterval(
         {
@@ -85,5 +76,26 @@ export const getDatesDataset = (list: Date[], searchList: Date[]): number[] => {
 };
 
 export const getLabels = (dates: Date[]): string[] => dates.map(d => format(d, 'kk:mm'));
+
+export const filterJournal = (journal: JournalItem[], filter: IJournalFilterState): JournalItem[] =>
+    journal.filter(item => {
+        let useFilter = true;
+
+        switch (true) {
+            case filter.isAllErrors:
+                useFilter = item.response.status !== SUCCESS_STATUS_CODE;
+                break;
+            case !!filter.status:
+                useFilter = item.response.status === Number(filter.status);
+                break;
+            case !!filter.mode:
+                useFilter = item.mode === filter.mode;
+                break;
+            default:
+                break;
+        }
+
+        return useFilter;
+    });
 
 export default drawChart;

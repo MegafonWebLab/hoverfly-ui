@@ -1,8 +1,8 @@
 import React from 'react';
 import { Button, Header, TextField } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
-import { useDispatch, useSelector } from '../../store/hooks';
-import { deletePacAsync, getPacAsync, updatePacAsync } from '../../store/pac/pacSlice';
+import { useDispatch, useSelector } from 'store/hooks';
+import { deletePacAsync, getPacAsync, updatePacAsync } from 'store/pac/pacSlice';
 import './PacInfo.pcss';
 
 const cn = cnCreate('pac-info');

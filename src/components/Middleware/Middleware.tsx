@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, Header, Select, TextField } from '@megafon/ui-core';
-import { ISelectItem } from '@megafon/ui-core/dist/es/components/Select/Select';
+import type { ISelectItem } from '@megafon/ui-core/dist/es/components/Select/Select';
 import { cnCreate } from '@megafon/ui-helpers';
 import { ReactComponent as Edit } from '@megafon/ui-icons/basic-16-edit_16.svg';
 import './Middleware.pcss';

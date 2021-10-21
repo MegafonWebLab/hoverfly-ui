@@ -1,6 +1,8 @@
 $b: .journal;
 
 $(b) {
+    margin-bottom: 16px;
+
     &__content {
         margin-bottom: 16px;
     }
@@ -8,6 +10,8 @@ $(b) {
     &__filter {
         display: flex;
         justify-content: space-between;
+
+        margin-bottom: 24px;
     }
 
     &__filter-left {
@@ -48,12 +52,36 @@ $(b) {
         padding-left: 20px;
     }
 
-    &__refresh {
+    &__delete {
         margin-right: 8px;
     }
 
     &__select-icon {
         width: 24px;
         height: 24px;
+    }
+
+    &__table {
+        width: 100%;
+
+        border-collapse: collapse;
+        border-spacing: 0 8px;
+        overflow: hidden;
+    }
+
+    &__table-head {
+        text-align: left;
+    }
+
+    &__th {
+        padding: 4px 4px 4px 0;
+
+        border-bottom: 1px solid #CCCCCC;
+    }
+
+    &__td-empty {
+        padding: 8px;
+
+        text-align: center;
     }
 }

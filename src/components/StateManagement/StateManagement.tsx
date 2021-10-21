@@ -5,9 +5,9 @@ import { ReactComponent as Edit } from '@megafon/ui-icons/basic-16-edit_16.svg';
 import { ReactComponent as Minus } from '@megafon/ui-icons/system-16-minus_16.svg';
 import { ReactComponent as Plus } from '@megafon/ui-icons/system-16-plus_16.svg';
 import './StateManagement.pcss';
+import type { ServerState } from 'api/types';
 import { useDispatch, useSelector } from 'store/hooks';
 import { addServerStateAsync, clearServerStateAsync } from 'store/serverState/serverStateSlice';
-import { ServerState } from '../../api/types';
 
 type LocalStateItem = { name: string; value: string; editable: boolean };
 

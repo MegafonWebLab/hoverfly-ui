@@ -1,0 +1,49 @@
+$b: .journal-row;
+
+$(b) {
+    &__row {
+        border-top: 2px solid #FFFFFF;
+        border-bottom: 2px solid #FFFFFF;
+
+        background: #EBF5FF;
+
+        cursor: pointer;
+    }
+
+    &__td {
+        padding: 8px 8px 8px 0;
+    }
+
+    &__content {
+        padding-left: 28px;
+    }
+
+    &__content-row {
+        padding: 8px 8px 8px 0;
+
+        &:not(:last-child) {
+            border-bottom: 1px solid #CCCCCC;
+        }
+    }
+
+    &__row-header {
+        margin-bottom: 8px;
+
+        font-weight: bold;
+    }
+
+    &__param {
+        display: flex;
+        margin-bottom: 4px;
+    }
+
+    &__param-body {
+        max-width: 900px;
+        max-height: 400px;
+        overflow: scroll;
+    }
+
+    &__param-name {
+        width: 250px;
+    }
+}

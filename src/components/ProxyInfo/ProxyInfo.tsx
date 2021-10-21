@@ -4,8 +4,8 @@ import { cnCreate } from '@megafon/ui-helpers';
 import { ReactComponent as Edit } from '@megafon/ui-icons/basic-16-edit_16.svg';
 import './ProxyInfo.pcss';
 import { useDispatch, useSelector } from 'store/hooks';
-import { getDestinationAsync, updateDestinationAsync } from '../../store/proxy/destinationSlice';
-import { getUpstreamProxyAsync } from '../../store/proxy/upstreamProxySlice';
+import { getDestinationAsync, updateDestinationAsync } from 'store/proxy/destinationSlice';
+import { getUpstreamProxyAsync } from 'store/proxy/upstreamProxySlice';
 
 const cn = cnCreate('proxy-info');
 const ProxyInfo: React.FC = () => {

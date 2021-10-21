@@ -1,5 +1,5 @@
-import { PayloadAction } from '@reduxjs/toolkit';
-import { IRequestState } from './types';
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { IRequestState } from './types';
 
 export const defaultPendingCase =
     <T extends IRequestState<unknown>>() =>

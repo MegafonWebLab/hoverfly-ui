@@ -6,14 +6,11 @@ import { ReactComponent as CalendarIcon } from '@megafon/ui-icons/basic-16-calen
 import { ReactComponent as Cancel } from '@megafon/ui-icons/system-16-cancel_16.svg';
 import { format } from 'date-fns';
 import type { LogsItem, LogsResponse } from 'api/types';
+import { HOURS, MINUTES, TIMESTAMP_DIVIDER } from 'constants/date';
 import { REQUEST_TIMER_SECONDS } from 'constants/timers';
 import { useDispatch, useSelector } from 'store/hooks';
 import { getLogsAsync } from 'store/logs/logsSlice';
 import './Logs.pcss';
-
-const TIMESTAMP_DIVIDER = 1000;
-const HOURS = 24;
-const MINUTES = 60;
 
 const HOUR_ITEMS: ISelectItem<number>[] = Array(HOURS)
     .fill(1)

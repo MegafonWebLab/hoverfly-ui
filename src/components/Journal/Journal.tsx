@@ -1,20 +1,34 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import { Header, Select, Button, Checkbox } from '@megafon/ui-core';
 import type { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Select';
 import { cnCreate } from '@megafon/ui-helpers';
 import { ReactComponent as ClockIcon } from '@megafon/ui-icons/basic-16-clock_16.svg';
+import { ReactComponent as DeleteIcon } from '@megafon/ui-icons/basic-16-delete_16.svg';
 import { ReactComponent as StatisticIcon } from '@megafon/ui-icons/basic-16-statistics_16.svg';
-import { ReactComponent as RefreshIcon } from '@megafon/ui-icons/system-16-refresh_16.svg';
 import type { ChartType } from 'chart.js';
 import equal from 'fast-deep-equal';
 import type { JournalResponse } from 'api/types';
 import { REQUEST_TIMER_SECONDS } from 'constants/timers';
 import { useDispatch, useSelector } from 'store/hooks';
-import { getJournalAsync } from 'store/journal/journalSlice';
-import drawChart, { DrawChartOptions, FromType, getDates, getDatesDataset, getFromUnix, getLabels } from './utils';
+import { getJournalAsync, deleteJournalAsync } from 'store/journal/journalSlice';
+import JournalRow from './JournalRow';
+import type { DrawChartOptions, IJournalFilterState } from './types';
+import drawChart, {
+    filterJournal,
+    FromType,
+    getDates,
+    getDatesDataset,
+    getFromUnix,
+    getLabels,
+    SUCCESS_STATUS_CODE,
+} from './utils';
 import './Journal.pcss';
 
-const SUCCESS_STATUS_CODE = 200;
+const NEUTRAL_STATUS = 300;
+const GREEN_COLOR = '#00B956';
+const RED_COLOR = '#ff0000';
+
 const INITIAL_STATE: JournalResponse = {
     journal: [],
     offset: 0,
@@ -34,13 +48,6 @@ const MODES: string[] = ['default', 'simulate', 'synthesize', 'modify', 'capture
 const TIMES: FromType[] = ['all', 'day', 'hour'];
 const FORMATS: ChartType[] = ['line', 'bar', 'pie', 'doughnut', 'polarArea', 'radar'];
 
-interface IJournalFilterState {
-    status?: string;
-    mode: string;
-    isAllErrors: boolean;
-    format: ChartType;
-}
-
 const cn = cnCreate('journal');
 const Journal: React.FC = () => {
     const dispatch = useDispatch();
@@ -51,6 +58,7 @@ const Journal: React.FC = () => {
     const [filterState, setFilterState] = React.useState<IJournalFilterState>(INITIAL_FILTER_STATE);
     const [time, setTime] = React.useState<FromType>('all');
     const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
+    const filteredJournal = filterJournal(state.journal, filterState);
 
     function handleChangeFilter(name: keyof IJournalFilterState) {
         return (
@@ -76,14 +84,16 @@ const Journal: React.FC = () => {
         setTime(dataItem?.value || 'all');
     }
 
+    function handleRemoveJournal() {
+        dispatch(deleteJournalAsync());
+    }
+
     // eslint-disable-next-line consistent-return
     React.useEffect(() => {
         if (canvasRef.current) {
             const [firstJournal] = state.journal;
             const dates = getDates(firstJournal?.timeStarted);
-            const filteredJournal = state.journal.filter(item =>
-                filterState.mode ? item.mode === filterState.mode : true,
-            );
+            const journal = state.journal.filter(item => (filterState.mode ? item.mode === filterState.mode : true));
 
             const data: DrawChartOptions = {
                 type: filterState.format,
@@ -92,22 +102,21 @@ const Journal: React.FC = () => {
             };
 
             if (filterState.status) {
-                const statusDates = filteredJournal
+                const statusDates = journal
                     .filter(item => item.response.status === Number(filterState.status))
                     .map(item => new Date(item.timeStarted));
 
                 data.datasets.push({
                     label: filterState.status.toString(),
                     data: getDatesDataset(statusDates, dates),
-                    // eslint-disable-next-line no-magic-numbers
-                    borderColor: Number(filterState.status) < 300 ? '#00B956' : '#ff0000',
+                    borderColor: Number(filterState.status) < NEUTRAL_STATUS ? GREEN_COLOR : RED_COLOR,
                 });
             } else {
-                const successDates = filteredJournal
+                const successDates = journal
                     .filter(item => item.response.status === SUCCESS_STATUS_CODE)
                     .map(item => new Date(item.timeStarted));
 
-                const errorDates = filteredJournal
+                const errorDates = journal
                     .filter(item => item.response.status !== SUCCESS_STATUS_CODE)
                     .map(item => new Date(item.timeStarted));
 
@@ -157,7 +166,7 @@ const Journal: React.FC = () => {
     }, [statusState, time]);
 
     return (
-        <div>
+        <div className={cn()}>
             <Header as="h2">Journal</Header>
             <div className={cn('content')}>
                 <canvas ref={canvasRef} className={cn('canvas')} />
@@ -193,7 +202,13 @@ const Journal: React.FC = () => {
                     </Checkbox>
                 </div>
                 <div className={cn('filter-right')}>
-                    <Button className={cn('refresh')} theme="purple" icon={<RefreshIcon />} sizeAll="small" />
+                    <Button
+                        className={cn('delete')}
+                        theme="purple"
+                        icon={<DeleteIcon />}
+                        sizeAll="small"
+                        onClick={handleRemoveJournal}
+                    />
                     <Select
                         classes={{
                             root: cn('filter-item', { time: true }),
@@ -238,6 +253,39 @@ const Journal: React.FC = () => {
                     />
                 </div>
             </div>
+            <table className={cn('table')}>
+                <thead className={cn('table-head')}>
+                    <tr className={cn('head-row')}>
+                        <th className={cn('th')} />
+                        <th className={cn('th')}>Method</th>
+                        <th className={cn('th')}>Route</th>
+                        <th className={cn('th')} />
+                        <th className={cn('th')}>Status</th>
+                        <th className={cn('th')}>Mode</th>
+                        <th className={cn('th')}>Last seen</th>
+                        <th className={cn('th')}>Latency</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {filteredJournal.length > 0 ? (
+                        filteredJournal.map(item => (
+                            <JournalRow
+                                request={item.request}
+                                response={item.response}
+                                mode={item.mode}
+                                timeStarted={item.timeStarted}
+                                latency={item.latency}
+                            />
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan={8} className={cn('td-empty')}>
+                                Journal empty
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
         </div>
     );
 };
