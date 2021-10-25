@@ -6,6 +6,7 @@ import Layout from 'components/Layout/Layout';
 import TopBar from 'components/TopBar/TopBar';
 import { useDispatch } from 'store/hooks';
 import { fetchStatusAsync } from 'store/status/statusSlice';
+import AuthModal from '../AuthModal/AuthModal';
 import CorsInfo from '../CorsInfo/CorsInfo';
 import Journal from '../Journal/Journal';
 import Logs from '../Logs/Logs';
@@ -24,31 +25,34 @@ function App(): JSX.Element {
     }, [dispatch]);
 
     return (
-        <Layout>
-            <TopBar />
-            <div>
-                <Grid>
-                    <GridColumn className={cn('left-column')} all="3">
-                        <CorsInfo />
-                        <hr />
-                        <ModeInfo />
-                        <hr />
-                        <StateManagement />
-                        <hr />
-                        <Middleware />
-                        <hr />
-                        <ProxyInfo />
-                        <hr />
-                        <PacInfo />
-                    </GridColumn>
-                    <GridColumn all="9" className={cn('right-column')}>
-                        <Journal />
-                        <hr />
-                        <Logs />
-                    </GridColumn>
-                </Grid>
-            </div>
-        </Layout>
+        <>
+            <Layout>
+                <TopBar />
+                <div>
+                    <Grid>
+                        <GridColumn className={cn('left-column')} all="3">
+                            <CorsInfo />
+                            <hr />
+                            <ModeInfo />
+                            <hr />
+                            <StateManagement />
+                            <hr />
+                            <Middleware />
+                            <hr />
+                            <ProxyInfo />
+                            <hr />
+                            <PacInfo />
+                        </GridColumn>
+                        <GridColumn all="9" className={cn('right-column')}>
+                            <Journal />
+                            <hr />
+                            <Logs />
+                        </GridColumn>
+                    </Grid>
+                </div>
+            </Layout>
+            <AuthModal />
+        </>
     );
 }
 

@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import axios, { AxiosInstance } from 'axios';
-import type { IRequest, IRequestCreateOptions, IRequestConfig } from './types';
+import type { IRequest, IRequestCreateOptions, IRequestConfig, AxiosErrorCallback } from './types';
 
 class AxiosRequest implements IRequest {
     instance: AxiosInstance;
 
     constructor(options: IRequestCreateOptions) {
         this.instance = axios.create(options);
+    }
+
+    interceptors(cbe: AxiosErrorCallback): void {
+        this.instance.interceptors.response.use(c => c, cbe);
     }
 
     get<T>(url: string, options?: IRequestConfig): Promise<T> {

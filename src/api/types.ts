@@ -1,7 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import type { AxiosError } from 'axios';
 import type { RootState } from '../store';
 
-export type ApiType = { hoverfly: IHoverflyApi };
+export type AxiosErrorCallback = (e: AxiosError) => void;
+
+export type ApiType = {
+    hoverfly: IHoverflyApi;
+};
+
+export interface IAuthConfig {
+    bearer?: string;
+}
 
 export interface IRequestCreateOptions {
     baseURL: string;
@@ -183,7 +192,12 @@ export type JournalSearchRequest = {
     };
 };
 
+export type AuthRequest = { username: string; password: string };
+export type AuthResponse = { token: string };
+
 export interface IHoverflyApi {
+    getAuth(data: AuthRequest): Promise<IRequestResponse<AuthResponse>>;
+
     fetchMainInfo(): Promise<IRequestResponse<MainInfo>>;
     fetchDeleteCache(): Promise<IRequestResponse<DeleteCache>>;
     fetchShutdown(): Promise<IRequestResponse<void>>;

@@ -12,7 +12,10 @@ const initialState: IMiddlewareState = {
 export const getMiddlewareAsync = createAsyncThunk<Middleware, void, ThunkApiConfig>(
     'middleware/get',
     async (_: unknown, thunkAPI) => {
-        const { data } = await thunkAPI.extra.hoverfly.fetchMiddleware();
+        const {
+            extra: { hoverfly },
+        } = thunkAPI;
+        const { data } = await hoverfly.fetchMiddleware();
 
         if (data) {
             return data;
@@ -26,7 +29,6 @@ export const updateMiddlewareAsync = createAsyncThunk<Middleware, Middleware, Th
     'middleware/update',
     async (content: Middleware, thunkAPI) => {
         const { data } = await thunkAPI.extra.hoverfly.updateMiddleware(content);
-
         if (data) {
             return data;
         }

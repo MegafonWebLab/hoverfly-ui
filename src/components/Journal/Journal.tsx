@@ -268,8 +268,9 @@ const Journal: React.FC = () => {
                 </thead>
                 <tbody>
                     {filteredJournal.length > 0 ? (
-                        filteredJournal.map(item => (
+                        filteredJournal.map((item, index) => (
                             <JournalRow
+                                key={item.timeStarted + index}
                                 request={item.request}
                                 response={item.response}
                                 mode={item.mode}
