@@ -1,0 +1,80 @@
+$b: .simulations;
+
+$(b) {
+    &__title {
+        margin-bottom: 8px;
+
+        font-weight: bold;
+    }
+
+    &__header {
+        display: flex;
+        align-items: flex-end;
+    }
+
+    &__header-left {
+        display: flex;
+        align-items: center;
+    }
+
+    &__header-right {
+        margin-bottom: 8px;
+    }
+
+    &__header-button {
+        margin-right: 8px;
+    }
+
+    &__field-wrapper {
+        margin-right: 8px;
+        margin-bottom: 8px;
+    }
+
+    &__routes {
+        min-width: 170px;
+    }
+
+    &__field-line {
+        display: flex;
+
+        margin-bottom: 12px;
+    }
+
+    &__field-name {
+        width: 200px;
+    }
+
+    &__field-add {
+        margin-bottom: 8px;
+    }
+
+    &__fields {
+        display: flex;
+        align-items: center;
+
+        &:not(:last-child) {
+            margin-bottom: 8px;
+        }
+    }
+
+    &__field:not(:last-child) {
+        margin-right: 16px;
+    }
+
+    &__select {
+        width: 150px;
+
+        &:not(:last-child) {
+            margin-right: 16px;
+        }
+
+        &_line {
+            margin-bottom: 12px;
+        }
+    }
+
+    &__editor {
+        min-width: 600px;
+        max-width: 700px;
+    }
+}

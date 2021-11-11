@@ -21,6 +21,8 @@ import type {
     JournalSearchDataRequest,
     AuthResponse,
     AuthRequest,
+    SimulationRequest,
+    SimulationResponse,
 } from '../types';
 
 type ApiCreate = {
@@ -116,6 +118,15 @@ const hoverflyApi = ({ baseURL }: ApiCreate, cbe: (e: AxiosError) => void): IHov
             };
 
             return instance.post('/v2/journal', formData, getAuthConfig());
+        },
+        fetchSimulation(data?: SimulationRequest): Promise<IRequestResponse<SimulationResponse>> {
+            return instance.get('/v2/simulation', { params: data, headers: getAuthConfig().headers });
+        },
+        createSimulation(data: SimulationResponse): Promise<IRequestResponse<SimulationResponse>> {
+            return instance.put('/v2/simulation', data, getAuthConfig());
+        },
+        updateSimulation(data: SimulationResponse): Promise<IRequestResponse<SimulationResponse>> {
+            return instance.post('/v2/simulation', data, getAuthConfig());
         },
     };
 };

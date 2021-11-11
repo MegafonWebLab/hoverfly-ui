@@ -20,3 +20,11 @@ export const getCookie = (name: string): string | null => {
 
     return null;
 };
+
+export const onlyDigits = (string: string): string => string.replace(/\D/g, '');
+
+export const omitKey = <T extends Record<string, unknown>>(object: T, key: string): T => {
+    delete object[key];
+
+    return object;
+};

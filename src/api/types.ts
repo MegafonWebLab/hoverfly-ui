@@ -192,6 +192,65 @@ export type JournalSearchRequest = {
     };
 };
 
+export type HoverflyMatcherValues = 'exact' | 'glob';
+
+export type HoverflyMatcher = {
+    matcher: HoverflyMatcherValues;
+    value: string;
+};
+
+export type PairItemRequest = {
+    path?: HoverflyMatcher[];
+    method?: HoverflyMatcher[];
+    destination?: HoverflyMatcher[];
+    scheme?: HoverflyMatcher[];
+    body?: HoverflyMatcher[];
+    headers?: Record<string, HoverflyMatcher[]>;
+    query?: Record<string, HoverflyMatcher[]>;
+    requiresState?: Record<string, string>;
+};
+
+export type PairItemResponse = {
+    status: number;
+    fixedDelay?: number;
+    body: string;
+    encodedBody?: boolean;
+    headers?: Record<string, string[]>;
+    templated?: boolean;
+    removesState?: string[];
+    transitionsState?: Record<string, string>;
+};
+
+export type SimulationRequest = {
+    urlPattern?: string;
+};
+
+export type SimulationItem = {
+    request: PairItemRequest;
+    response: PairItemResponse;
+};
+
+export type SimulationGlobalDelay = {
+    urlPattern?: string;
+    httpMethod?: string;
+    delay: number;
+};
+
+export type SimulationResponse = {
+    data: {
+        pairs: SimulationItem[];
+        globalActions: {
+            delays: SimulationGlobalDelay[];
+            delaysLogNormal: string[];
+        };
+    };
+    meta: {
+        schemaVersion: string;
+        hoverflyVersion: string;
+        timeExported: string;
+    };
+};
+
 export type AuthRequest = { username: string; password: string };
 export type AuthResponse = { token: string };
 
@@ -227,4 +286,8 @@ export interface IHoverflyApi {
     fetchJournal(data?: JournalRequest): Promise<IRequestResponse<JournalResponse>>;
     deleteJournal(): Promise<IRequestResponse<void>>;
     searchJournal(data: JournalSearchDataRequest): Promise<IRequestResponse<JournalResponse>>;
+
+    fetchSimulation(data?: SimulationRequest): Promise<IRequestResponse<SimulationResponse>>;
+    createSimulation(data: SimulationResponse): Promise<IRequestResponse<SimulationResponse>>;
+    updateSimulation(data: SimulationResponse): Promise<IRequestResponse<SimulationResponse>>;
 }

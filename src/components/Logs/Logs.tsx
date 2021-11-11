@@ -19,6 +19,8 @@ const MINUTE_ITEMS: ISelectItem<number>[] = Array(MINUTES)
     .fill(1)
     .map<ISelectItem<number>>((_x, i) => ({ title: `${i}`, value: i }));
 
+const LOG_MAX_CHARACTER = 10000;
+
 const cn = cnCreate('logs');
 const Logs: React.FC = () => {
     const dispatch = useDispatch();
@@ -125,8 +127,9 @@ const Logs: React.FC = () => {
 
         return fieldList.map(([key, value], index) => {
             // default value can crash react render
-            tmpDiv.current.innerHTML = value;
-            const b = tmpDiv.current.textContent || tmpDiv.current.innerText || '';
+            tmpDiv.current.innerHTML = value.toString().replace(/<img[^>]*>/g, '');
+            let b = tmpDiv.current.textContent || tmpDiv.current.innerText || '';
+            b = b.length > LOG_MAX_CHARACTER ? `${b.slice(0, LOG_MAX_CHARACTER)}...` : b;
 
             return (
                 // eslint-disable-next-line react/no-array-index-key

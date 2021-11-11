@@ -13,6 +13,7 @@ import destination from './proxy/destinationSlice';
 import upstreamProxy from './proxy/upstreamProxySlice';
 import serverState from './serverState/serverStateSlice';
 import shutdown from './shutdown/shutdownSlice';
+import simulation from './simulation/simulationSlice';
 import status from './status/statusSlice';
 import { getAuthParams } from './utils';
 
@@ -31,6 +32,7 @@ export const store = configureStore({
         logs,
         journal,
         auth,
+        simulation,
     },
     middleware: getDefaultMiddleware =>
         getDefaultMiddleware({

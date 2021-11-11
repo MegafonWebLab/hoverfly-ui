@@ -14,6 +14,7 @@ import Middleware from '../Middleware/Middleware';
 import ModeInfo from '../ModeInfo/ModeInfo';
 import PacInfo from '../PacInfo/PacInfo';
 import ProxyInfo from '../ProxyInfo/ProxyInfo';
+import Simulations from '../Simulations/Simulations';
 import StateManagement from '../StateManagement/StateManagement';
 
 const cn = cnCreate('app');
@@ -44,6 +45,8 @@ function App(): JSX.Element {
                             <PacInfo />
                         </GridColumn>
                         <GridColumn all="9" className={cn('right-column')}>
+                            <Simulations />
+                            <hr />
                             <Journal />
                             <hr />
                             <Logs />
