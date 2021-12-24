@@ -1,10 +1,11 @@
 # Hoverfly-ui
 
+Before run project need to start any hoverfly server.
+
 ## Run project
 ```bash
 $ yarn start
 ```
-
 
 ### TODO
 * почистить webpack config
