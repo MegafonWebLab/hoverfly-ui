@@ -5,14 +5,26 @@ $(b) {
 
     box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.2);
 
+    @media (--mobile) {
+        padding: 13px 38px 11px 28px;
+    }
+    @media (--mobileS) {
+        flex-direction: column;
+    }
+
     &__version {
         margin-top: -5px;
         margin-left: 2px;
 
         color: #999999;
+
         font-weight: 600;
         font-size: 12px;
         line-height: 16px;
+
+        @media (--mobile) {
+            margin-bottom: 10px;
+        }
     }
 
     &__version-server {
@@ -21,40 +33,61 @@ $(b) {
 
     &__buttons {
         display: flex;
+        align-items: center;
 
-        max-width: 263px;
+        justify-content: space-around;
+        max-width: 270px;
 
-        @media (--mobileBU) {
-            justify-content: space-around;
+        @media (--mobile) {
+            justify-content: center;
+        }
+        @media (--mobileS) {
+            flex-direction: column;
+            gap: 20px;
+            align-items: flex-end;
         }
     }
 
     &__button {
         display: flex;
+
         align-items: center;
-        margin-bottom: 8px;
+        min-width: 110px;
+        margin-bottom: 5px;
 
-        @media (--mobileBU) {
-            margin-bottom: 3px;
+        cursor: pointer;
 
+        @media (--mobileMB) {
             &:first-child {
                 margin-right: 8px;
             }
         }
+        @media (--mobileS) {
+            flex-direction: row-reverse;
+        }
+    }
+
+    &__button:hover, &__button:active, &__button:focus {
+        opacity: 0.7;
     }
 
     &__button-preloader {
         justify-content: center;
         margin-bottom: -6px;
-        margin-left: 15px;
     }
 
     &__clear-icon {
         width: 18px;
         height: 18px;
-        margin-right: 5px;
 
         fill: #FFA717;
+
+        @media (--mobileMU) {
+            margin-right: 5px;
+        }
+        @media (--mobileS) {
+            margin-left: 8px;
+        }
     }
 
     &__clear-icon_disabled {
@@ -64,12 +97,32 @@ $(b) {
     &__shut-down-icon {
         width: 16px;
         height: 16px;
-        margin-right: 5px;
+
+        @media (--mobileMU) {
+            margin-right: 5px;
+        }
+        @media (--mobileS) {
+            margin-left: 8px;
+        }
     }
 
     &__profile-block {
         display: flex;
+
         justify-content: flex-end;
+
+        cursor: pointer;
+
+        @media (--mobileM) {
+            justify-content: flex-start;
+        }
+        @media (--mobileS) {
+            margin-top: 20px;
+        }
+    }
+
+    &__profile-block:hover, &__profile-block:active, &__profile-block:focus {
+        opacity: 0.7;
     }
 
     &__profile-header {

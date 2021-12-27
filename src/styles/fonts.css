@@ -1,0 +1,7 @@
+@font-face {
+    font-family: 'Roboto_Graphik';
+    font-style: normal;
+    font-weight: normal;
+    src: url('https://static1.megafon.ru/.blocks/fonts/roboto/roboto-regular-webfont.eot');
+    src: local('☺'), url('https://static1.megafon.ru/.blocks/fonts/graphik/MegaFonGraphikLC-Regular-Web.woff2') format('woff2'), url('https://static1.megafon.ru/.blocks/fonts/graphik/MegaFonGraphikLC-Regular-Web.woff') format('woff'), url('https://static1.megafon.ru/.blocks/fonts/roboto/roboto-regular-webfont.ttf') format('ttf'), url('https://static1.megafon.ru/.blocks/fonts/roboto/roboto-regular-webfont.eot') format('eot'), url('https://static1.megafon.ru/.blocks/fonts/roboto/roboto-regular-webfont.svg#robotoregular') format('svg');
+}

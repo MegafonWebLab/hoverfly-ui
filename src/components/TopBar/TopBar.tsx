@@ -17,7 +17,6 @@ const TopBar: React.FC = () => {
     const mainInfo = useSelector(state => state.main);
     const cacheState = useSelector(state => state.cache);
     const shutdownState = useSelector(state => state.shutdown);
-    // const statusState = useSelector(state => state.status.value);
     const server = mainInfo.type === 'success' ? mainInfo.value.version : '*.*.*';
     const hasCachePending = cacheState.type === 'pending';
     const hasShutdownPending = shutdownState.type === 'pending';
@@ -32,42 +31,53 @@ const TopBar: React.FC = () => {
         dispatch(deleteShutdownAsync());
     }
 
+    const preloader = <Preloader sizeAll="small" color="black" className={cn('button-preloader')} />;
+
     return (
-        <Grid className={cn()} vAlign="center">
-            <GridColumn all="2">
+        <Grid className={cn()} vAlign="center" hAlign="between">
+            <GridColumn all="2" tablet="3" mobile="5">
                 <img src={hoverflyIcon} alt="Hoverfly" width="137" height="21" />
                 <div className={cn('version')}>
-                    <span className={cn('version-server')}>Server v {server}</span>
-                    <span>UI v 0.1.0</span>
+                    <span className={cn('version-server')}>
+                        Server{'\u00A0'}v{'\u00A0'}
+                        {server}
+                    </span>
+                    <span>
+                        UI{'\u00A0'}v{'\u00A0'}0.1.0
+                    </span>
                 </div>
             </GridColumn>
-            <GridColumn all="3">
-                <div className={cn('buttons')}>
-                    <div className={cn('button-wrap')}>
-                        <button type='button' onClick={handleClickCache} className={cn('button')} disabled={hasCachePending}>
-                            <ClearIcon className={cn('clear-icon', { disabled: hasCachePending })} />
-                            <span>Clear cache</span>
-                        </button>
-                        {hasCachePending && (
-                            <Preloader sizeAll="small" color="black" className={cn('button-preloader')} />
-                        )}
-                    </div>
-                    <div className={cn('button-wrap')}>
-                        <button type='button' className={cn('button')} onClick={handleClickShutdown} disabled={hasShutdownPending}>
-                            <img
-                                src={hasShutdownPending ? disabledDownIcon : shutDownIcon}
-                                alt="shut down"
-                                className={cn('shut-down-icon')}
-                            />
-                            Shut down
-                        </button>
-                        {hasShutdownPending && (
-                            <Preloader sizeAll="small" color="black" className={cn('button-preloader')} />
-                        )}
-                    </div>
+            <GridColumn all="6" tablet="4" mobile="7" className={cn('buttons')}>
+                <div className={cn('button-wrap')}>
+                    <button
+                        type="button"
+                        className={cn('button')}
+                        onClick={handleClickCache}
+                        disabled={hasCachePending}
+                    >
+                        <ClearIcon className={cn('clear-icon', { disabled: hasCachePending })} />
+                        <span>Clear cache</span>
+                    </button>
+                    {hasCachePending && preloader}
+                </div>
+                <div className={cn('button-wrap')}>
+                    <button
+                        type="button"
+                        className={cn('button')}
+                        onClick={handleClickShutdown}
+                        disabled={hasShutdownPending}
+                    >
+                        <img
+                            src={hasShutdownPending ? disabledDownIcon : shutDownIcon}
+                            alt="shut down"
+                            className={cn('shut-down-icon')}
+                        />
+                        Shut down
+                    </button>
+                    {hasShutdownPending && preloader}
                 </div>
             </GridColumn>
-            <GridColumn all="7" className={cn('profile-block')}>
+            <GridColumn all="6" tablet="5" mobile="12" className={cn('profile-block')}>
                 <Header as="h2" className={cn('profile-header')}>
                     Nikita Safonov
                 </Header>

@@ -2,8 +2,8 @@ $b: .footer;
 
 $(b) {
     display: flex;
-    align-items: center;
 
+    align-items: center;
     justify-content: space-between;
     height: 41px;
     padding: 12px 74px;
@@ -11,4 +11,15 @@ $(b) {
     color: #D8D8D8;
 
     background-color: #333333;
+
+    @media (--mobileSM) {
+        gap: 12px;
+        padding: 5px 20px;
+
+        font-size: 12px;
+        line-height: 15px;
+    }
+    @media (--mobileS) {
+        font-size: 10px;
+    }
 }
