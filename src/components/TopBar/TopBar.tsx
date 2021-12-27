@@ -1,10 +1,15 @@
 import React from 'react';
-import './TopBar.pcss';
-import { Button, Grid, GridColumn, Header } from '@megafon/ui-core';
+import { Grid, GridColumn, Header, Preloader } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
+import { ReactComponent as ProfileIcon } from '@megafon/ui-icons/basic-16-profile_16.svg';
+import { ReactComponent as ClearIcon } from '@megafon/ui-icons/system-16-refresh_16.svg';
+import disabledDownIcon from 'static/favicon/disabled_shut_down.svg';
+import hoverflyIcon from 'static/favicon/hoverfly.png';
+import shutDownIcon from 'static/favicon/shut_down.svg';
 import { deleteCacheAsync } from 'store/cache/cacheSlice';
 import { useDispatch, useSelector } from 'store/hooks';
 import { deleteShutdownAsync } from 'store/shutdown/shutdownSlice';
+import './TopBar.pcss';
 
 const cn = cnCreate('topbar');
 const TopBar: React.FC = () => {
@@ -12,7 +17,7 @@ const TopBar: React.FC = () => {
     const mainInfo = useSelector(state => state.main);
     const cacheState = useSelector(state => state.cache);
     const shutdownState = useSelector(state => state.shutdown);
-    const statusState = useSelector(state => state.status.value);
+    // const statusState = useSelector(state => state.status.value);
     const server = mainInfo.type === 'success' ? mainInfo.value.version : '*.*.*';
     const hasCachePending = cacheState.type === 'pending';
     const hasShutdownPending = shutdownState.type === 'pending';
@@ -29,38 +34,44 @@ const TopBar: React.FC = () => {
 
     return (
         <Grid className={cn()} vAlign="center">
-            <GridColumn all="6">
-                <Header as="h2">Hoverfly-ui</Header>
+            <GridColumn all="2">
+                <img src={hoverflyIcon} alt="Hoverfly" width="137" height="21" />
                 <div className={cn('version')}>
-                    Server: {server}, status: {statusState ? 'green' : 'red'}
+                    <span className={cn('version-server')}>Server v {server}</span>
+                    <span>UI v 0.1.0</span>
                 </div>
-                <div className={cn('version')}>UI: v0.0.1-beta</div>
             </GridColumn>
-            <GridColumn all="6">
+            <GridColumn all="3">
                 <div className={cn('buttons')}>
-                    <Button
-                        className={cn('button')}
-                        sizeAll="small"
-                        type="outline"
-                        theme="purple"
-                        showLoader={hasCachePending}
-                        disabled={!statusState}
-                        onClick={handleClickCache}
-                    >
-                        Clear cache
-                    </Button>
-                    <Button
-                        className={cn('button')}
-                        sizeAll="small"
-                        type="outline"
-                        theme="black"
-                        showLoader={hasShutdownPending}
-                        disabled={!statusState}
-                        onClick={handleClickShutdown}
-                    >
-                        Shutdown
-                    </Button>
+                    <div className={cn('button-wrap')}>
+                        <button type='button' onClick={handleClickCache} className={cn('button')} disabled={hasCachePending}>
+                            <ClearIcon className={cn('clear-icon', { disabled: hasCachePending })} />
+                            <span>Clear cache</span>
+                        </button>
+                        {hasCachePending && (
+                            <Preloader sizeAll="small" color="black" className={cn('button-preloader')} />
+                        )}
+                    </div>
+                    <div className={cn('button-wrap')}>
+                        <button type='button' className={cn('button')} onClick={handleClickShutdown} disabled={hasShutdownPending}>
+                            <img
+                                src={hasShutdownPending ? disabledDownIcon : shutDownIcon}
+                                alt="shut down"
+                                className={cn('shut-down-icon')}
+                            />
+                            Shut down
+                        </button>
+                        {hasShutdownPending && (
+                            <Preloader sizeAll="small" color="black" className={cn('button-preloader')} />
+                        )}
+                    </div>
                 </div>
+            </GridColumn>
+            <GridColumn all="7" className={cn('profile-block')}>
+                <Header as="h2" className={cn('profile-header')}>
+                    Nikita Safonov
+                </Header>
+                <ProfileIcon className={cn('profile-icon')} />
             </GridColumn>
         </Grid>
     );

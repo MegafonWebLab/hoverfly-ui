@@ -1,36 +1,89 @@
 $b: .topbar;
 
 $(b) {
-    padding: 16px;
+    padding: 13px 78px 11px 58px;
 
     box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.2);
 
     &__version {
-        font-size: 14px;
+        margin-top: -5px;
+        margin-left: 2px;
+
+        color: #999999;
+        font-weight: 600;
+        font-size: 12px;
+        line-height: 16px;
+    }
+
+    &__version-server {
+        margin-right: 14px;
     }
 
     &__buttons {
         display: flex;
-        flex-direction: column;
-        align-items: flex-end;
+
+        max-width: 263px;
 
         @media (--mobileBU) {
-            flex-direction: row;
-            justify-content: flex-end;
+            justify-content: space-around;
         }
     }
 
     &__button {
-        display: block;
-        width: 150px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 8px;
 
-        &:first-child {
-            margin-bottom: 8px;
+        @media (--mobileBU) {
+            margin-bottom: 3px;
 
-            @media (--mobileBU) {
+            &:first-child {
                 margin-right: 8px;
-                margin-bottom: 0;
             }
         }
+    }
+
+    &__button-preloader {
+        justify-content: center;
+        margin-bottom: -6px;
+        margin-left: 15px;
+    }
+
+    &__clear-icon {
+        width: 18px;
+        height: 18px;
+        margin-right: 5px;
+
+        fill: #FFA717;
+    }
+
+    &__clear-icon_disabled {
+        fill: #1010104D;
+    }
+
+    &__shut-down-icon {
+        width: 16px;
+        height: 16px;
+        margin-right: 5px;
+    }
+
+    &__profile-block {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    &__profile-header {
+        margin-right: 8px;
+
+        font-size: 15px;
+        line-height: 24px;
+    }
+
+    &__profile-icon {
+        width: 17px;
+        height: 21px;
+        margin-top: 1px;
+
+        fill: #00B956;
     }
 }
