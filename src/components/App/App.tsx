@@ -2,6 +2,7 @@ import React from 'react';
 import './App.pcss';
 import { Grid, GridColumn } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
+import Footer from 'components/Footer/Footer';
 import Layout from 'components/Layout/Layout';
 import TopBar from 'components/TopBar/TopBar';
 import { useDispatch } from 'store/hooks';
@@ -53,6 +54,7 @@ function App(): JSX.Element {
                         </GridColumn>
                     </Grid>
                 </div>
+                <Footer />
             </Layout>
             <AuthModal />
         </>

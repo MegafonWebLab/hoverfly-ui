@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import './styles/normalize.pcss';
+import 'styles/default.pcss';
 import './styles/variables.pcss';
 import './styles/media.pcss';
 import App from './components/App/App';

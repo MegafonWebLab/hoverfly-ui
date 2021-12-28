@@ -79,7 +79,8 @@
   "scripts": {
     "start": "PORT=4200 node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "lint:style:fix": "stylelint \"**/*.(pcss)\" --fix"
   },
   "eslintConfig": {
     "extends": [
