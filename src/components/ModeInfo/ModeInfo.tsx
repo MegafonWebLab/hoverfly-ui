@@ -1,10 +1,11 @@
 import React from 'react';
-import { Checkbox, Header, Select, Button, TextField } from '@megafon/ui-core';
+import { Checkbox, Select, Button, TextField } from '@megafon/ui-core';
 import type { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Select';
 import { cnCreate } from '@megafon/ui-helpers';
 import './ModeInfo.pcss';
 import { ReactComponent as Cancel } from '@megafon/ui-icons/system-16-cancel_16.svg';
 import type { ModeState } from 'api/types';
+import AccordionWrapper from 'components/AccordionWrapper/AccordionWrapper';
 import { useDispatch, useSelector } from 'store/hooks';
 import { getModeAsync, updateModeAsync } from 'store/mode/modeSlice';
 
@@ -156,41 +157,39 @@ const ModeInfo: React.FC = () => {
 
     return (
         <div className={cn()}>
-            <Header as="h3" className={cn('title')}>
-                Mode
-            </Header>
-            <table>
-                <tbody>
-                    <tr>
-                        <td className={cn('cell')} width="45%">
-                            Mode
-                        </td>
-                        <td className={cn('cell')}>
-                            <Select
-                                classes={{
-                                    control: cn('select-contol'),
-                                    listItemTitle: cn('select-item-title'),
-                                    arrowWrap: cn('select-arrow-wrap'),
-                                    titleInner: cn('select-title-inner'),
-                                }}
-                                currentValue={modeValue}
-                                items={modeItems.map(item => ({
-                                    title: item,
-                                    value: item,
-                                }))}
-                                onSelect={handleChangeMode}
-                            />
-                        </td>
-                    </tr>
-                    {isCaptureMode && renderCaptureFields}
-                    {isShouldRenderHeaders && renderHostFields}
-                </tbody>
-            </table>
-            <div className={cn('submit-wrapper')}>
-                <Button sizeAll="small" disabled={!statusState} onClick={handleSubmit}>
-                    Change
-                </Button>
-            </div>
+            <AccordionWrapper title="Mode">
+                <table>
+                    <tbody>
+                        <tr>
+                            <td className={cn('cell')} width="45%">
+                                Mode
+                            </td>
+                            <td className={cn('cell')}>
+                                <Select
+                                    classes={{
+                                        control: cn('select-contol'),
+                                        listItemTitle: cn('select-item-title'),
+                                        titleInner: cn('select-title-inner'),
+                                    }}
+                                    currentValue={modeValue}
+                                    items={modeItems.map(item => ({
+                                        title: item,
+                                        value: item,
+                                    }))}
+                                    onSelect={handleChangeMode}
+                                />
+                            </td>
+                        </tr>
+                        {isCaptureMode && renderCaptureFields}
+                        {isShouldRenderHeaders && renderHostFields}
+                    </tbody>
+                </table>
+                <div className={cn('submit-wrapper')}>
+                    <Button sizeAll="small" disabled={!statusState} onClick={handleSubmit}>
+                        Change
+                    </Button>
+                </div>
+            </AccordionWrapper>
         </div>
     );
 };

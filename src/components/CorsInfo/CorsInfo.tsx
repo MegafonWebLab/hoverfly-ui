@@ -1,8 +1,8 @@
 import React from 'react';
-import { Header } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
 import { useSelector } from 'store/hooks';
 import './CorsInfo.pcss';
+import AccordionWrapper from 'components/AccordionWrapper/AccordionWrapper';
 
 const cn = cnCreate('cors-info');
 const CorsInfo: React.FC = () => {
@@ -12,21 +12,20 @@ const CorsInfo: React.FC = () => {
 
     return (
         <div className={cn()}>
-            <Header className={cn('title')} as="h3">
-                Cors
-            </Header>
-            <table className={cn('table')}>
-                <tbody>
-                    {corsList.map(({ key, value }) => (
-                        <tr key={key}>
-                            <td className={cn('cell')} width="35%">
-                                {key}:
-                            </td>
-                            <td className={cn('cell')}>{String(value)}</td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+            <AccordionWrapper title="CORS">
+                <table className={cn('table')}>
+                    <tbody>
+                        {corsList.map(({ key, value }) => (
+                            <tr key={key}>
+                                <td className={cn('cell')} width="35%">
+                                    {key}:
+                                </td>
+                                <td className={cn('cell')}>{String(value)}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </AccordionWrapper>
         </div>
     );
 };

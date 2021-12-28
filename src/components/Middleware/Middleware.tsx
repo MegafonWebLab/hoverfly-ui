@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, Header, Select, TextField } from '@megafon/ui-core';
+import { Button, Select, TextField } from '@megafon/ui-core';
 import type { ISelectItem } from '@megafon/ui-core/dist/es/components/Select/Select';
 import { cnCreate } from '@megafon/ui-helpers';
 import { ReactComponent as Edit } from '@megafon/ui-icons/basic-16-edit_16.svg';
 import './Middleware.pcss';
+import AccordionWrapper from 'components/AccordionWrapper/AccordionWrapper';
 import { useDispatch, useSelector } from 'store/hooks';
 import { getMiddlewareAsync, updateMiddlewareAsync } from 'store/middleware/middlewareSlice';
 
@@ -174,41 +175,44 @@ const Middleware: React.FC = () => {
 
     return (
         <div className={cn()}>
-            <Header className={cn('title')} as="h3">
-                Middleware
-            </Header>
-            <table className={cn('table')}>
-                <tbody>
-                    <tr>
-                        <td className={cn('cell')} width="45%">
-                            Mode
-                        </td>
-                        <td className={cn('cell')}>
-                            <Select
-                                classes={{
-                                    control: cn('select-contol'),
-                                    listItemTitle: cn('select-item-title'),
-                                    arrowWrap: cn('select-arrow-wrap'),
-                                    titleInner: cn('select-title-inner'),
-                                }}
-                                currentValue={mode}
-                                items={modes.map(m => ({
-                                    title: m,
-                                    value: m,
-                                }))}
-                                onSelect={handleChangeMode}
-                            />
-                        </td>
-                    </tr>
-                    {mode === 'binary' && renderBinary}
-                    {mode === 'remote' && renderRemote}
-                </tbody>
-            </table>
-            <div className={cn('footer')}>
-                <Button className={cn('button')} sizeAll="small" disabled={!statusState} onClick={handleClickSubmit}>
-                    Change
-                </Button>
-            </div>
+            <AccordionWrapper title="Middleware">
+                <table className={cn('table')}>
+                    <tbody>
+                        <tr>
+                            <td className={cn('cell')} width="45%">
+                                Mode
+                            </td>
+                            <td className={cn('cell')}>
+                                <Select
+                                    classes={{
+                                        control: cn('select-contol'),
+                                        listItemTitle: cn('select-item-title'),
+                                        titleInner: cn('select-title-inner'),
+                                    }}
+                                    currentValue={mode}
+                                    items={modes.map(m => ({
+                                        title: m,
+                                        value: m,
+                                    }))}
+                                    onSelect={handleChangeMode}
+                                />
+                            </td>
+                        </tr>
+                        {mode === 'binary' && renderBinary}
+                        {mode === 'remote' && renderRemote}
+                    </tbody>
+                </table>
+                <div className={cn('footer')}>
+                    <Button
+                        className={cn('button')}
+                        sizeAll="small"
+                        disabled={!statusState}
+                        onClick={handleClickSubmit}
+                    >
+                        Change
+                    </Button>
+                </div>
+            </AccordionWrapper>
         </div>
     );
 };

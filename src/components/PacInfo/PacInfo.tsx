@@ -1,9 +1,10 @@
 import React from 'react';
-import { Button, Header, TextField } from '@megafon/ui-core';
+import { Button, TextField } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
 import { useDispatch, useSelector } from 'store/hooks';
 import { deletePacAsync, getPacAsync, updatePacAsync } from 'store/pac/pacSlice';
 import './PacInfo.pcss';
+import AccordionWrapper from 'components/AccordionWrapper/AccordionWrapper';
 
 const cn = cnCreate('pac-info');
 const PacInfo: React.FC = () => {
@@ -42,19 +43,18 @@ const PacInfo: React.FC = () => {
 
     return (
         <div className={cn()}>
-            <Header as="h3" className={cn('title')}>
-                Pac
-            </Header>
-            <TextField
-                className={cn('field-wrapper')}
-                classes={{ input: cn('field') }}
-                value={state}
-                textarea="flexible"
-                onChange={handleChange}
-            />
-            <Button sizeAll="small" actionType="button" fullWidth disabled={!statusState} onClick={handleSubmit}>
-                Set Pac file
-            </Button>
+            <AccordionWrapper title="PAC">
+                <TextField
+                    className={cn('field-wrapper')}
+                    classes={{ input: cn('field') }}
+                    value={state}
+                    textarea="flexible"
+                    onChange={handleChange}
+                />
+                <Button sizeAll="small" actionType="button" fullWidth disabled={!statusState} onClick={handleSubmit}>
+                    Set Pac file
+                </Button>
+            </AccordionWrapper>
         </div>
     );
 };

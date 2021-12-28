@@ -1,8 +1,9 @@
 import React from 'react';
-import { Button, Header, TextField } from '@megafon/ui-core';
+import { Button, TextField } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
 import { ReactComponent as Edit } from '@megafon/ui-icons/basic-16-edit_16.svg';
 import './ProxyInfo.pcss';
+import AccordionWrapper from 'components/AccordionWrapper/AccordionWrapper';
 import { useDispatch, useSelector } from 'store/hooks';
 import { getDestinationAsync, updateDestinationAsync } from 'store/proxy/destinationSlice';
 import { getUpstreamProxyAsync } from 'store/proxy/upstreamProxySlice';
@@ -64,40 +65,39 @@ const ProxyInfo: React.FC = () => {
 
     return (
         <div className={cn()}>
-            <Header as="h3" className={cn('title')}>
-                Proxy Settings
-            </Header>
-            <table className={cn('table')}>
-                <tbody>
-                    <tr>
-                        <td className={cn('cell')} width="45%">
-                            <div className={cn('cell-box')}>{renderEditButton} Destination</div>
-                        </td>
-                        <td className={cn('cell')}>
-                            {editable ? renderTextField : <div className={cn('cell-text')}>{destination}</div>}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td className={cn('cell')} width="45%">
-                            Upstream proxy
-                        </td>
-                        <td className={cn('cell')}>
-                            <div className={cn('cell-text')}>{upstream}</div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div className={cn('footer')}>
-                <Button
-                    className={cn('action-button')}
-                    actionType="button"
-                    disabled={!statusState}
-                    sizeAll="small"
-                    onClick={handleClickSubmit}
-                >
-                    Save settings
-                </Button>
-            </div>
+            <AccordionWrapper title="Proxy settings">
+                <table className={cn('table')}>
+                    <tbody>
+                        <tr>
+                            <td className={cn('cell')} width="45%">
+                                <div className={cn('cell-box')}>{renderEditButton} Destination</div>
+                            </td>
+                            <td className={cn('cell')}>
+                                {editable ? renderTextField : <div className={cn('cell-text')}>{destination}</div>}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className={cn('cell')} width="45%">
+                                Upstream proxy
+                            </td>
+                            <td className={cn('cell')}>
+                                <div className={cn('cell-text')}>{upstream}</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div className={cn('footer')}>
+                    <Button
+                        className={cn('action-button')}
+                        actionType="button"
+                        disabled={!statusState}
+                        sizeAll="small"
+                        onClick={handleClickSubmit}
+                    >
+                        Save settings
+                    </Button>
+                </div>
+            </AccordionWrapper>
         </div>
     );
 };
