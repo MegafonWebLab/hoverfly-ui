@@ -370,7 +370,7 @@ const Simulations: React.FC = () => {
                             className={cn('select')}
                             currentValue={currentPair?.request.method?.[0].value || 'GET'}
                             items={METHODS}
-                            isDisabled={!isRouteIndex}
+                            disabled={!isRouteIndex}
                             onSelect={handleChooseCurrentValueRequest('method', 'value')}
                         />
                     </div>
@@ -380,7 +380,7 @@ const Simulations: React.FC = () => {
                             <Select
                                 className={cn('select')}
                                 items={MATCHES}
-                                isDisabled={!isRouteIndex}
+                                disabled={!isRouteIndex}
                                 currentValue={currentPair?.request.destination?.[0].matcher || ''}
                                 onSelect={handleChooseCurrentValueRequest('destination', 'matcher')}
                             />
@@ -396,7 +396,7 @@ const Simulations: React.FC = () => {
                             <Select
                                 className={cn('select')}
                                 items={MATCHES}
-                                isDisabled={!isRouteIndex}
+                                disabled={!isRouteIndex}
                                 currentValue={currentPair?.request.path?.[0].matcher || ''}
                                 onSelect={handleChooseCurrentValueRequest('path', 'matcher')}
                             />
@@ -421,7 +421,7 @@ const Simulations: React.FC = () => {
                                     <Select
                                         className={cn('select')}
                                         items={MATCHES}
-                                        isDisabled={!isRouteIndex}
+                                        disabled={!isRouteIndex}
                                         currentValue={header.match}
                                         onSelect={handleChooseHeaderQuery('query', index)}
                                     />
@@ -450,7 +450,7 @@ const Simulations: React.FC = () => {
                                     <Select
                                         className={cn('select')}
                                         items={MATCHES}
-                                        isDisabled={!isRouteIndex}
+                                        disabled={!isRouteIndex}
                                         currentValue={header.match}
                                         onSelect={handleChooseHeaderQuery('request', index)}
                                     />
@@ -475,13 +475,13 @@ const Simulations: React.FC = () => {
                                     <Select
                                         className={cn('select', { line: true })}
                                         items={MATCHES}
-                                        isDisabled={!isRouteIndex}
+                                        disabled={!isRouteIndex}
                                         currentValue={rBody.matcher || ''}
                                         onSelect={handleChooseCurrentValueRequest('body', 'matcher')}
                                     />
                                     <Select
                                         className={cn('select', { line: true })}
-                                        isDisabled={!isRouteIndex}
+                                        disabled={!isRouteIndex}
                                         items={BODY_FORMATS}
                                         currentValue={rBody.type}
                                         onSelect={handleChooseBodyType('request')}
@@ -503,7 +503,7 @@ const Simulations: React.FC = () => {
                         <Select
                             className={cn('select')}
                             items={STATUS_CODES}
-                            isDisabled={!isRouteIndex}
+                            disabled={!isRouteIndex}
                             currentValue={currentPair?.response.status}
                             onSelect={handleChooseCurrentResponse('status')}
                         />
@@ -534,7 +534,7 @@ const Simulations: React.FC = () => {
                                     <Select
                                         className={cn('select')}
                                         items={MATCHES}
-                                        isDisabled={!isRouteIndex}
+                                        disabled={!isRouteIndex}
                                         currentValue={header.match}
                                         onSelect={handleChooseHeaderQuery('response', index)}
                                     />
@@ -554,7 +554,7 @@ const Simulations: React.FC = () => {
                             <Select
                                 className={cn('select', { line: true })}
                                 items={BODY_FORMATS}
-                                isDisabled={!isRouteIndex}
+                                disabled={!isRouteIndex}
                                 currentValue={body.response.type}
                                 onSelect={handleChooseBodyType('response')}
                             />

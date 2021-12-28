@@ -1495,25 +1495,33 @@
   resolved "https://registry.yarnpkg.com/@megafon/frontend-presets/-/frontend-presets-3.1.0.tgz#9ae92e72b3fe07bcd9f16922fe251d2c9445d70d"
   integrity sha512-bulfSV0u0/KYDv90XUlGPMJ6ka/KiJxlsqdXzs0SGeABW2v402/RcrbQZKKJ+IEYGJ0O8YQ9ZVP4dOxmKndk7Q==
 
-"@megafon/ui-core@^2.0.0-beta.155":
-  version "2.0.0-beta.155"
-  resolved "https://registry.yarnpkg.com/@megafon/ui-core/-/ui-core-2.0.0-beta.155.tgz#bf050f22bf2b04d9eb9f4f041787f0cb5a42d288"
-  integrity sha512-Ja0gpaTdSUmrHYI+vspYDCBIdFC4rx6evAAA5siVm7fvahCoce7QmixOSvTgdQgQ3qmW9erxVAREA7OBTmYU5w==
+"@megafon/ui-core@^2.1.4":
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/@megafon/ui-core/-/ui-core-2.1.4.tgz#ead08ed0569817eb1de7b7f7e75278e44451d4dc"
+  integrity sha512-dbHinuoUvS3g/iuoGNZXE2FxuZa59zrWWYlXmAq0sgKGC2YoQI6g5H3wxG2PSsHv9FeEYacXdVLSc+ycIShPPQ==
   dependencies:
     "@babel/runtime" "^7.8.4"
     "@datepicker-react/hooks" "^2.7.0"
-    "@megafon/ui-helpers" "^1.0.0-beta.0"
-    "@megafon/ui-icons" "^0.0.2-beta.1"
+    "@megafon/ui-helpers" "^1.0.0"
     "@popperjs/core" "^2.5.3"
     core-js "^3.6.4"
     date-fns "^2.16.1"
-    deep-equal "^1.1.1"
     lodash.debounce "^4.0.8"
     lodash.throttle "^4.1.1"
     prop-types "^15.7.2"
     react-input-mask "^2.0.4"
     react-popper "^2.2.3"
     swiper "^6.5.6"
+
+"@megafon/ui-helpers@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@megafon/ui-helpers/-/ui-helpers-1.0.0.tgz#3449b7f98b98222a19a29cbd57b7d6b4a9e9d87d"
+  integrity sha512-PKpaOGugs22jSycP+S2N5kl9JF1sWClCAYg+CAO1zHWcgU6fgmZ9/woH02Ky5X2PPwZdV92DpX0pGRAQmG+QsA==
+  dependencies:
+    "@babel/runtime" "^7.8.4"
+    classnames "^2.2.6"
+    core-js "^3.6.4"
+    htmr "^0.9.2"
 
 "@megafon/ui-helpers@^1.0.0-beta.0":
   version "1.0.0-beta.0"
@@ -4223,7 +4231,7 @@ dedent@^0.7.0:
   resolved "https://registry.yarnpkg.com/dedent/-/dedent-0.7.0.tgz#2495ddbaf6eb874abb0e1be9df22d2e5a544326c"
   integrity sha1-JJXduvbrh0q7Dhvp3yLS5aVEMmw=
 
-deep-equal@^1.0.1, deep-equal@^1.1.1:
+deep-equal@^1.0.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/deep-equal/-/deep-equal-1.1.1.tgz#b5c98c942ceffaf7cb051e24e1434a25a2e6076a"
   integrity sha512-yd9c5AdiqVcR+JjcwUQb9DkhJc8ngNr0MahEBGvDiJw8puWab2yZlh+nkasOnZP+EGTAP6rRp2JzJhJZzvNF8g==
