@@ -14,10 +14,15 @@ import './TopBar.pcss';
 const cn = cnCreate('topbar');
 const TopBar: React.FC = () => {
     const dispatch = useDispatch();
+
     const mainInfo = useSelector(state => state.main);
     const cacheState = useSelector(state => state.cache);
     const shutdownState = useSelector(state => state.shutdown);
+    const authState = useSelector(state => state.auth);
+
+    const username = authState.username || 'Nikita Safonov';
     const server = mainInfo.type === 'success' ? mainInfo.value.version : '*.*.*';
+
     const hasCachePending = cacheState.type === 'pending';
     const hasShutdownPending = shutdownState.type === 'pending';
 
@@ -37,14 +42,9 @@ const TopBar: React.FC = () => {
         <Grid className={cn()} vAlign="center" hAlign="between">
             <GridColumn all="2" tablet="3" mobile="5">
                 <img src={hoverflyIcon} alt="Hoverfly" width="137" height="21" />
-                <div className={cn('version')}>
-                    <span className={cn('version-server')}>
-                        Server{'\u00A0'}v{'\u00A0'}
-                        {server}
-                    </span>
-                    <span>
-                        UI{'\u00A0'}v{'\u00A0'}0.1.0
-                    </span>
+                <div className={cn('versions')}>
+                    <span className={cn('version')}>Server v {server}</span>{' '}
+                    <span className={cn('version')}>UI v 0.1.0</span>
                 </div>
             </GridColumn>
             <GridColumn all="6" tablet="4" mobile="7" className={cn('buttons')}>
@@ -77,9 +77,9 @@ const TopBar: React.FC = () => {
                     {hasShutdownPending && preloader}
                 </div>
             </GridColumn>
-            <GridColumn all="6" tablet="5" mobile="12" className={cn('profile-block')}>
-                <Header as="h2" className={cn('profile-header')}>
-                    Nikita Safonov
+            <GridColumn all="6" tablet="5" mobile="12" className={cn('profile')}>
+                <Header as="h2" className={cn('profile-username')}>
+                    {username}
                 </Header>
                 <ProfileIcon className={cn('profile-icon')} />
             </GridColumn>

@@ -8,6 +8,7 @@ import type { IRequestState, IRequestStateFailed, IRequestStateSuccess } from '.
 export type IAuthState<T = IRequestState<AuthResponse>> = {
     rd: T;
     isNeedAuth: boolean;
+    username?: string;
 };
 
 const initialState: IAuthState = {
@@ -46,6 +47,7 @@ export const authSlice = createSlice<IAuthState, { needAuth: CaseReducer<IAuthSt
             })
             .addCase(getAuthorizeAsync.fulfilled, (state: IAuthState<IRequestStateSuccess<AuthResponse>>, action) => {
                 state.rd.type = 'success';
+                state.username = action.meta.arg.username;
                 state.rd.value = action.payload;
                 state.isNeedAuth = false;
             })

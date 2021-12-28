@@ -12,7 +12,9 @@ $(b) {
         flex-direction: column;
     }
 
-    &__version {
+    &__versions {
+        max-width: 217px;
+
         margin-top: -5px;
         margin-left: 2px;
 
@@ -25,10 +27,14 @@ $(b) {
         @media (--mobile) {
             margin-bottom: 10px;
         }
+
+        &:first-child {
+            margin-right: 14px;
+        }
     }
 
-    &__version-server {
-        margin-right: 14px;
+    &__version {
+        white-space: nowrap;
     }
 
     &__buttons {
@@ -108,7 +114,7 @@ $(b) {
         }
     }
 
-    &__profile-block {
+    &__profile {
         display: flex;
 
         justify-content: flex-end;
@@ -123,13 +129,13 @@ $(b) {
         }
     }
 
-    &__profile-block:hover,
-    &__profile-block:active,
-    &__profile-block:focus {
+    &__profile:hover,
+    &__profile:active,
+    &__profile:focus {
         opacity: 0.7;
     }
 
-    &__profile-header {
+    &__profile-username {
         margin-right: 8px;
 
         font-size: 15px;
