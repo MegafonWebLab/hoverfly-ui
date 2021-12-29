@@ -1,11 +1,11 @@
 import React from 'react';
 import { Grid, GridColumn, Header, TextField } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
-import CorsInfo from '../CorsInfo/CorsInfo';
-import Middleware from '../Middleware/Middleware';
-import ModeInfo from '../ModeInfo/ModeInfo';
-import PacInfo from '../PacInfo/PacInfo';
-import ProxyInfo from '../ProxyInfo/ProxyInfo';
+import CorsInfo from './sections/CorsInfo/CorsInfo';
+import ServerSettingsMiddleware from './sections/ServerSettingsMiddleware/ServerSettingsMiddleware';
+import ModeInfo from './sections/ModeInfo/ModeInfo';
+import PacInfo from './sections/PacInfo/PacInfo';
+import ProxyInfo from './sections/ProxyInfo/ProxyInfo';
 import './ServerSettings.pcss';
 
 const cn = cnCreate('server-settings');
@@ -19,7 +19,7 @@ const ServerSettings: React.FC = () => (
                 <TextField classes={{ input: cn('global-delay-input') }} placeholder="Global Delay" />
             </GridColumn>
             <GridColumn className={cn('sections')} all="9">
-                <Middleware />
+                <ServerSettingsMiddleware />
                 <ModeInfo />
                 <PacInfo />
                 <CorsInfo />
