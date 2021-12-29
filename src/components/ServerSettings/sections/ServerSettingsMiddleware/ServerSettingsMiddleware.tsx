@@ -1,12 +1,13 @@
 import React from 'react';
-import { Header, Select, TextField } from '@megafon/ui-core';
+import { Select } from '@megafon/ui-core';
 import type { ISelectItem } from '@megafon/ui-core/dist/es/components/Select/Select';
 import { cnCreate } from '@megafon/ui-helpers';
+import AccordionWrapper from 'components/AccordionWrapper/AccordionWrapper';
 import { useDispatch, useSelector } from 'store/hooks';
 import { getMiddlewareAsync, updateMiddlewareAsync } from 'store/middleware/middlewareSlice';
-import AccordionWrapper from 'components/AccordionWrapper/AccordionWrapper';
 import ServerSettingsButton from '../ServerSettingsButton/ServerSettingsButton';
 import './ServerSettingsMiddleware.pcss';
+import ServerSettingsTextField from '../ServerSettingsTextField/ServerSettingsTextField';
 
 type MiddlewareModeState = 'Binary' | 'Remote';
 type MiddlewareState = Record<'binary' | 'script' | 'remote', { value: string; edited: boolean }>;
@@ -82,48 +83,36 @@ const ServerSettingsMiddleware: React.FC = () => {
                 },
             });
         }
-    }, [middleware.type]);
+    }, [middleware]);
 
     React.useEffect(() => {
         statusState && dispatch(getMiddlewareAsync());
-    }, [statusState]);
+    }, [statusState, dispatch]);
 
-    const renderBinary = (
-        <>
-            <div className={cn('mode')}>
-                <Header className={cn('mode-title')} as="h5">Binary path</Header>
-                <TextField
-                    className={cn('field')}
-                    classes={{ input: cn('input') }}
-                    value={state.binary.value}
-                    placeholder='State key'
-                    onChange={handleChangeState('binary')}
-                />
-            </div>
-            <div className={cn('mode-script')}>
-                <Header className={cn('mode-title')} as="h5">Script</Header>
-                <TextField
-                    className={cn('field')}
-                    classes={{ input: cn('textarea') }}
-                    value={state.script.value}
-                    textarea="fixed"
-                    onChange={handleChangeState('script')}
-                />
-            </div>
-        </>
-    );
-
-    const renderRemote = (
-        <div className={cn('mode')}>
-            <Header className={cn('mode-title')} as="h5">URL</Header>
-            <TextField
-                className={cn('field')}
-                classes={{ input: cn('input') }}
-                value={state.remote.value}
-                placeholder='localhost'
-                onChange={handleChangeState('remote')}
+    const renderBinary = (): JSX.Element => (
+        <div className={cn('binary-fields')}>
+            <ServerSettingsTextField
+                title="Binary path"
+                value={state.binary.value}
+                placeholder="State key"
+                onChange={handleChangeState('binary')}
+            />
+            <ServerSettingsTextField
+                textarea
+                title="Script"
+                value={state.script.value}
+                onChange={handleChangeState('script')}
             />
         </div>
+    );
+
+    const renderRemote = (): JSX.Element => (
+        <ServerSettingsTextField
+            title="URL"
+            value={state.remote.value}
+            placeholder="localhost"
+            onChange={handleChangeState('remote')}
+        />
     );
 
     return (
@@ -140,13 +129,9 @@ const ServerSettingsMiddleware: React.FC = () => {
                     }))}
                     onSelect={handleChangeMode}
                 />
-                {mode === 'Binary' && renderBinary}
-                {mode === 'Remote' && renderRemote}
-                <ServerSettingsButton
-                    text='Change Middleware'
-                    disabled={!statusState}
-                    onClick={handleClickSubmit}
-                />
+                {mode === 'Binary' && renderBinary()}
+                {mode === 'Remote' && renderRemote()}
+                <ServerSettingsButton text="Change Middleware" disabled={!statusState} onClick={handleClickSubmit} />
             </AccordionWrapper>
         </div>
     );

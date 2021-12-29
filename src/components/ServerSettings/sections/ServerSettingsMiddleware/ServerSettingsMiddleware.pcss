@@ -1,40 +1,16 @@
 $b: .middleware;
 
 $(b) {
-    &__mode,
-    &__mode-script {
+    &__binary-fields {
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
+        gap: 16px;
     }
 
-    &__mode {
-        align-items: center;
-    }
-
-    &__mode-title {
-        font-weight: 600;
-    }
-
-    &__field {
-        flex-basis: 84%;
-    }
-
-    &__mode,
     &__select-contol {
-        margin-bottom: 16px;
-    }
-
-    &__select-contol,
-    &__input,
-    &__textarea {
         min-height: 42px;
+        margin-bottom: 16px;
 
         border-radius: 12px;
-    }
-
-    &__field &__textarea {
-        padding: 22px 15px;
-
-        background-color: #F6F6F6;
     }
 }

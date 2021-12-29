@@ -1,6 +1,6 @@
+import React from 'react';
 import { Button } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
-import React from 'react';
 import './ServerSettingsButton.pcss';
 
 type Props = {
@@ -12,13 +12,7 @@ type Props = {
 const cn = cnCreate('server-settings-button');
 const ServerSettingsButton: React.FC<Props> = ({ text, onClick, disabled }): JSX.Element => (
     <div className={cn('button-wrap')}>
-        <Button
-            className={cn('button')}
-            type="outline"
-            sizeAll="small"
-            disabled={disabled}
-            onClick={onClick}
-        >
+        <Button className={cn('button')} type="outline" sizeAll="small" disabled={disabled} onClick={onClick}>
             <span className={cn('button-text')}>{text}</span>
         </Button>
     </div>
