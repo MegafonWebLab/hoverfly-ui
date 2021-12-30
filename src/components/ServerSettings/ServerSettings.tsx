@@ -1,11 +1,11 @@
 import React from 'react';
 import { Grid, GridColumn, Header, TextField } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
-import ProxyInfo from './sections/ProxyInfo/ProxyInfo';
 import ServerSettingsCORS from './sections/ServerSettingsCORS/ServerSettingsCORS';
 import ServerSettingsMiddleware from './sections/ServerSettingsMiddleware/ServerSettingsMiddleware';
 import ServerSettingsMode from './sections/ServerSettingsMode/ServerSettingsMode';
 import ServerSettingsPAC from './sections/ServerSettingsPAC/ServerSettingsPAC';
+import ServerSettingsProxy from './sections/ServerSettingsProxy/ServerSettingsProxy';
 import './ServerSettings.pcss';
 
 const cn = cnCreate('server-settings');
@@ -23,7 +23,7 @@ const ServerSettings: React.FC = () => (
                 <ServerSettingsMode />
                 <ServerSettingsPAC />
                 <ServerSettingsCORS />
-                <ProxyInfo />
+                <ServerSettingsProxy />
             </GridColumn>
         </Grid>
     </div>

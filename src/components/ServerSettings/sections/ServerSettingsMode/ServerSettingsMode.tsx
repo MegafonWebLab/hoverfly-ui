@@ -190,7 +190,6 @@ const ServerSettingsMode: React.FC = () => {
                 {isCaptureMode && renderCaptureFields()}
                 <div className={cn('input-list')}>
                     {renderMatchingStrategy()}
-                    {renderHostFields()}
                     {isShouldRenderHeaders && renderHostFields()}
                 </div>
                 <ServerSettingsButton text="Change Mode" disabled={!statusState} onClick={handleSubmit} />
