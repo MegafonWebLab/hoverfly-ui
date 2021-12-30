@@ -5,7 +5,35 @@ import type { IRequestState, IRequestStateFailed, IRequestStateSuccess } from '.
 export type IMainState = IRequestState<MainInfo>;
 
 const initialState: IMainState = {
-    type: 'idle',
+    type: 'success',
+    value: {
+        cors: {
+            enabled: true,
+            allowOrigin: '*',
+            allowMethods: 'GET, POST, PULL, PATCH',
+            allowHeaders: 'Content-type, Origin',
+            preflightMaxAge: 1800,
+            allowCredentials: true,
+        },
+        destination: 'destination',
+        mode: 'Simulate',
+        arguments: {
+            matchingStrategy: 'matchingStrategy',
+        },
+        isWebServer: true,
+        usage: {
+            counters: {
+                capture: 10,
+                diff: 20,
+                modify: 30,
+                simulate: 40,
+                spy: 50,
+                synthesize: 60,
+            },
+        },
+        version: '1.2.3',
+        upstreamProxy: 'upstreamProxy',
+    },
 };
 
 export const loadMainAsync = createAsyncThunk<MainInfo, void, ThunkApiConfig>(
