@@ -81,7 +81,7 @@ export type MainInfo = {
 };
 
 export type ModeState = {
-    mode: 'simulate' | 'synthesize' | 'modify' | 'capture' | 'spy' | 'diff';
+    mode: 'Simulate' | 'Synthesize' | 'Modify' | 'Capture' | 'Spy' | 'Diff';
     arguments: {
         matchingStrategy: string;
         headersWhitelist?: string[];
