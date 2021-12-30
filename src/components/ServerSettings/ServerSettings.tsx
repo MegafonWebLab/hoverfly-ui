@@ -2,10 +2,10 @@ import React from 'react';
 import { Grid, GridColumn, Header, TextField } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
 import CorsInfo from './sections/CorsInfo/CorsInfo';
-import PacInfo from './sections/PacInfo/PacInfo';
 import ProxyInfo from './sections/ProxyInfo/ProxyInfo';
 import ServerSettingsMiddleware from './sections/ServerSettingsMiddleware/ServerSettingsMiddleware';
 import ServerSettingsMode from './sections/ServerSettingsMode/ServerSettingsMode';
+import ServerSettingsPAC from './sections/ServerSettingsPAC/ServerSettingsPAC';
 import './ServerSettings.pcss';
 
 const cn = cnCreate('server-settings');
@@ -21,7 +21,7 @@ const ServerSettings: React.FC = () => (
             <GridColumn className={cn('sections')} all="9">
                 <ServerSettingsMiddleware />
                 <ServerSettingsMode />
-                <PacInfo />
+                <ServerSettingsPAC />
                 <CorsInfo />
                 <ProxyInfo />
             </GridColumn>
