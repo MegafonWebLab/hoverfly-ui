@@ -5,7 +5,7 @@ import './Footer.pcss';
 
 const cn = cnCreate('footer');
 const Footer: React.FC = () => (
-    <div className={cn()}>
+    <footer className={cn()}>
         <div>
             2021. Developed with love by
             {'\u00A0'}
@@ -16,7 +16,7 @@ const Footer: React.FC = () => (
             CKO
         </div>
         <span>Open source project for free</span>
-    </div>
+    </footer>
 );
 
 export default Footer;
