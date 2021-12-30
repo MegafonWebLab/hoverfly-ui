@@ -5,7 +5,7 @@ import { cnCreate } from '@megafon/ui-helpers';
 import './ServerSettingsMode.pcss';
 import { ReactComponent as Cancel } from '@megafon/ui-icons/system-16-cancel_16.svg';
 import type { ModeState } from 'api/types';
-import AccordionWrapper from 'components/AccordionWrapper/AccordionWrapper';
+import CollapseWrapper from 'components/CollapseWrapper/CollapseWrapper';
 import { useDispatch, useSelector } from 'store/hooks';
 import { getModeAsync, updateModeAsync } from 'store/mode/modeSlice';
 import ServerSettingsButton from '../ServerSettingsButton/ServerSettingsButton';
@@ -164,7 +164,7 @@ const ServerSettingsMode: React.FC = () => {
 
     return (
         <div className={cn()}>
-            <AccordionWrapper title="Mode">
+            <CollapseWrapper title="Mode">
                 <Grid hAlign="between">
                     <GridColumn all="1">
                         <Header className={cn('title')} as="h5">
@@ -193,7 +193,7 @@ const ServerSettingsMode: React.FC = () => {
                     {isShouldRenderHeaders && renderHostFields()}
                 </div>
                 <ServerSettingsButton text="Change Mode" disabled={!statusState} onClick={handleSubmit} />
-            </AccordionWrapper>
+            </CollapseWrapper>
         </div>
     );
 };

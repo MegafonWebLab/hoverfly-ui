@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { TextField } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
-import AccordionWrapper from 'components/AccordionWrapper/AccordionWrapper';
+import CollapseWrapper from 'components/CollapseWrapper/CollapseWrapper';
 import { useDispatch, useSelector } from 'store/hooks';
 import { deletePacAsync, getPacAsync, updatePacAsync } from 'store/pac/pacSlice';
 import ServerSettingsButton from '../ServerSettingsButton/ServerSettingsButton';
@@ -38,10 +38,10 @@ const ServerSettingsPAC: React.FC = () => {
 
     return (
         <div className={cn()}>
-            <AccordionWrapper title="PAC">
+            <CollapseWrapper title="PAC">
                 <TextField value={state} textarea="flexible" onChange={handleChange} />
                 <ServerSettingsButton text="Set PAC file" disabled={!statusState} onClick={handleSubmit} />
-            </AccordionWrapper>
+            </CollapseWrapper>
         </div>
     );
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import { Select } from '@megafon/ui-core';
 import type { ISelectItem } from '@megafon/ui-core/dist/es/components/Select/Select';
 import { cnCreate } from '@megafon/ui-helpers';
-import AccordionWrapper from 'components/AccordionWrapper/AccordionWrapper';
+import CollapseWrapper from 'components/CollapseWrapper/CollapseWrapper';
 import { useDispatch, useSelector } from 'store/hooks';
 import { getMiddlewareAsync, updateMiddlewareAsync } from 'store/middleware/middlewareSlice';
 import ServerSettingsButton from '../ServerSettingsButton/ServerSettingsButton';
@@ -117,7 +117,7 @@ const ServerSettingsMiddleware: React.FC = () => {
 
     return (
         <div className={cn()}>
-            <AccordionWrapper title="Middleware">
+            <CollapseWrapper title="Middleware">
                 <Select
                     classes={{
                         control: cn('select-contol'),
@@ -132,7 +132,7 @@ const ServerSettingsMiddleware: React.FC = () => {
                 {mode === 'Binary' && renderBinary()}
                 {mode === 'Remote' && renderRemote()}
                 <ServerSettingsButton text="Change Middleware" disabled={!statusState} onClick={handleClickSubmit} />
-            </AccordionWrapper>
+            </CollapseWrapper>
         </div>
     );
 };

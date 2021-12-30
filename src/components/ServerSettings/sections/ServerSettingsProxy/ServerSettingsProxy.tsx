@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Header, TextField } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
-import AccordionWrapper from 'components/AccordionWrapper/AccordionWrapper';
+import CollapseWrapper from 'components/CollapseWrapper/CollapseWrapper';
 import editIcon from 'static/favicon/edit-icon.svg';
 import { useDispatch, useSelector } from 'store/hooks';
 import { getDestinationAsync, updateDestinationAsync } from 'store/proxy/destinationSlice';
@@ -69,7 +69,7 @@ const ServerSettingsProxy: React.FC = () => {
 
     return (
         <div className={cn()}>
-            <AccordionWrapper title="Proxy settings">
+            <CollapseWrapper title="Proxy settings">
                 <div className={cn('data-wrap')}>
                     <div className={cn('destination-wrap')}>
                         <div className={cn('title')}>Destination</div>
@@ -78,7 +78,7 @@ const ServerSettingsProxy: React.FC = () => {
                             <Button
                                 theme="white"
                                 sizeAll="small"
-                                icon={<img src={editIcon} alt='edit icon' />}
+                                icon={<img src={editIcon} alt="edit icon" />}
                                 onClick={handleDestinationEditButtonClick}
                             />
                         </div>
@@ -95,7 +95,7 @@ const ServerSettingsProxy: React.FC = () => {
                     disabled={!statusState}
                     onClick={handleSaveButtonClick}
                 />
-            </AccordionWrapper>
+            </CollapseWrapper>
         </div>
     );
 };

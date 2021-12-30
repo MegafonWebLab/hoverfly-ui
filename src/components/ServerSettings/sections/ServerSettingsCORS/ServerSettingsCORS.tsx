@@ -1,7 +1,7 @@
 import React from 'react';
 import { Header } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
-import AccordionWrapper from 'components/AccordionWrapper/AccordionWrapper';
+import CollapseWrapper from 'components/CollapseWrapper/CollapseWrapper';
 import { useSelector } from 'store/hooks';
 import './ServerSettingsCORS.pcss';
 
@@ -25,7 +25,7 @@ const ServerSettingsCORS: React.FC = () => {
 
     return (
         <div className={cn()}>
-            <AccordionWrapper title="CORS">
+            <CollapseWrapper title="CORS">
                 <div className={cn('list')}>
                     {corsList.map(({ title, value }) => (
                         <div className={cn('item')} key={title}>
@@ -36,7 +36,7 @@ const ServerSettingsCORS: React.FC = () => {
                         </div>
                     ))}
                 </div>
-            </AccordionWrapper>
+            </CollapseWrapper>
         </div>
     );
 };
