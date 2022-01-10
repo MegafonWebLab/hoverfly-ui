@@ -1,13 +1,31 @@
 $b: .server-settings;
 
 $(b) {
+    &__content-wrap {
+        display: flex;
+        gap: 82px;
+        justify-content: space-between;
+
+        @media (--mobileSM) {
+            flex-direction: column;
+            gap: 30px;
+        }
+    }
+
     &__header {
         margin-bottom: 12px;
 
         font-weight: 600;
-
         font-size: 32px;
         line-height: 40px;
+    }
+
+    &__sections {
+        flex-grow: 10;
+    }
+
+    &__global-delay {
+        flex-grow: 1;
     }
 
     &__global-delay-input {

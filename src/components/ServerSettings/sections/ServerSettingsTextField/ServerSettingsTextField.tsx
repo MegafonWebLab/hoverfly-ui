@@ -30,7 +30,7 @@ const ServerSettingsTextField: React.FC<Props> = ({
                 {title}
             </Header>
         </GridColumn>
-        <GridColumn all={fieldSize}>
+        <GridColumn all={fieldSize} mobile="9">
             <TextField
                 className={cn('field')}
                 classes={{ input: cn('input', { textarea }) }}
