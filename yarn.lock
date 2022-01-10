@@ -9736,6 +9736,11 @@ react-modal@^3.14.3:
     react-lifecycles-compat "^3.0.0"
     warning "^4.0.3"
 
+react-multi-select-component@^4.1.15:
+  version "4.1.15"
+  resolved "https://registry.yarnpkg.com/react-multi-select-component/-/react-multi-select-component-4.1.15.tgz#c7303bb3b30e84a2e93674c446f983232373d572"
+  integrity sha512-BdLRcJv+2qUtrke9F7YrNG16RSyfaYgtqxx1Zg59slQRqrv2rpGbboycId72zWpXeB611zeD1P2ij7o5YOf7UQ==
+
 react-popper@^2.2.3:
   version "2.2.5"
   resolved "https://registry.yarnpkg.com/react-popper/-/react-popper-2.2.5.tgz#1214ef3cec86330a171671a4fbcbeeb65ee58e96"

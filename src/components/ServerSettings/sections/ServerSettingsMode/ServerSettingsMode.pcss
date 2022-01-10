@@ -1,10 +1,42 @@
 $b: .mode-info;
+$lib: .dropdown;
 
 $(b) {
     &__title {
         margin-top: 13px;
 
         font-weight: 600;
+    }
+
+    &__host-fields {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__multi-select-container {
+        position: relative;
+
+        width: 83%;
+        height: 56px;
+    }
+
+    &__multi-select {
+        position: absolute;
+
+        width: 100%;
+
+        $(lib) {
+            &-container {
+                display: flex;
+                align-items: center;
+                height: 56px;
+                border-radius: 12px !important;
+            }
+
+            &-heading-value {
+                color: transparent;
+            }
+        }
     }
 
     &__select {
@@ -27,21 +59,55 @@ $(b) {
         margin-left: 104px;
     }
 
-    &__input-list {
+    &__submit-wrapper {
         display: flex;
-        flex-direction: column;
-        gap: 24px;
+        justify-content: center;
+    }
+
+    &__headers {
+        position: absolute;
+
+        display: flex;
+        gap: 8px;
+        max-width: 750px;
+        margin-top: 12px;
+        margin-left: 16px;
+    }
+
+    &__header-item {
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+        width: fit-content;
+        max-height: 32px;
+        padding: 7px 16px;
+
+        border-radius: 32px;
+
+        color: #999999;
+
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    &__header-item:hover,
+    &__header-item:active,
+    &__header-item:focus {
+        color: #FFFFFF;
+
+        background-color: #34AAF2;
+
+        $(b)__cancel-icon {
+            fill: #FFFFFF;
+        }
     }
 
     &__cancel-icon {
         width: 20px;
         height: 20px;
+        margin-left: 5px;
 
         cursor: pointer;
-    }
 
-    &__submit-wrapper {
-        display: flex;
-        justify-content: center;
+        fill: #999999;
     }
 }

@@ -4,12 +4,12 @@ import type { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Se
 import { cnCreate } from '@megafon/ui-helpers';
 import './ServerSettingsMode.pcss';
 import { ReactComponent as Cancel } from '@megafon/ui-icons/system-16-cancel_16.svg';
+import { MultiSelect } from 'react-multi-select-component';
 import type { ModeState } from 'api/types';
 import CollapseWrapper from 'components/CollapseWrapper/CollapseWrapper';
 import { useDispatch, useSelector } from 'store/hooks';
 import { getModeAsync, updateModeAsync } from 'store/mode/modeSlice';
 import ServerSettingsButton from '../ServerSettingsButton/ServerSettingsButton';
-import ServerSettingsTextField from '../ServerSettingsTextField/ServerSettingsTextField';
 
 const modeWebser: ModeState['mode'][] = ['Simulate', 'Synthesize', 'Spy', 'Diff'];
 const modeValues: ModeState['mode'][] = ['Capture', 'Diff', 'Modify', 'Simulate', 'Spy', 'Synthesize'];
@@ -21,22 +21,56 @@ const initialArguments: Required<ModeState['arguments']> = {
     overwriteDuplicate: false,
 };
 
+type Option = {
+    label: string;
+    value: string;
+};
+
 const cn = cnCreate('mode-info');
 const ServerSettingsMode: React.FC = () => {
     const dispatch = useDispatch();
+
     const mainState = useSelector(state => state.main);
     const modeState = useSelector(state => state.mode);
     const statusState = useSelector(state => state.status.value);
+
     const mode = modeState.type === 'success' ? modeState.value.mode : 'Simulate';
     const isWebserver = mainState.type === 'success' ? mainState.value.isWebServer : false;
     const modeItems = isWebserver ? modeWebser : modeValues;
 
     const [modeValue, setModeState] = React.useState<ModeState['mode']>(mode);
-    const [header, setHeader] = React.useState<string>('');
+    const [headers, setHeaders] = React.useState<Option[]>([]);
     const [argumentsState, setArgumentsState] = React.useState<Required<ModeState['arguments']>>(initialArguments);
-    const { headersWhitelist, matchingStrategy } = argumentsState;
+
+    const { headersWhitelist } = argumentsState;
+
     const isCaptureMode = modeValue === 'Capture';
     const isShouldRenderHeaders = modeValue === 'Capture' || modeValue === 'Diff';
+
+    function handleMultiSelectCreateOption(value: string): Option {
+        return {
+            label: value,
+            value,
+        };
+    }
+
+    function handleMultiSelectChange(list: Option[]) {
+        setHeaders(list);
+
+        if (!list.length) {
+            return setArgumentsState(state => ({
+                ...state,
+                headersWhitelist: [],
+            }));
+        }
+
+        const lastValue = list[list.length - 1].value;
+
+        return setArgumentsState(state => ({
+            ...state,
+            headersWhitelist: [...state.headersWhitelist.filter(h => h !== lastValue), lastValue],
+        }));
+    }
 
     function handleChangeMode(_e: React.MouseEvent<HTMLDivElement>, item: ISelectItem<ModeState['mode']>) {
         setModeState(item.value);
@@ -51,40 +85,14 @@ const ServerSettingsMode: React.FC = () => {
         };
     }
 
-    function handleSubmitHeader(e: React.FormEvent<HTMLFormElement>) {
-        e.preventDefault();
-
-        const trimmed = header.trim();
-        if (trimmed) {
-            setArgumentsState(state => ({
-                ...state,
-                headersWhitelist: [...state.headersWhitelist.filter(h => h !== trimmed), trimmed],
-            }));
-            setHeader('');
-        }
-    }
-
-    function handleMatchingStrategyChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const trimmed = header.trim();
-        if (trimmed) {
-            setArgumentsState(state => ({
-                ...state,
-                matchingStrategy: e.target.value,
-            }));
-            setHeader('');
-        }
-    }
-
-    function handleChangeHeader(e: React.ChangeEvent<HTMLInputElement>) {
-        setHeader(e.target.value);
-    }
-
     function handleClickCancelHeader(index: number) {
         return (_e: React.MouseEvent<SVGElement>) => {
             const newHeaders = [...headersWhitelist];
             newHeaders.splice(index, 1);
+            headers.splice(index, 1);
 
             setArgumentsState(state => ({ ...state, headersWhitelist: newHeaders }));
+            setHeaders(headers);
         };
     }
 
@@ -129,37 +137,31 @@ const ServerSettingsMode: React.FC = () => {
     );
 
     const renderHostFields = (): JSX.Element => (
-        <>
-            <form onSubmit={handleSubmitHeader} className={cn('header-form')}>
-                <ServerSettingsTextField
-                    title="Headers"
-                    value={header}
-                    placeholder="Headers"
-                    fieldSize="9"
-                    headerSize="3"
-                    onChange={handleChangeHeader}
+        <div className={cn('host-fields')}>
+            <Header className={cn('title')} as="h5">
+                Headers
+            </Header>
+            <div className={cn('multi-select-container')}>
+                <MultiSelect
+                    isCreatable
+                    options={[]}
+                    value={headers}
+                    labelledBy="Select headers"
+                    className={cn('multi-select')}
+                    onChange={handleMultiSelectChange}
+                    onCreateOption={handleMultiSelectCreateOption}
+                    overrideStrings={{ selectSomeItems: 'Headers' }}
                 />
-            </form>
-            <div className={cn('headers', { 'not-empty': !!headersWhitelist.length })}>
-                {argumentsState.headersWhitelist.map((h, index) => (
-                    <div key={h} className={cn('header')}>
-                        <span className={cn('header-name')}>{h}</span>{' '}
-                        <Cancel className={cn('cancel-icon')} onClick={handleClickCancelHeader(index)} />
-                    </div>
-                ))}
+                <div className={cn('headers', { 'not-empty': !!headersWhitelist.length })}>
+                    {argumentsState.headersWhitelist.map((title, index) => (
+                        <div key={title} className={cn('header-item')}>
+                            <span className={cn('header-name')}>{title}</span>{' '}
+                            <Cancel className={cn('cancel-icon')} onClick={handleClickCancelHeader(index)} />
+                        </div>
+                    ))}
+                </div>
             </div>
-        </>
-    );
-
-    const renderMatchingStrategy = (): JSX.Element => (
-        <ServerSettingsTextField
-            title="Matching strategy"
-            value={matchingStrategy}
-            placeholder="State key"
-            fieldSize="9"
-            headerSize="3"
-            onChange={handleMatchingStrategyChange}
-        />
+        </div>
     );
 
     return (
@@ -188,10 +190,7 @@ const ServerSettingsMode: React.FC = () => {
                     </GridColumn>
                 </Grid>
                 {isCaptureMode && renderCaptureFields()}
-                <div className={cn('input-list')}>
-                    {renderMatchingStrategy()}
-                    {isShouldRenderHeaders && renderHostFields()}
-                </div>
+                {!isShouldRenderHeaders && renderHostFields()}
                 <ServerSettingsButton text="Change Mode" disabled={!statusState} onClick={handleSubmit} />
             </CollapseWrapper>
         </div>
