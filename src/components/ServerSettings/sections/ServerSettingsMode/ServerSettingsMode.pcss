@@ -16,33 +16,8 @@ $(b) {
 
         @media (--mobileS) {
             flex-direction: column;
+
             gap: 10px;
-        }
-    }
-
-    &__multi-select-container {
-        position: relative;
-
-        flex-grow: 5;
-        height: 56px;
-    }
-
-    &__multi-select {
-        position: absolute;
-
-        width: 100%;
-
-        $(lib) {
-            &-container {
-                display: flex;
-                align-items: center;
-                height: 56px;
-                border-radius: 12px !important;
-            }
-
-            &-heading-value {
-                color: transparent;
-            }
         }
     }
 
@@ -65,7 +40,6 @@ $(b) {
         display: flex;
         justify-content: center;
         max-width: 476px;
-
         margin-bottom: 36px;
 
         @media (--mobileS) {
@@ -73,15 +47,39 @@ $(b) {
         }
     }
 
-    &__submit-wrapper {
-        display: flex;
-        justify-content: center;
+    &__multi-select-container {
+        position: relative;
+
+        flex-grow: 5;
+        height: 56px;
+    }
+
+    &__multi-select {
+        position: absolute;
+
+        width: 100%;
+
+        $(lib) {
+            &-container {
+                display: flex;
+                align-items: center;
+
+                height: 56px;
+
+                border-radius: 12px !important;
+            }
+
+            &-heading-value {
+                color: transparent;
+            }
+        }
     }
 
     &__headers {
         position: absolute;
 
         display: flex;
+
         gap: 8px;
         max-width: 750px;
         margin-top: 12px;
@@ -92,6 +90,7 @@ $(b) {
         display: flex;
         align-items: center;
         box-sizing: border-box;
+
         width: fit-content;
         max-height: 32px;
         padding: 7px 16px;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Select } from '@megafon/ui-core';
 import type { ISelectItem } from '@megafon/ui-core/dist/es/components/Select/Select';
 import { cnCreate } from '@megafon/ui-helpers';
@@ -6,8 +6,8 @@ import CollapseWrapper from 'components/CollapseWrapper/CollapseWrapper';
 import { useDispatch, useSelector } from 'store/hooks';
 import { getMiddlewareAsync, updateMiddlewareAsync } from 'store/middleware/middlewareSlice';
 import ServerSettingsButton from '../ServerSettingsButton/ServerSettingsButton';
-import './ServerSettingsMiddleware.pcss';
 import ServerSettingsTextField from '../ServerSettingsTextField/ServerSettingsTextField';
+import './ServerSettingsMiddleware.pcss';
 
 type MiddlewareModeState = 'Binary' | 'Remote';
 type MiddlewareState = Record<'binary' | 'script' | 'remote', { value: string; edited: boolean }>;
@@ -36,15 +36,15 @@ const ServerSettingsMiddleware: React.FC = () => {
     const statusState = !!useSelector(state => state.status.value);
     const middleware = useSelector(state => state.middleware);
 
-    const [mode, setMode] = React.useState<MiddlewareModeState>('Binary');
-    const [state, setState] = React.useState<MiddlewareState>(initialState);
+    const [mode, setMode] = useState<MiddlewareModeState>('Binary');
+    const [state, setState] = useState<MiddlewareState>(initialState);
 
     function handleChangeMode(_e: React.MouseEvent<HTMLDivElement>, item: ISelectItem<MiddlewareModeState>): void {
         setMode(item.value);
     }
 
     function handleChangeState(name: 'binary' | 'script' | 'remote') {
-        return (e: React.ChangeEvent<HTMLInputElement>) => {
+        return (e: React.ChangeEvent<HTMLInputElement>): void => {
             setState(prevState => ({ ...prevState, [name]: { ...prevState[name], value: e.target.value } }));
         };
     }
@@ -66,26 +66,19 @@ const ServerSettingsMiddleware: React.FC = () => {
         dispatch(updateMiddlewareAsync(formData));
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (middleware.type === 'success') {
+            const { binary, script, remote } = middleware.value;
+
             setState({
-                binary: {
-                    value: middleware.value.binary,
-                    edited: false,
-                },
-                script: {
-                    value: middleware.value.script,
-                    edited: false,
-                },
-                remote: {
-                    value: middleware.value.remote,
-                    edited: false,
-                },
+                binary: { value: binary, edited: false },
+                script: { value: script, edited: false },
+                remote: { value: remote, edited: false },
             });
         }
     }, [middleware]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         statusState && dispatch(getMiddlewareAsync());
     }, [statusState, dispatch]);
 
@@ -93,8 +86,8 @@ const ServerSettingsMiddleware: React.FC = () => {
         <div className={cn('binary-fields')}>
             <ServerSettingsTextField
                 title="Binary path"
-                value={state.binary.value}
                 placeholder="State key"
+                value={state.binary.value}
                 onChange={handleChangeState('binary')}
             />
             <ServerSettingsTextField
@@ -109,8 +102,8 @@ const ServerSettingsMiddleware: React.FC = () => {
     const renderRemote = (): JSX.Element => (
         <ServerSettingsTextField
             title="URL"
-            value={state.remote.value}
             placeholder="localhost"
+            value={state.remote.value}
             onChange={handleChangeState('remote')}
         />
     );
@@ -119,14 +112,12 @@ const ServerSettingsMiddleware: React.FC = () => {
         <div className={cn()}>
             <CollapseWrapper title="Middleware">
                 <Select
-                    classes={{
-                        control: cn('select-contol'),
-                    }}
-                    currentValue={mode}
-                    items={modes.map(m => ({
-                        title: m,
-                        value: m,
+                    classes={{ control: cn('select-contol') }}
+                    items={modes.map(modesItem => ({
+                        title: modesItem,
+                        value: modesItem,
                     }))}
+                    currentValue={mode}
                     onSelect={handleChangeMode}
                 />
                 {mode === 'Binary' && renderBinary()}

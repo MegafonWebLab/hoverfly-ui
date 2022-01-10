@@ -9,7 +9,7 @@ import ServerSettingsProxy from './sections/ServerSettingsProxy/ServerSettingsPr
 import './ServerSettings.pcss';
 
 const cn = cnCreate('server-settings');
-const ServerSettings: React.FC = () => {
+const ServerSettings: React.FC = (): JSX.Element => {
     const [globalDelay, setGlobalDelay] = useState('');
 
     function getDigits(string: string): string {

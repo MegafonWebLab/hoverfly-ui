@@ -24,7 +24,7 @@ const ServerSettingsTextField: React.FC<Props> = ({
     headerSize = '2',
     textarea,
 }): JSX.Element => (
-    <Grid className={cn('mode', { textarea })} hAlign="between" vAlign={textarea ? 'top' : 'center'}>
+    <Grid hAlign="between" vAlign={textarea ? 'top' : 'center'}>
         <GridColumn all={headerSize}>
             <Header className={cn('mode-title')} as="h5">
                 {title}

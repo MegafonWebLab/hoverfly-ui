@@ -1,17 +1,6 @@
 $b: .server-settings;
 
 $(b) {
-    &__content-wrap {
-        display: flex;
-        gap: 82px;
-        justify-content: space-between;
-
-        @media (--mobileSM) {
-            flex-direction: column;
-            gap: 30px;
-        }
-    }
-
     &__header {
         margin-bottom: 12px;
 
@@ -20,8 +9,17 @@ $(b) {
         line-height: 40px;
     }
 
-    &__sections {
-        flex-grow: 10;
+    &__content-wrap {
+        display: flex;
+
+        gap: 82px;
+        justify-content: space-between;
+
+        @media (--mobileSM) {
+            flex-direction: column;
+
+            gap: 30px;
+        }
     }
 
     &__global-delay {
@@ -32,5 +30,9 @@ $(b) {
         max-width: 265px;
 
         border-radius: 12px;
+    }
+
+    &__sections {
+        flex-grow: 10;
     }
 }

@@ -14,14 +14,18 @@ const ServerSettingsPAC: React.FC = () => {
     const statusState = !!useSelector(state => state.status.value);
     const pacStore = useSelector(state => state.pac);
 
-    const [state, setState] = useState<string>('');
+    const [script, setScript] = useState<string>('');
 
-    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-        setState(e.target.value);
+    function handleFileChange(e: React.ChangeEvent<HTMLInputElement>): void {
+        setScript(e.target.value);
     }
 
-    function handleSubmit() {
-        return state ? dispatch(updatePacAsync(state)) : dispatch(deletePacAsync());
+    function handleFileSubmit(): void {
+        if (script) {
+            dispatch(updatePacAsync(script));
+        } else {
+            dispatch(deletePacAsync());
+        }
     }
 
     useEffect(() => {
@@ -29,7 +33,7 @@ const ServerSettingsPAC: React.FC = () => {
             return;
         }
 
-        typeof pacStore.value === 'string' && setState(pacStore.value);
+        typeof pacStore.value === 'string' && setScript(pacStore.value);
     }, [pacStore]);
 
     useEffect(() => {
@@ -39,8 +43,8 @@ const ServerSettingsPAC: React.FC = () => {
     return (
         <div className={cn()}>
             <CollapseWrapper title="PAC">
-                <TextField value={state} textarea="flexible" onChange={handleChange} />
-                <ServerSettingsButton text="Set PAC file" disabled={!statusState} onClick={handleSubmit} />
+                <TextField value={script} textarea="flexible" onChange={handleFileChange} />
+                <ServerSettingsButton text="Set PAC file" disabled={!statusState} onClick={handleFileSubmit} />
             </CollapseWrapper>
         </div>
     );

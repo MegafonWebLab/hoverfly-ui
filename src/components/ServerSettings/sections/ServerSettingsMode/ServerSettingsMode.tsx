@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Checkbox, Header, Select } from '@megafon/ui-core';
 import type { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Select';
 import { cnCreate } from '@megafon/ui-helpers';
-import './ServerSettingsMode.pcss';
 import { ReactComponent as Cancel } from '@megafon/ui-icons/system-16-cancel_16.svg';
 import { MultiSelect } from 'react-multi-select-component';
 import type { ModeState } from 'api/types';
@@ -10,6 +9,7 @@ import CollapseWrapper from 'components/CollapseWrapper/CollapseWrapper';
 import { useDispatch, useSelector } from 'store/hooks';
 import { getModeAsync, updateModeAsync } from 'store/mode/modeSlice';
 import ServerSettingsButton from '../ServerSettingsButton/ServerSettingsButton';
+import './ServerSettingsMode.pcss';
 
 const modeWebser: ModeState['mode'][] = ['Simulate', 'Synthesize', 'Spy', 'Diff'];
 const modeValues: ModeState['mode'][] = ['Capture', 'Diff', 'Modify', 'Simulate', 'Spy', 'Synthesize'];
@@ -26,23 +26,26 @@ type Option = {
     value: string;
 };
 
+type ChangeCheckboxFnType = (_e: React.ChangeEvent<HTMLInputElement>) => void;
+type ClickCancelHeaderFnType = (_e: React.MouseEvent<SVGElement>) => void;
+
 const cn = cnCreate('mode-info');
-const ServerSettingsMode: React.FC = () => {
+const ServerSettingsMode: React.FC = (): JSX.Element => {
     const dispatch = useDispatch();
 
     const mainState = useSelector(state => state.main);
     const modeState = useSelector(state => state.mode);
     const statusState = useSelector(state => state.status.value);
 
-    const mode = modeState.type === 'success' ? modeState.value.mode : 'Simulate';
     const isWebserver = mainState.type === 'success' ? mainState.value.isWebServer : false;
+    const mode = modeState.type === 'success' ? modeState.value.mode : 'Simulate';
     const modeItems = isWebserver ? modeWebser : modeValues;
 
-    const [modeValue, setModeState] = React.useState<ModeState['mode']>(mode);
-    const [headers, setHeaders] = React.useState<Option[]>([]);
-    const [argumentsState, setArgumentsState] = React.useState<Required<ModeState['arguments']>>(initialArguments);
+    const [headers, setHeaders] = useState<Option[]>([]);
+    const [modeValue, setModeState] = useState<ModeState['mode']>(mode);
+    const [argumentsState, setArgumentsState] = useState<Required<ModeState['arguments']>>(initialArguments);
 
-    const { headersWhitelist } = argumentsState;
+    const { headersWhitelist, matchingStrategy, overwriteDuplicate, stateful } = argumentsState;
 
     const isCaptureMode = modeValue === 'Capture';
     const isShouldRenderHeaders = modeValue === 'Capture' || modeValue === 'Diff';
@@ -54,7 +57,7 @@ const ServerSettingsMode: React.FC = () => {
         };
     }
 
-    function handleMultiSelectChange(list: Option[]) {
+    function handleMultiSelectChange(list: Option[]): void {
         setHeaders(list);
 
         if (!list.length) {
@@ -72,12 +75,12 @@ const ServerSettingsMode: React.FC = () => {
         }));
     }
 
-    function handleChangeMode(_e: React.MouseEvent<HTMLDivElement>, item: ISelectItem<ModeState['mode']>) {
+    function handleChangeMode(_e: React.MouseEvent<HTMLDivElement>, item: ISelectItem<ModeState['mode']>): void {
         setModeState(item.value);
     }
 
-    function handleChangeCheckbox(name: 'stateful' | 'overwriteDuplicate') {
-        return (_e: React.ChangeEvent<HTMLInputElement>) => {
+    function handleChangeCheckbox(name: 'stateful' | 'overwriteDuplicate'): ChangeCheckboxFnType {
+        return (_e: React.ChangeEvent<HTMLInputElement>): void => {
             setArgumentsState(state => ({
                 ...state,
                 [name]: !state[name],
@@ -85,9 +88,10 @@ const ServerSettingsMode: React.FC = () => {
         };
     }
 
-    function handleClickCancelHeader(index: number) {
-        return (_e: React.MouseEvent<SVGElement>) => {
+    function handleClickCancelHeader(index: number): ClickCancelHeaderFnType {
+        return (_e: React.MouseEvent<SVGElement>): void => {
             const newHeaders = [...headersWhitelist];
+
             newHeaders.splice(index, 1);
             headers.splice(index, 1);
 
@@ -96,8 +100,8 @@ const ServerSettingsMode: React.FC = () => {
         };
     }
 
-    function handleSubmit(_e: React.MouseEvent<HTMLButtonElement>) {
-        const matching = modeValue === 'Simulate' ? 'strongest' : argumentsState.matchingStrategy;
+    function handleSubmit(_e: React.MouseEvent<HTMLButtonElement>): void {
+        const matching = modeValue === 'Simulate' ? 'strongest' : matchingStrategy;
         const content: ModeState = {
             mode: modeValue,
             arguments: {
@@ -109,11 +113,11 @@ const ServerSettingsMode: React.FC = () => {
         dispatch(updateModeAsync(content));
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         setModeState(mode);
     }, [mode]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (modeState.type === 'success') {
             const argumentsStore: Required<ModeState['arguments']> =
                 modeState.type === 'success' ? { ...initialArguments, ...modeState.value.arguments } : initialArguments;
@@ -121,16 +125,16 @@ const ServerSettingsMode: React.FC = () => {
         }
     }, [modeState]);
 
-    React.useEffect(() => {
+    useEffect(() => {
         dispatch(getModeAsync());
     }, [dispatch]);
 
     const renderCaptureFields = (): JSX.Element => (
         <div className={cn('checkbox-list')}>
-            <Checkbox checked={argumentsState.stateful} onChange={handleChangeCheckbox('stateful')}>
+            <Checkbox checked={stateful} onChange={handleChangeCheckbox('stateful')}>
                 Stateful
             </Checkbox>
-            <Checkbox checked={argumentsState.overwriteDuplicate} onChange={handleChangeCheckbox('overwriteDuplicate')}>
+            <Checkbox checked={overwriteDuplicate} onChange={handleChangeCheckbox('overwriteDuplicate')}>
                 Overwrite Dups
             </Checkbox>
         </div>
@@ -153,7 +157,7 @@ const ServerSettingsMode: React.FC = () => {
                     overrideStrings={{ selectSomeItems: 'Headers' }}
                 />
                 <div className={cn('headers', { 'not-empty': !!headersWhitelist.length })}>
-                    {argumentsState.headersWhitelist.map((title, index) => (
+                    {headersWhitelist.map((title, index) => (
                         <div key={title} className={cn('header-item')}>
                             <span className={cn('header-name')}>{title}</span>{' '}
                             <Cancel className={cn('cancel-icon')} onClick={handleClickCancelHeader(index)} />
@@ -185,7 +189,6 @@ const ServerSettingsMode: React.FC = () => {
                         onSelect={handleChangeMode}
                     />
                 </div>
-                {renderCaptureFields()}
                 {isCaptureMode && renderCaptureFields()}
                 {!isShouldRenderHeaders && renderHostFields()}
                 <ServerSettingsButton text="Change Mode" disabled={!statusState} onClick={handleSubmit} />

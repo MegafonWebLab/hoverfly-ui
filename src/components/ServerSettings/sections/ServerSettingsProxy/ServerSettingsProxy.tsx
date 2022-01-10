@@ -29,8 +29,8 @@ const ServerSettingsProxy: React.FC = () => {
         setEditable(prev => !prev);
     }
 
-    function handleDestinationEditFormChange(e: React.ChangeEvent<HTMLInputElement>): void {
-        setDestination(e.target.value);
+    function handleDestinationEditFormChange(_e: React.ChangeEvent<HTMLInputElement>): void {
+        setDestination(_e.target.value);
     }
 
     function handleSaveButtonClick(): void {
@@ -70,7 +70,7 @@ const ServerSettingsProxy: React.FC = () => {
     return (
         <div className={cn()}>
             <CollapseWrapper title="Proxy settings">
-                <div className={cn('data-wrap')}>
+                <div className={cn('wrapper')}>
                     <div className={cn('destination-wrap')}>
                         <Header className={cn('title')} as="h5">
                             Destination
