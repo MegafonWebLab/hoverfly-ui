@@ -1,5 +1,4 @@
 import React from 'react';
-import { Header } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
 import CollapseWrapper from 'components/CollapseWrapper/CollapseWrapper';
 import { useSelector } from 'store/hooks';
@@ -29,10 +28,8 @@ const ServerSettingsCORS: React.FC = () => {
                 <div className={cn('list')}>
                     {corsList.map(({ title, value }) => (
                         <div className={cn('item')} key={title}>
-                            <Header className={cn('title')} as="h5">
-                                {title}
-                            </Header>
-                            <span>{value}</span>
+                            <span className={cn('title')}>{title}</span>
+                            <span className={cn('value')}>{value}</span>
                         </div>
                     ))}
                 </div>

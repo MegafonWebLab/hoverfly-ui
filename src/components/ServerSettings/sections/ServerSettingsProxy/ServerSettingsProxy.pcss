@@ -12,6 +12,12 @@ $(b) {
         display: flex;
         align-items: center;
         justify-content: space-between;
+
+        @media (--mobileS) {
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
     }
 
     &__destination-wrap {

@@ -72,7 +72,9 @@ const ServerSettingsProxy: React.FC = () => {
             <CollapseWrapper title="Proxy settings">
                 <div className={cn('data-wrap')}>
                     <div className={cn('destination-wrap')}>
-                        <div className={cn('title')}>Destination</div>
+                        <Header className={cn('title')} as="h5">
+                            Destination
+                        </Header>
                         <div className={cn('destination-edit-block')}>
                             {editable ? destinationTextField : <span>{destination}</span>}
                             <Button
