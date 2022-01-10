@@ -1,5 +1,5 @@
 import React from 'react';
-import { Checkbox, Grid, GridColumn, Header, Select } from '@megafon/ui-core';
+import { Checkbox, Header, Select } from '@megafon/ui-core';
 import type { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Select';
 import { cnCreate } from '@megafon/ui-helpers';
 import './ServerSettingsMode.pcss';
@@ -167,28 +167,25 @@ const ServerSettingsMode: React.FC = () => {
     return (
         <div className={cn()}>
             <CollapseWrapper title="Mode">
-                <Grid hAlign="between">
-                    <GridColumn all="1">
-                        <Header className={cn('title')} as="h5">
-                            Mode
-                        </Header>
-                    </GridColumn>
-                    <GridColumn all="11">
-                        <Select
-                            className={cn('select')}
-                            classes={{
-                                control: cn('select-contol'),
-                                list: cn('select-list'),
-                            }}
-                            currentValue={modeValue}
-                            items={modeItems.map(item => ({
-                                title: item,
-                                value: item,
-                            }))}
-                            onSelect={handleChangeMode}
-                        />
-                    </GridColumn>
-                </Grid>
+                <div className={cn('select-wrapper')}>
+                    <Header className={cn('title')} as="h5">
+                        Mode
+                    </Header>
+                    <Select
+                        className={cn('select')}
+                        classes={{
+                            control: cn('select-contol'),
+                            list: cn('select-list'),
+                        }}
+                        currentValue={modeValue}
+                        items={modeItems.map(item => ({
+                            title: item,
+                            value: item,
+                        }))}
+                        onSelect={handleChangeMode}
+                    />
+                </div>
+                {renderCaptureFields()}
                 {isCaptureMode && renderCaptureFields()}
                 {!isShouldRenderHeaders && renderHostFields()}
                 <ServerSettingsButton text="Change Mode" disabled={!statusState} onClick={handleSubmit} />

@@ -3,20 +3,27 @@ $lib: .dropdown;
 
 $(b) {
     &__title {
+        flex-grow: 1;
         margin-top: 13px;
 
         font-weight: 600;
     }
 
+    &__select-wrapper,
     &__host-fields {
         display: flex;
         justify-content: space-between;
+
+        @media (--mobileS) {
+            flex-direction: column;
+            gap: 10px;
+        }
     }
 
     &__multi-select-container {
         position: relative;
 
-        width: 83%;
+        flex-grow: 5;
         height: 56px;
     }
 
@@ -40,6 +47,7 @@ $(b) {
     }
 
     &__select {
+        flex-grow: 17;
         margin-bottom: 29px;
     }
 
@@ -55,8 +63,14 @@ $(b) {
 
     &__checkbox-list {
         display: flex;
+        justify-content: center;
+        max-width: 476px;
+
         margin-bottom: 36px;
-        margin-left: 104px;
+
+        @media (--mobileS) {
+            flex-direction: column;
+        }
     }
 
     &__submit-wrapper {
