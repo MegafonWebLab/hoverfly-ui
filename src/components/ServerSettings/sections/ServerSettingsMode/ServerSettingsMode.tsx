@@ -10,8 +10,8 @@ import { getModeAsync, updateModeAsync } from 'store/mode/modeSlice';
 import ServerSettingsButton from '../ServerSettingsButton/ServerSettingsButton';
 import './ServerSettingsMode.pcss';
 
-const modeWebser: ModeState['mode'][] = ['Simulate', 'Synthesize', 'Spy', 'Diff'];
-const modeValues: ModeState['mode'][] = ['Capture', 'Diff', 'Modify', 'Simulate', 'Spy', 'Synthesize'];
+const modeWebser: ModeState['mode'][] = ['simulate', 'synthesize', 'spy', 'diff'];
+const modeValues: ModeState['mode'][] = ['capture', 'diff', 'modify', 'simulate', 'spy', 'synthesize'];
 
 const initialArguments: Required<ModeState['arguments']> = {
     matchingStrategy: '',
@@ -36,7 +36,7 @@ const ServerSettingsMode: React.FC = (): JSX.Element => {
     const statusState = useSelector(state => state.status.value);
 
     const isWebserver = mainState.type === 'success' ? mainState.value.isWebServer : false;
-    const mode = modeState.type === 'success' ? modeState.value.mode : 'Simulate';
+    const mode = modeState.type === 'success' ? modeState.value.mode : 'simulate';
     const modeItems = isWebserver ? modeWebser : modeValues;
 
     const [modeValue, setModeState] = useState<ModeState['mode']>(mode);
@@ -44,8 +44,8 @@ const ServerSettingsMode: React.FC = (): JSX.Element => {
 
     const { headersWhitelist, matchingStrategy, overwriteDuplicate, stateful } = argumentsState;
 
-    const isCaptureMode = modeValue === 'Capture';
-    const isShouldRenderHeaders = modeValue === 'Capture' || modeValue === 'Diff';
+    const isCaptureMode = modeValue === 'capture';
+    const isShouldRenderHeaders = modeValue === 'capture' || modeValue === 'diff';
 
     function handleMultiSelectChange(headerList: MultiValue[]): void {
         const newHeaders = headerList.map(({ value }) => value);
@@ -70,7 +70,7 @@ const ServerSettingsMode: React.FC = (): JSX.Element => {
     }
 
     function handleSubmit(_e: React.MouseEvent<HTMLButtonElement>): void {
-        const matching = modeValue === 'Simulate' ? 'strongest' : matchingStrategy;
+        const matching = modeValue === 'simulate' ? 'strongest' : matchingStrategy;
         const content: ModeState = {
             mode: modeValue,
             arguments: {
@@ -144,7 +144,7 @@ const ServerSettingsMode: React.FC = (): JSX.Element => {
                         }}
                         currentValue={modeValue}
                         items={modeItems.map(item => ({
-                            title: item,
+                            title: item.replace(/^\w/, item[0].toUpperCase()),
                             value: item,
                         }))}
                         onSelect={handleChangeMode}
