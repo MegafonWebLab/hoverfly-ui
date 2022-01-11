@@ -23,7 +23,11 @@ const ServerSettingsCORS: React.FC = () => {
             return [];
         }
 
-        return Object.entries(main.value.cors).map(([key, value]) => ({ title: CORS[key], value: String(value) }));
+        return Object.entries(main.value.cors).map(([key, value]) => {
+            const convertedValue = String(value).replace(/,/g, ', ');
+
+            return { title: CORS[key], value: convertedValue };
+        });
     }
 
     return (
