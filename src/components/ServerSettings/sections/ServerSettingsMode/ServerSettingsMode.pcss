@@ -30,7 +30,7 @@ $(b) {
         position: relative;
     }
 
-    &__select-contol {
+    &__select-control {
         min-height: 42px;
 
         border-radius: 12px;
@@ -47,46 +47,42 @@ $(b) {
         }
     }
 
-    &__multi-select-container {
-        position: relative;
-
-        flex-grow: 5;
-        height: 56px;
+    &__multi-select {
+        box-shadow: none;
     }
 
-    &__multi-select {
-        position: absolute;
+    &__multi-select-container {
+        flex-grow: 5;
+    }
 
-        width: 100%;
+    &__multi-select > &__control {
+        min-height: 56px;
+        border: 1px solid #D8D8D8;
 
-        $(lib) {
-            &-container {
-                display: flex;
-                align-items: center;
+        border-radius: 12px;
 
-                height: 56px;
+        box-shadow: none;
 
-                border-radius: 12px !important;
-            }
+        &--menu-is-open,
+        &--is-focused {
+            border: 1px solid #000000;
+        }
 
-            &-heading-value {
-                color: transparent;
-            }
+        &:hover,
+        &:active,
+        &:focus {
+            border: 1px solid #000000;
         }
     }
 
-    &__headers {
-        position: absolute;
+    &__multi-select > &__control:hover,
+    &__multi-select > &__control--is-focused {
+        border: 1px solid #000000;
 
-        display: flex;
-
-        gap: 8px;
-        max-width: 750px;
-        margin-top: 12px;
-        margin-left: 16px;
+        box-shadow: none;
     }
 
-    &__header-item {
+    &__value-container > &__multi-value {
         display: flex;
         align-items: center;
         box-sizing: border-box;
@@ -99,28 +95,31 @@ $(b) {
 
         color: #999999;
 
+        background-color: #FFFFFF;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-    }
 
-    &__header-item:hover,
-    &__header-item:active,
-    &__header-item:focus {
-        color: #FFFFFF;
+        &:hover,
+        &:active,
+        &:focus {
+            color: #FFFFFF;
 
-        background-color: #34AAF2;
-
-        $(b)__cancel-icon {
-            fill: #FFFFFF;
+            background-color: #34AAF2;
         }
     }
 
-    &__cancel-icon {
-        width: 20px;
-        height: 20px;
-        margin-left: 5px;
+    &__multi-value > &__multi-value__label {
+        color: inherit;
+    }
 
-        cursor: pointer;
+    &__multi-value > &__multi-value__remove {
+        background-color: inherit;
 
-        fill: #999999;
+        &:hover,
+        &:active,
+        &:focus {
+            color: #FFFFFF;
+
+            background-color: #34AAF2;
+        }
     }
 }

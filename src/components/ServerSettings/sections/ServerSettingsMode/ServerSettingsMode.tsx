@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Checkbox, Header, Select } from '@megafon/ui-core';
 import type { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Select';
 import { cnCreate } from '@megafon/ui-helpers';
-import { ReactComponent as Cancel } from '@megafon/ui-icons/system-16-cancel_16.svg';
-import { MultiSelect } from 'react-multi-select-component';
+import MultiSelect from 'react-select/creatable';
 import type { ModeState } from 'api/types';
 import CollapseWrapper from 'components/CollapseWrapper/CollapseWrapper';
 import { useDispatch, useSelector } from 'store/hooks';
@@ -21,13 +20,12 @@ const initialArguments: Required<ModeState['arguments']> = {
     overwriteDuplicate: false,
 };
 
-type Option = {
+type MultiValue = {
     label: string;
     value: string;
 };
 
 type ChangeCheckboxFnType = (_e: React.ChangeEvent<HTMLInputElement>) => void;
-type ClickCancelHeaderFnType = (_e: React.MouseEvent<SVGElement>) => void;
 
 const cn = cnCreate('mode-info');
 const ServerSettingsMode: React.FC = (): JSX.Element => {
@@ -41,7 +39,6 @@ const ServerSettingsMode: React.FC = (): JSX.Element => {
     const mode = modeState.type === 'success' ? modeState.value.mode : 'Simulate';
     const modeItems = isWebserver ? modeWebser : modeValues;
 
-    const [headers, setHeaders] = useState<Option[]>([]);
     const [modeValue, setModeState] = useState<ModeState['mode']>(mode);
     const [argumentsState, setArgumentsState] = useState<Required<ModeState['arguments']>>(initialArguments);
 
@@ -50,28 +47,12 @@ const ServerSettingsMode: React.FC = (): JSX.Element => {
     const isCaptureMode = modeValue === 'Capture';
     const isShouldRenderHeaders = modeValue === 'Capture' || modeValue === 'Diff';
 
-    function handleMultiSelectCreateOption(value: string): Option {
-        return {
-            label: value,
-            value,
-        };
-    }
+    function handleMultiSelectChange(headerList: MultiValue[]): void {
+        const newHeaders = headerList.map(({ value }) => value);
 
-    function handleMultiSelectChange(list: Option[]): void {
-        setHeaders(list);
-
-        if (!list.length) {
-            return setArgumentsState(state => ({
-                ...state,
-                headersWhitelist: [],
-            }));
-        }
-
-        const lastValue = list[list.length - 1].value;
-
-        return setArgumentsState(state => ({
+        setArgumentsState(state => ({
             ...state,
-            headersWhitelist: [...state.headersWhitelist.filter(h => h !== lastValue), lastValue],
+            headersWhitelist: newHeaders,
         }));
     }
 
@@ -85,18 +66,6 @@ const ServerSettingsMode: React.FC = (): JSX.Element => {
                 ...state,
                 [name]: !state[name],
             }));
-        };
-    }
-
-    function handleClickCancelHeader(index: number): ClickCancelHeaderFnType {
-        return (_e: React.MouseEvent<SVGElement>): void => {
-            const newHeaders = [...headersWhitelist];
-
-            newHeaders.splice(index, 1);
-            headers.splice(index, 1);
-
-            setArgumentsState(state => ({ ...state, headersWhitelist: newHeaders }));
-            setHeaders(headers);
         };
     }
 
@@ -147,23 +116,15 @@ const ServerSettingsMode: React.FC = (): JSX.Element => {
             </Header>
             <div className={cn('multi-select-container')}>
                 <MultiSelect
-                    isCreatable
-                    options={[]}
-                    value={headers}
-                    labelledBy="Select headers"
+                    classNamePrefix={cn('')}
                     className={cn('multi-select')}
+                    isMulti
+                    options={headersWhitelist.map(header => ({
+                        value: header,
+                        label: header,
+                    }))}
                     onChange={handleMultiSelectChange}
-                    onCreateOption={handleMultiSelectCreateOption}
-                    overrideStrings={{ selectSomeItems: 'Headers' }}
                 />
-                <div className={cn('headers', { 'not-empty': !!headersWhitelist.length })}>
-                    {headersWhitelist.map((title, index) => (
-                        <div key={title} className={cn('header-item')}>
-                            <span className={cn('header-name')}>{title}</span>{' '}
-                            <Cancel className={cn('cancel-icon')} onClick={handleClickCancelHeader(index)} />
-                        </div>
-                    ))}
-                </div>
             </div>
         </div>
     );
@@ -178,7 +139,7 @@ const ServerSettingsMode: React.FC = (): JSX.Element => {
                     <Select
                         className={cn('select')}
                         classes={{
-                            control: cn('select-contol'),
+                            control: cn('select-control'),
                             list: cn('select-list'),
                         }}
                         currentValue={modeValue}
