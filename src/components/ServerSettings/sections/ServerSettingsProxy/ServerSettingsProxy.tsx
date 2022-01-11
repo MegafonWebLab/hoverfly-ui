@@ -21,7 +21,7 @@ const ServerSettingsProxy: React.FC = () => {
     const [destination, setDestination] = useState<string>('-');
     const [upstream, setUpstream] = useState<string>('link anywhere');
 
-    function closeDestinationEditForm(): void {
+    function handleCloseDestinationEditForm(): void {
         setEditable(false);
     }
 
@@ -34,7 +34,7 @@ const ServerSettingsProxy: React.FC = () => {
     }
 
     function handleSaveButtonClick(): void {
-        closeDestinationEditForm();
+        handleCloseDestinationEditForm();
         dispatch(updateDestinationAsync({ destination }));
     }
 
@@ -57,12 +57,12 @@ const ServerSettingsProxy: React.FC = () => {
         }
     }, [upstreamStore]);
 
-    const destinationTextField: JSX.Element = (
-        <form onSubmit={closeDestinationEditForm}>
+    const renderDestinationTextField = (): JSX.Element => (
+        <form onSubmit={handleCloseDestinationEditForm}>
             <TextField
                 value={destination}
                 onChange={handleDestinationEditFormChange}
-                onBlur={closeDestinationEditForm}
+                onBlur={handleCloseDestinationEditForm}
             />
         </form>
     );
@@ -76,8 +76,8 @@ const ServerSettingsProxy: React.FC = () => {
                             Destination
                         </Header>
                         <div className={cn('destination-edit-block')}>
-                            {editable ? destinationTextField : <span>{destination}</span>}
-                            <button type='button' className={cn('edit-btn')} onClick={handleDestinationEditButtonClick}>
+                            {editable ? renderDestinationTextField() : <span>{destination}</span>}
+                            <button type="button" className={cn('edit-btn')} onClick={handleDestinationEditButtonClick}>
                                 <img src={editIcon} alt="edit icon" />
                             </button>
                         </div>

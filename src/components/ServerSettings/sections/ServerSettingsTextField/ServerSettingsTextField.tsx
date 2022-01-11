@@ -4,7 +4,7 @@ import { TGridSizeValues } from '@megafon/ui-core/dist/lib/components/Grid/GridC
 import { cnCreate } from '@megafon/ui-helpers';
 import './ServerSettingsTextField.pcss';
 
-type Props = {
+type ServerSettingsTextFieldProps = {
     title: string;
     value: string;
     placeholder?: string;
@@ -15,7 +15,7 @@ type Props = {
 };
 
 const cn = cnCreate('server-settings-text-field');
-const ServerSettingsTextField: React.FC<Props> = ({
+const ServerSettingsTextField: React.FC<ServerSettingsTextFieldProps> = ({
     title,
     value,
     placeholder,
