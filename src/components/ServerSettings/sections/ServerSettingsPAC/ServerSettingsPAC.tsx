@@ -5,7 +5,6 @@ import CollapseWrapper from 'components/CollapseWrapper/CollapseWrapper';
 import { useDispatch, useSelector } from 'store/hooks';
 import { deletePacAsync, getPacAsync, updatePacAsync } from 'store/pac/pacSlice';
 import ServerSettingsButton from '../ServerSettingsButton/ServerSettingsButton';
-import './ServerSettingsPAC.pcss';
 
 const cn = cnCreate('server-settings-pac');
 const ServerSettingsPAC: React.FC = () => {

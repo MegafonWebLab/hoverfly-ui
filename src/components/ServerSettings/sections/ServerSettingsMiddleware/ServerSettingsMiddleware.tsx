@@ -76,7 +76,8 @@ const ServerSettingsMiddleware: React.FC = () => {
                 remote: { value: remote, edited: false },
             });
         }
-    }, [middleware]);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [middleware.type]);
 
     useEffect(() => {
         statusState && dispatch(getMiddlewareAsync());

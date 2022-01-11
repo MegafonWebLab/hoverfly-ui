@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Header, TextField } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
+import { getDigits } from 'utils';
 import ServerSettingsCORS from './sections/ServerSettingsCORS/ServerSettingsCORS';
 import ServerSettingsMiddleware from './sections/ServerSettingsMiddleware/ServerSettingsMiddleware';
 import ServerSettingsMode from './sections/ServerSettingsMode/ServerSettingsMode';
@@ -11,10 +12,6 @@ import './ServerSettings.pcss';
 const cn = cnCreate('server-settings');
 const ServerSettings: React.FC = (): JSX.Element => {
     const [globalDelay, setGlobalDelay] = useState('');
-
-    function getDigits(string: string): string {
-        return string.replace(/[^0-9]/g, '');
-    }
 
     function handleDelayInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
         setGlobalDelay(getDigits(e.target.value));
