@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Header, TextField } from '@megafon/ui-core';
+import { Header, TextField } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
 import CollapseWrapper from 'components/CollapseWrapper/CollapseWrapper';
 import editIcon from 'static/favicon/edit-icon.svg';
@@ -77,12 +77,9 @@ const ServerSettingsProxy: React.FC = () => {
                         </Header>
                         <div className={cn('destination-edit-block')}>
                             {editable ? destinationTextField : <span>{destination}</span>}
-                            <Button
-                                theme="white"
-                                sizeAll="small"
-                                icon={<img src={editIcon} alt="edit icon" />}
-                                onClick={handleDestinationEditButtonClick}
-                            />
+                            <button type='button' className={cn('edit-btn')} onClick={handleDestinationEditButtonClick}>
+                                <img src={editIcon} alt="edit icon" />
+                            </button>
                         </div>
                     </div>
                     <div className={cn('upstream-wrap')}>
