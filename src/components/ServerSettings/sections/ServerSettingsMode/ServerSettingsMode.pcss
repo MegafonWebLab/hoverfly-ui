@@ -1,0 +1,125 @@
+$b: .mode-info;
+$lib: .dropdown;
+
+$(b) {
+    &__title {
+        flex-grow: 1;
+        margin-top: 13px;
+
+        font-weight: 600;
+    }
+
+    &__select-wrapper,
+    &__host-fields {
+        display: flex;
+        justify-content: space-between;
+
+        @media (--mobileS) {
+            flex-direction: column;
+
+            gap: 10px;
+        }
+    }
+
+    &__select {
+        flex-grow: 17;
+        margin-bottom: 29px;
+    }
+
+    &__select-list {
+        position: relative;
+    }
+
+    &__select-control {
+        min-height: 42px;
+
+        border-radius: 12px;
+    }
+
+    &__checkbox-list {
+        display: flex;
+        justify-content: center;
+        max-width: 476px;
+        margin-bottom: 36px;
+
+        @media (--mobileS) {
+            flex-direction: column;
+        }
+    }
+
+    &__multi-select {
+        box-shadow: none;
+    }
+
+    &__multi-select-container {
+        flex-grow: 5;
+    }
+
+    &__multi-select > &__control {
+        min-height: 56px;
+        border: 1px solid #D8D8D8;
+
+        border-radius: 12px;
+
+        box-shadow: none;
+
+        &--menu-is-open,
+        &--is-focused {
+            border: 1px solid #000000;
+        }
+
+        &:hover,
+        &:active,
+        &:focus {
+            border: 1px solid #000000;
+        }
+    }
+
+    &__multi-select > &__control:hover,
+    &__multi-select > &__control--is-focused {
+        border: 1px solid #000000;
+
+        box-shadow: none;
+    }
+
+    &__value-container > &__multi-value {
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+
+        width: fit-content;
+        max-height: 32px;
+        padding: 7px 16px;
+
+        border-radius: 32px;
+
+        color: #999999;
+
+        background-color: #FFFFFF;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+        &:hover,
+        &:active,
+        &:focus {
+            color: #FFFFFF;
+
+            background-color: #34AAF2;
+        }
+    }
+
+    &__multi-value > &__multi-value__label {
+        color: inherit;
+    }
+
+    &__multi-value > &__multi-value__remove {
+        background-color: inherit;
+
+        &:hover,
+        &:active,
+        &:focus {
+            color: #FFFFFF;
+
+            background-color: #34AAF2;
+        }
+    }
+}

@@ -28,3 +28,5 @@ export const omitKey = <T extends Record<string, unknown>>(object: T, key: strin
 
     return object;
 };
+
+export const getDigits = (string: string): string => string.replace(/[^0-9]/g, '');

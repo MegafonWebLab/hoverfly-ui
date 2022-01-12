@@ -1,0 +1,47 @@
+$b: .server-settings-proxy;
+
+$(b) {
+    &__wrapper {
+        display: flex;
+        flex-direction: column;
+
+        gap: 16px;
+    }
+
+    &__destination-wrap,
+    &__upstream-wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        @media (--mobileS) {
+            flex-direction: column;
+
+            gap: 10px;
+            align-items: flex-start;
+        }
+    }
+
+    &__destination-wrap {
+        max-width: 401px;
+    }
+
+    &__upstream-wrap {
+        max-width: 350px;
+    }
+
+    &__destination-edit-block {
+        display: flex;
+
+        gap: 19px;
+    }
+
+    &__title {
+        color: rgba(51, 51, 51, 0.5);
+        font-weight: 600;
+    }
+
+    &__edit-btn {
+        cursor: pointer;
+    }
+}

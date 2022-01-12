@@ -6,7 +6,7 @@ import { ReactComponent as Minus } from '@megafon/ui-icons/system-16-minus_16.sv
 import { ReactComponent as Plus } from '@megafon/ui-icons/system-16-plus_16.svg';
 import { Controlled as CodeMirror } from 'react-codemirror2';
 import type { SimulationResponse, HoverflyMatcher, PairItemRequest, SimulationItem, PairItemResponse } from 'api/types';
-import AccordionWrapper from 'components/AccordionWrapper/AccordionWrapper';
+import CollapseWrapper from 'components/CollapseWrapper/CollapseWrapper';
 import './Simulations.pcss';
 import { useDispatch, useSelector } from 'store/hooks';
 import { createSimulationAsync, getSimulationAsync } from 'store/simulation/simulationSlice';
@@ -341,7 +341,7 @@ const Simulations: React.FC = () => {
                 </div>
             </div>
             <div className={cn('content')}>
-                <AccordionWrapper isOpenDefault title="Stateful settings">
+                <CollapseWrapper isOpenDefault title="Stateful settings">
                     <div className={cn('field-line')}>
                         <div className={cn('field-name')}>Require states</div>
                         <div>
@@ -362,15 +362,15 @@ const Simulations: React.FC = () => {
                                 )}
                         </div>
                     </div>
-                </AccordionWrapper>
-                <AccordionWrapper isOpenDefault title="Request matchers">
+                </CollapseWrapper>
+                <CollapseWrapper isOpenDefault title="Request matchers">
                     <div className={cn('field-line')}>
                         <div className={cn('field-name')}>Method</div>
                         <Select
                             className={cn('select')}
                             currentValue={currentPair?.request.method?.[0].value || 'GET'}
                             items={METHODS}
-                            isDisabled={!isRouteIndex}
+                            disabled={!isRouteIndex}
                             onSelect={handleChooseCurrentValueRequest('method', 'value')}
                         />
                     </div>
@@ -380,7 +380,7 @@ const Simulations: React.FC = () => {
                             <Select
                                 className={cn('select')}
                                 items={MATCHES}
-                                isDisabled={!isRouteIndex}
+                                disabled={!isRouteIndex}
                                 currentValue={currentPair?.request.destination?.[0].matcher || ''}
                                 onSelect={handleChooseCurrentValueRequest('destination', 'matcher')}
                             />
@@ -396,7 +396,7 @@ const Simulations: React.FC = () => {
                             <Select
                                 className={cn('select')}
                                 items={MATCHES}
-                                isDisabled={!isRouteIndex}
+                                disabled={!isRouteIndex}
                                 currentValue={currentPair?.request.path?.[0].matcher || ''}
                                 onSelect={handleChooseCurrentValueRequest('path', 'matcher')}
                             />
@@ -421,7 +421,7 @@ const Simulations: React.FC = () => {
                                     <Select
                                         className={cn('select')}
                                         items={MATCHES}
-                                        isDisabled={!isRouteIndex}
+                                        disabled={!isRouteIndex}
                                         currentValue={header.match}
                                         onSelect={handleChooseHeaderQuery('query', index)}
                                     />
@@ -450,7 +450,7 @@ const Simulations: React.FC = () => {
                                     <Select
                                         className={cn('select')}
                                         items={MATCHES}
-                                        isDisabled={!isRouteIndex}
+                                        disabled={!isRouteIndex}
                                         currentValue={header.match}
                                         onSelect={handleChooseHeaderQuery('request', index)}
                                     />
@@ -475,13 +475,13 @@ const Simulations: React.FC = () => {
                                     <Select
                                         className={cn('select', { line: true })}
                                         items={MATCHES}
-                                        isDisabled={!isRouteIndex}
+                                        disabled={!isRouteIndex}
                                         currentValue={rBody.matcher || ''}
                                         onSelect={handleChooseCurrentValueRequest('body', 'matcher')}
                                     />
                                     <Select
                                         className={cn('select', { line: true })}
-                                        isDisabled={!isRouteIndex}
+                                        disabled={!isRouteIndex}
                                         items={BODY_FORMATS}
                                         currentValue={rBody.type}
                                         onSelect={handleChooseBodyType('request')}
@@ -496,14 +496,14 @@ const Simulations: React.FC = () => {
                             ))}
                         </div>
                     </div>
-                </AccordionWrapper>
-                <AccordionWrapper isOpenDefault title="Response">
+                </CollapseWrapper>
+                <CollapseWrapper isOpenDefault title="Response">
                     <div className={cn('field-line')}>
                         <div className={cn('field-name')}>Status code</div>
                         <Select
                             className={cn('select')}
                             items={STATUS_CODES}
-                            isDisabled={!isRouteIndex}
+                            disabled={!isRouteIndex}
                             currentValue={currentPair?.response.status}
                             onSelect={handleChooseCurrentResponse('status')}
                         />
@@ -534,7 +534,7 @@ const Simulations: React.FC = () => {
                                     <Select
                                         className={cn('select')}
                                         items={MATCHES}
-                                        isDisabled={!isRouteIndex}
+                                        disabled={!isRouteIndex}
                                         currentValue={header.match}
                                         onSelect={handleChooseHeaderQuery('response', index)}
                                     />
@@ -554,7 +554,7 @@ const Simulations: React.FC = () => {
                             <Select
                                 className={cn('select', { line: true })}
                                 items={BODY_FORMATS}
-                                isDisabled={!isRouteIndex}
+                                disabled={!isRouteIndex}
                                 currentValue={body.response.type}
                                 onSelect={handleChooseBodyType('response')}
                             />
@@ -582,7 +582,7 @@ const Simulations: React.FC = () => {
                     >
                         Encoded body
                     </Checkbox>
-                </AccordionWrapper>
+                </CollapseWrapper>
             </div>
         </div>
     );
