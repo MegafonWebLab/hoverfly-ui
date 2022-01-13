@@ -44,10 +44,10 @@ export const modeSlice = createSlice<IModeState, {}, 'mode'>({
         builder
             .addCase(getModeAsync.pending, defaultPendingCase<IModeState>())
             .addCase(getModeAsync.fulfilled, defaultFulfilledCase<IModeState, ModeState>())
-            .addCase(getModeAsync.rejected, defaultRejectedCase<IModeState>())
+            .addCase(getModeAsync.rejected, defaultRejectedCase<IModeState, ModeState>())
             .addCase(updateModeAsync.pending, defaultPendingCase<IModeState>())
             .addCase(updateModeAsync.fulfilled, defaultFulfilledCase<IModeState, ModeState>())
-            .addCase(updateModeAsync.rejected, defaultRejectedCase<IModeState>());
+            .addCase(updateModeAsync.rejected, defaultRejectedCase<IModeState, ModeState>());
     },
 });
 

@@ -53,16 +53,19 @@ export const journalSlice = createSlice<IJournalSliceState, {}, 'journal'>({
         builder
             .addCase(getJournalAsync.pending, defaultPendingCase<IJournalSliceState>())
             .addCase(getJournalAsync.fulfilled, defaultFulfilledCase<IJournalSliceState, JournalRequest>())
-            .addCase(getJournalAsync.rejected, defaultRejectedCase<IJournalSliceState>())
+            .addCase(getJournalAsync.rejected, defaultRejectedCase<IJournalSliceState, JournalRequest>())
             .addCase(deleteJournalAsync.pending, defaultPendingCase<IJournalSliceState>())
             .addCase(deleteJournalAsync.fulfilled, defaultFulfilledCase<IJournalSliceState, void>())
-            .addCase(deleteJournalAsync.rejected, defaultRejectedCase<IJournalSliceState>())
+            .addCase(deleteJournalAsync.rejected, defaultRejectedCase<IJournalSliceState, JournalRequest>())
             .addCase(getJournalSearchAsync.pending, defaultPendingCase<IJournalSliceState>())
             .addCase(
                 getJournalSearchAsync.fulfilled,
                 defaultFulfilledCase<IJournalSliceState, JournalResponse | JournalSearchDataRequest>(),
             )
-            .addCase(getJournalSearchAsync.rejected, defaultRejectedCase<IJournalSliceState>());
+            .addCase(
+                getJournalSearchAsync.rejected,
+                defaultRejectedCase<IJournalSliceState, JournalSearchDataRequest>(),
+            );
     },
 });
 
