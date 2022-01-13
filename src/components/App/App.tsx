@@ -1,8 +1,11 @@
 import React from 'react';
 import './App.pcss';
+import { positions, Provider as AlertProvider } from 'react-alert';
 import Footer from 'components/Footer/Footer';
+import AlertLayout from 'components/layouts/AlertLayout/AlertLayout';
 import ContentLayout from 'components/layouts/ContentLayout/ContentLayout';
 import Layout from 'components/layouts/Layout/Layout';
+import Notification from 'components/Notification/Notification';
 import ServerSettings from 'components/ServerSettings/ServerSettings';
 import TopBar from 'components/TopBar/TopBar';
 import { useDispatch } from 'store/hooks';
@@ -17,16 +20,18 @@ function App(): JSX.Element {
     }, [dispatch]);
 
     return (
-        <>
-            <Layout>
-                <TopBar />
-                <ContentLayout>
-                    <ServerSettings />
-                </ContentLayout>
-                <Footer />
-            </Layout>
-            <AuthModal />
-        </>
+        <AlertProvider template={Notification} timeout={5000} position={positions.TOP_RIGHT} offset="5px">
+            <AlertLayout>
+                <Layout>
+                    <TopBar />
+                    <ContentLayout>
+                        <ServerSettings />
+                    </ContentLayout>
+                    <Footer />
+                </Layout>
+                <AuthModal />
+            </AlertLayout>
+        </AlertProvider>
     );
 }
 

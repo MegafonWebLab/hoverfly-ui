@@ -1,9 +1,19 @@
-import type { Action, PayloadAction } from '@reduxjs/toolkit';
+import type { Action, PayloadAction, SerializedError } from '@reduxjs/toolkit';
 import type { AxiosError } from 'axios';
 import { needAuth } from './auth/authSlice';
 import type { IRequestState } from './types';
 
 const NOT_AUTH_STATUS = 401;
+
+type RejectedActionType<T> = PayloadAction<
+    Error | undefined,
+    string,
+    { arg: T | void; requestId: string; requestStatus: 'rejected'; aborted: boolean; condition: boolean } & (
+        | { rejectedWithValue: true }
+        | ({ rejectedWithValue: false } & Record<string, unknown>)
+    ),
+    SerializedError
+>;
 
 export const defaultPendingCase =
     <T extends IRequestState<unknown>>() =>
@@ -24,8 +34,17 @@ export const defaultFulfilledCase =
     };
 
 export const defaultRejectedCase =
-    <T extends IRequestState<unknown>>() =>
-    (state: T): void => {
+    <T extends IRequestState<unknown>, Data>() =>
+    (state: T, action: RejectedActionType<Data>): void => {
+        document.dispatchEvent(
+            new CustomEvent('alert', {
+                detail: {
+                    title: action.error.name,
+                    message: action.error.message,
+                },
+            }),
+        );
+
         state.type = 'failed';
     };
 
