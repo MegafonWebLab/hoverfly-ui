@@ -14,14 +14,13 @@ import './TopBar.pcss';
 const cn = cnCreate('topbar');
 const TopBar: React.FC = () => {
     const dispatch = useDispatch();
-
     const mainInfo = useSelector(state => state.main);
     const cacheState = useSelector(state => state.cache);
     const shutdownState = useSelector(state => state.shutdown);
     const authState = useSelector(state => state.auth);
 
     const username = authState.username || 'Nikita Safonov';
-    const server = mainInfo.type === 'success' ? mainInfo.value.version : '*.*.*';
+    const versionServer = mainInfo.type === 'success' ? mainInfo.value.version : 'v*.*.*';
 
     const hasCachePending = cacheState.type === 'pending';
     const hasShutdownPending = shutdownState.type === 'pending';
@@ -43,8 +42,8 @@ const TopBar: React.FC = () => {
             <GridColumn all="2" tablet="3" mobile="5">
                 <img src={hoverflyIcon} alt="Hoverfly" width="137" height="21" />
                 <div className={cn('versions')}>
-                    <span className={cn('version')}>Server v {server}</span>{' '}
-                    <span className={cn('version')}>UI v 0.1.0</span>
+                    <span className={cn('version')}>Server {versionServer}</span>
+                    <span className={cn('version')}>UI v{VERSION}</span>
                 </div>
             </GridColumn>
             <GridColumn all="6" tablet="4" mobile="7" className={cn('buttons')}>
