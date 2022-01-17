@@ -1,6 +1,8 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { ServerState, ThunkApiConfig } from 'api/types';
+import { showNotification } from '../../utils';
 import type { IRequestState } from '../types';
+import { RejectedActionType } from '../utils';
 
 export type IServerState = {
     value: { state: Record<string, string> };
@@ -84,7 +86,8 @@ const fulfilledCase = (
     state.value = action.payload;
 };
 
-const rejectedCase = (state: IServerState) => {
+const rejectedCase = (name: string) => (state: IServerState, action: RejectedActionType<ServerState>) => {
+    showNotification(`${name} ${action.error.name?.toLowerCase()}`.trim(), action.error.message);
     state.request.type = 'failed';
 };
 
@@ -96,13 +99,13 @@ export const cacheSlice = createSlice<IServerState, Record<string, never>, 'serv
         builder
             .addCase(getServerStateAsync.pending, pendingCase)
             .addCase(getServerStateAsync.fulfilled, fulfilledCase)
-            .addCase(getServerStateAsync.rejected, rejectedCase)
+            .addCase(getServerStateAsync.rejected, rejectedCase('Server state'))
             .addCase(addServerStateAsync.pending, pendingCase)
             .addCase(addServerStateAsync.fulfilled, fulfilledCase)
-            .addCase(addServerStateAsync.rejected, rejectedCase)
+            .addCase(addServerStateAsync.rejected, rejectedCase('Server state add'))
             .addCase(clearServerStateAsync.pending, pendingCase)
             .addCase(clearServerStateAsync.fulfilled, fulfilledCase)
-            .addCase(clearServerStateAsync.rejected, rejectedCase);
+            .addCase(clearServerStateAsync.rejected, rejectedCase('Server state clear'));
     },
 });
 

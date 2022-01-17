@@ -31,7 +31,7 @@ export const middlewareSlice = createSlice<IUpstreamProxyState, {}, 'upstreamPro
         builder
             .addCase(getUpstreamProxyAsync.pending, defaultPendingCase<IUpstreamProxyState>())
             .addCase(getUpstreamProxyAsync.fulfilled, defaultFulfilledCase<IUpstreamProxyState, UpstreamProxy>())
-            .addCase(getUpstreamProxyAsync.rejected, defaultRejectedCase<IUpstreamProxyState>());
+            .addCase(getUpstreamProxyAsync.rejected, defaultRejectedCase<IUpstreamProxyState, UpstreamProxy>());
     },
 });
 

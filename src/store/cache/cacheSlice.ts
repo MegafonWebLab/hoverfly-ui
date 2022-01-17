@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { DeleteCache, ThunkApiConfig } from 'api/types';
+import { showNotification } from '../../utils';
 import type { IRequestState, IRequestStateFailed, IRequestStateSuccess } from '../types';
 
 export type ICacheState = IRequestState<DeleteCache>;
@@ -32,10 +33,12 @@ export const cacheSlice = createSlice<ICacheState, {}, 'cache'>({
                 state.type = 'pending';
             })
             .addCase(deleteCacheAsync.fulfilled, (state: IRequestStateSuccess<DeleteCache>, action) => {
+                showNotification('Cache deleted', '', false);
                 state.type = 'success';
                 state.value = action.payload;
             })
             .addCase(deleteCacheAsync.rejected, (state: IRequestStateFailed, action) => {
+                showNotification(`Cache delete ${action.error.name?.toLowerCase()}`.trim(), action.error.message);
                 state.type = 'failed';
                 state.error = action.error.message || '';
             });

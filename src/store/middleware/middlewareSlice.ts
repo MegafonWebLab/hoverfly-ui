@@ -46,10 +46,13 @@ export const middlewareSlice = createSlice<IMiddlewareState, {}, 'middleware'>({
         builder
             .addCase(getMiddlewareAsync.pending, defaultPendingCase<IMiddlewareState>())
             .addCase(getMiddlewareAsync.fulfilled, defaultFulfilledCase<IMiddlewareState, Middleware>())
-            .addCase(getMiddlewareAsync.rejected, defaultRejectedCase<IMiddlewareState>())
+            .addCase(getMiddlewareAsync.rejected, defaultRejectedCase<IMiddlewareState, Middleware>('Middleware'))
             .addCase(updateMiddlewareAsync.pending, defaultPendingCase<IMiddlewareState>())
             .addCase(updateMiddlewareAsync.fulfilled, defaultFulfilledCase<IMiddlewareState, Middleware>())
-            .addCase(updateMiddlewareAsync.rejected, defaultRejectedCase<IMiddlewareState>());
+            .addCase(
+                updateMiddlewareAsync.rejected,
+                defaultRejectedCase<IMiddlewareState, Middleware>('Middleware update'),
+            );
     },
 });
 

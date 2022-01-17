@@ -31,7 +31,7 @@ export const logsSlice = createSlice<ILogsSliceState, {}, 'logs'>({
         builder
             .addCase(getLogsAsync.pending, defaultPendingCase<ILogsSliceState>())
             .addCase(getLogsAsync.fulfilled, defaultFulfilledCase<ILogsSliceState, LogsResponse | LogsRequest>())
-            .addCase(getLogsAsync.rejected, defaultRejectedCase<ILogsSliceState>());
+            .addCase(getLogsAsync.rejected, defaultRejectedCase<ILogsSliceState, LogsResponse | LogsRequest>('Logs'));
     },
 });
 

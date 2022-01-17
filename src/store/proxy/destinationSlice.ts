@@ -44,10 +44,10 @@ export const middlewareSlice = createSlice<IDestinationState, {}, 'destination'>
         builder
             .addCase(getDestinationAsync.pending, defaultPendingCase<IDestinationState>())
             .addCase(getDestinationAsync.fulfilled, defaultFulfilledCase<IDestinationState, Destination>())
-            .addCase(getDestinationAsync.rejected, defaultRejectedCase<IDestinationState>())
+            .addCase(getDestinationAsync.rejected, defaultRejectedCase<IDestinationState, Destination>())
             .addCase(updateDestinationAsync.pending, defaultPendingCase<IDestinationState>())
             .addCase(updateDestinationAsync.fulfilled, defaultFulfilledCase<IDestinationState, Destination>())
-            .addCase(updateDestinationAsync.rejected, defaultRejectedCase<IDestinationState>());
+            .addCase(updateDestinationAsync.rejected, defaultRejectedCase<IDestinationState, Destination>());
     },
 });
 

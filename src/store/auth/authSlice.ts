@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 import type { AuthRequest, AuthResponse, ThunkApiConfig } from 'api/types';
 import { TOKEN_NAME } from 'constants/cookie';
-import { setCookie } from 'utils';
+import { setCookie, showNotification } from 'utils';
 import type { IRequestState, IRequestStateFailed, IRequestStateSuccess } from '../types';
 
 export type IAuthState<T = IRequestState<AuthResponse>> = {
@@ -52,6 +52,7 @@ export const authSlice = createSlice<IAuthState, { needAuth: CaseReducer<IAuthSt
                 state.isNeedAuth = false;
             })
             .addCase(getAuthorizeAsync.rejected, (state: IAuthState<IRequestStateFailed>, action) => {
+                showNotification(`Auth ${action.error.name?.toLowerCase()}`.trim(), action.error.message);
                 state.rd.type = 'failed';
                 state.rd.error = action.error.message || '';
             });

@@ -2,6 +2,11 @@
 
 Before run project need to start any hoverfly server.
 
+## Install dependencies
+```bash
+$ yarn install
+```
+
 ## Run project
 ```bash
 $ yarn start
@@ -10,7 +15,6 @@ $ yarn start
 ### TODO
 * почистить webpack config
 * отображать нотификации для DELETE методов
-* получать версию ui из package.json
 * добавить yarn скрипты по запуску тестов и линтов
 
 ## Contributing

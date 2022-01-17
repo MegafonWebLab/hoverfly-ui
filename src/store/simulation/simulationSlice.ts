@@ -72,13 +72,22 @@ export const simulationSlice = createSlice<ISimulationState, {}, 'simulation'>({
                 getSimulationAsync.fulfilled,
                 defaultFulfilledCase<ISimulationState, SimulationResponse | SimulationRequest>(),
             )
-            .addCase(getSimulationAsync.rejected, defaultRejectedCase<ISimulationState>())
+            .addCase(
+                getSimulationAsync.rejected,
+                defaultRejectedCase<ISimulationState, SimulationRequest>('Simulation'),
+            )
             .addCase(createSimulationAsync.pending, defaultPendingCase<ISimulationState>())
             .addCase(createSimulationAsync.fulfilled, defaultFulfilledCase<ISimulationState, SimulationResponse>())
-            .addCase(createSimulationAsync.rejected, defaultRejectedCase<ISimulationState>())
+            .addCase(
+                createSimulationAsync.rejected,
+                defaultRejectedCase<ISimulationState, SimulationResponse>('Simulation create'),
+            )
             .addCase(updateSimulationAsync.pending, defaultPendingCase<ISimulationState>())
             .addCase(updateSimulationAsync.fulfilled, defaultFulfilledCase<ISimulationState, SimulationResponse>())
-            .addCase(updateSimulationAsync.rejected, defaultRejectedCase<ISimulationState>());
+            .addCase(
+                updateSimulationAsync.rejected,
+                defaultRejectedCase<ISimulationState, SimulationResponse>('Simulation update'),
+            );
     },
 });
 
