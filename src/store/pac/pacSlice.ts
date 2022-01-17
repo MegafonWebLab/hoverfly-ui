@@ -50,13 +50,13 @@ export const middlewareSlice = createSlice<IPacState, {}, 'pac'>({
         builder
             .addCase(getPacAsync.pending, defaultPendingCase<IPacState>())
             .addCase(getPacAsync.fulfilled, defaultFulfilledCase<IPacState, Pac>())
-            .addCase(getPacAsync.rejected, defaultRejectedCase<IPacState, Pac>())
+            .addCase(getPacAsync.rejected, defaultRejectedCase<IPacState, Pac>('Pac load'))
             .addCase(updatePacAsync.pending, defaultPendingCase<IPacState>())
             .addCase(updatePacAsync.fulfilled, defaultFulfilledCase<IPacState, string>())
-            .addCase(updatePacAsync.rejected, defaultRejectedCase<IPacState, Pac>())
+            .addCase(updatePacAsync.rejected, defaultRejectedCase<IPacState, Pac>('Pac update'))
             .addCase(deletePacAsync.pending, defaultPendingCase<IPacState>())
             .addCase(deletePacAsync.fulfilled, defaultFulfilledCase<IPacState, void>())
-            .addCase(deletePacAsync.rejected, defaultRejectedCase<IPacState, Pac>());
+            .addCase(deletePacAsync.rejected, defaultRejectedCase<IPacState, Pac>('Pac remove'));
     },
 });
 

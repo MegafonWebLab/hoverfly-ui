@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { ThunkApiConfig } from 'api/types';
+import { showNotification } from '../../utils';
 import type { IRequestState, IRequestStateFailed, IRequestStateSuccess } from '../types';
 
 export type IShutdownState = IRequestState<void>;
@@ -34,10 +35,12 @@ export const shutdownSlice = createSlice<IShutdownState, {}, 'shutdown'>({
                 state.type = 'pending';
             })
             .addCase(deleteShutdownAsync.fulfilled, (state: IRequestStateSuccess<void>, action) => {
+                showNotification('Shutdown', '', false);
                 state.type = 'success';
                 state.value = action.payload;
             })
             .addCase(deleteShutdownAsync.rejected, (state: IRequestStateFailed, action) => {
+                showNotification(`Shutdown ${action.error.name?.toLowerCase()}`.trim(), action.error.message);
                 state.type = 'failed';
                 state.error = action.error.message || '';
             });

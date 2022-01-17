@@ -1,11 +1,12 @@
 import type { Action, PayloadAction, SerializedError } from '@reduxjs/toolkit';
 import type { AxiosError } from 'axios';
+import { showNotification } from '../utils';
 import { needAuth } from './auth/authSlice';
 import type { IRequestState } from './types';
 
 const NOT_AUTH_STATUS = 401;
 
-type RejectedActionType<T> = PayloadAction<
+export type RejectedActionType<T> = PayloadAction<
     Error | undefined,
     string,
     { arg: T | void; requestId: string; requestStatus: 'rejected'; aborted: boolean; condition: boolean } & (
@@ -22,11 +23,15 @@ export const defaultPendingCase =
     };
 
 export const defaultFulfilledCase =
-    <State extends IRequestState<unknown>, Data>() =>
+    <State extends IRequestState<unknown>, Data>(name?: string) =>
     (
         state: State,
         action: PayloadAction<Data, string, { arg: Data | void; requestId: string; requestStatus: 'fulfilled' }>,
     ): void => {
+        if (name) {
+            showNotification(name, '', false);
+        }
+
         state.type = 'success';
         if (state.type === 'success') {
             state.value = action.payload;
@@ -34,16 +39,11 @@ export const defaultFulfilledCase =
     };
 
 export const defaultRejectedCase =
-    <T extends IRequestState<unknown>, Data>() =>
+    <T extends IRequestState<unknown>, Data>(name?: string) =>
     (state: T, action: RejectedActionType<Data>): void => {
-        document.dispatchEvent(
-            new CustomEvent('alert', {
-                detail: {
-                    title: action.error.name,
-                    message: action.error.message,
-                },
-            }),
-        );
+        if (name) {
+            showNotification(`${name || ''} ${action.error.name?.toLowerCase()}`.trim(), action.error.message);
+        }
 
         state.type = 'failed';
     };
