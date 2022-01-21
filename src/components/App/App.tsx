@@ -43,7 +43,7 @@ function App(): JSX.Element {
                                         <main className={cn('main')}>
                                             <ContentLayout>
                                                 <Routes>
-                                                    <Route path="/dashboard" element={<Dashboard />} />
+                                                    <Route path="/" element={<Dashboard />} />
                                                     <Route path="/simulations" element={<Simulations />} />
                                                     <Route path="/settings" element={<ServerSettings />} />
                                                 </Routes>

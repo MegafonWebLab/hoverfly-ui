@@ -8,22 +8,20 @@ import { NavLink } from 'react-router-dom';
 import './Navigation.pcss';
 
 const cn = cnCreate('navigation');
-const Navigation: React.FC = () => {
-    const setActiveLink = ({ isActive }: any) => (isActive ? cn('link', { active: true }) : cn('link'));
+const setActiveLink = ({ isActive }: any) => (isActive ? cn('link', { active: true }) : cn('link'));
 
-    return (
-        <nav className={cn()}>
-            <NavLink className={setActiveLink} to="/dashboard">
-                <HomeIcon className={cn('icon')} />
-            </NavLink>
-            <NavLink className={setActiveLink} to="/simulations">
-                <SocialIcon className={cn('icon')} />
-            </NavLink>
-            <NavLink className={setActiveLink} to="/settings">
-                <SettingsIcon className={cn('icon')} />
-            </NavLink>
-        </nav>
-    );
-};
+const Navigation: React.FC = () => (
+    <nav className={cn()}>
+        <NavLink className={setActiveLink} to="/">
+            <HomeIcon className={cn('icon')} />
+        </NavLink>
+        <NavLink className={setActiveLink} to="/simulations">
+            <SocialIcon className={cn('icon')} />
+        </NavLink>
+        <NavLink className={setActiveLink} to="/settings">
+            <SettingsIcon className={cn('icon')} />
+        </NavLink>
+    </nav>
+);
 
 export default Navigation;
