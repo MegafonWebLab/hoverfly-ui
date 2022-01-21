@@ -5,13 +5,16 @@ import './styles/normalize.pcss';
 import 'styles/default.pcss';
 import './styles/variables.pcss';
 import './styles/media.pcss';
+import { BrowserRouter } from 'react-router-dom';
 import App from './components/App/App';
 import { store } from './store';
 
 ReactDOM.render(
     <React.StrictMode>
         <Provider store={store}>
-            <App />
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
         </Provider>
     </React.StrictMode>,
     document.getElementById('root'),
