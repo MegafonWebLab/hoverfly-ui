@@ -2,7 +2,7 @@ import React from 'react';
 import './App.pcss';
 import { cnCreate } from '@megafon/ui-helpers';
 import { positions, Provider as AlertProvider } from 'react-alert';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from 'components/Dashboard/Dashboard';
 import Footer from 'components/Footer/Footer';
 import AlertLayout from 'components/layouts/AlertLayout/AlertLayout';
@@ -46,6 +46,7 @@ function App(): JSX.Element {
                                                     <Route path="/" element={<Dashboard />} />
                                                     <Route path="/simulations" element={<Simulations />} />
                                                     <Route path="/settings" element={<ServerSettings />} />
+                                                    <Route path="/*" element={<Navigate to="/" />} />
                                                 </Routes>
                                             </ContentLayout>
                                         </main>
