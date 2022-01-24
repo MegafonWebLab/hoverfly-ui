@@ -1,0 +1,31 @@
+$b: .navigation;
+
+$(b) {
+    &__link {
+        display: block;
+        padding: 14px;
+
+        list-style-type: none;
+        background-color: #F6F6F6;
+
+        &:last-child {
+            border-radius: 0 0 18px 0;
+        }
+    }
+
+    &__link_active {
+        background-color: #FFFFFF;
+
+        $(b)__icon {
+            fill: #731982;
+        }
+    }
+
+    &__icon {
+        display: block;
+        width: 32px;
+        height: 32px;
+
+        fill: #33333380;
+    }
+}

@@ -63,6 +63,7 @@
     "react-modal": "^3.14.3",
     "react-redux": "^7.2.5",
     "react-refresh": "^0.8.3",
+    "react-router-dom": "^6.2.1",
     "react-select": "^5.2.1",
     "resolve": "1.18.1",
     "resolve-url-loader": "^3.1.2",
