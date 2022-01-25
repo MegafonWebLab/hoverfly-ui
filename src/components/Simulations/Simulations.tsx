@@ -30,12 +30,14 @@ const Simulations: React.FC = () => {
 
     function handleSimulationEditButtonClick(id: number) {
         id;
-        return () => { }
+
+        return () => {};
     }
 
     function handleSimulationDeleteButtonClick(id: number) {
         id;
-        return () => { }
+
+        return () => {};
     }
 
     function handlePaginationChange(currentPage: number) {
@@ -53,18 +55,10 @@ const Simulations: React.FC = () => {
         simulationListOnPage.map((request, id) => (
             <li className={cn('item')}>
                 <div className={cn('item-buttons')}>
-                    <button
-                        type="button"
-                        className={cn('edit-btn')}
-                        onClick={handleSimulationEditButtonClick(id)}
-                    >
+                    <button type="button" className={cn('edit-btn')} onClick={handleSimulationEditButtonClick(id)}>
                         <img className={cn('edit-btn')} src={editIcon} alt="edit-icon" />
                     </button>
-                    <button
-                        type="button"
-                        className={cn('delete-btn')}
-                        onClick={handleSimulationDeleteButtonClick(id)}
-                    >
+                    <button type="button" className={cn('delete-btn')} onClick={handleSimulationDeleteButtonClick(id)}>
                         <DeleteIcon />
                     </button>
                 </div>
@@ -82,7 +76,7 @@ const Simulations: React.FC = () => {
                     <Header className={cn('active-simulations-header')} as="h3">
                         Active simulations
                     </Header>
-                    <button type='button' className={cn('add-btn')} onClick={handleAddSimulationButtonClick}>
+                    <button type="button" className={cn('add-btn')} onClick={handleAddSimulationButtonClick}>
                         <span className={cn('button-content')}>
                             <img className={cn('plus-icon')} src={plusIcon} alt="plus-icon" />
                             ADD NEW

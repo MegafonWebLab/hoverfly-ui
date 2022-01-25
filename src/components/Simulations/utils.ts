@@ -167,10 +167,10 @@ export const changeServerState = (
     index: number,
     value: string,
 ): SimulationsServerState => {
-    const newState = [...state[key]];
-    newState[index][name] = value;
+    const newState = cloneDeep(state);
+    newState[key][index][name] = value;
 
-    return { ...state, [key]: newState };
+    return { ...newState };
 };
 
 export const changeHeaderState = (

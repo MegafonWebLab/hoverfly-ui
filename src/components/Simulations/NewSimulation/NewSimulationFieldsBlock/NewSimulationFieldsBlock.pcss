@@ -1,0 +1,41 @@
+$b: .new-simulation-fields-block;
+
+$(b) {
+    &__wrapper {
+        display: grid;
+        grid-template-areas: 'title fields';
+        grid-template-columns: 150px auto;
+        margin-bottom: -16px;
+
+        padding-right: 13px;
+    }
+
+    &__wrapper_has-add-button {
+        grid-template-areas: 'title fields'
+            '. button';
+
+        margin-bottom: 0;
+    }
+
+    &__wrapper_empty {
+        grid-template-areas: 'title button';
+        align-items: center;
+
+        margin-bottom: 0;
+    }
+
+    &__title {
+        grid-area: title;
+        width: 200px;
+    }
+
+    &__fields {
+        display: flex;
+        grid-area: fields;
+        align-items: center;
+    }
+
+    &__button {
+        grid-area: button;
+    }
+}
