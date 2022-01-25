@@ -12,6 +12,7 @@ import Login from 'components/Login/Login';
 import Navigation from 'components/Navigation/Navigation';
 import Notification from 'components/Notification/Notification';
 import ServerSettings from 'components/ServerSettings/ServerSettings';
+import NewSimulation from 'components/Simulations/NewSimulation/NewSimulation';
 import Simulations from 'components/Simulations/Simulations';
 import TopBar from 'components/TopBar/TopBar';
 import { useDispatch } from 'store/hooks';
@@ -45,6 +46,7 @@ function App(): JSX.Element {
                                                 <Routes>
                                                     <Route path="/" element={<Dashboard />} />
                                                     <Route path="/simulations" element={<Simulations />} />
+                                                    <Route path="/simulations/new" element={<NewSimulation />} />
                                                     <Route path="/settings" element={<ServerSettings />} />
                                                     <Route path="/*" element={<Navigate to="/" />} />
                                                 </Routes>

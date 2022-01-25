@@ -1,8 +1,28 @@
 $b: .new-simulations;
 
 $(b) {
-    display: flex;
-    justify-content: space-between;
+
+    &__wrapper {
+        display: flex;
+        justify-content: space-between;
+
+        margin-top: 16px;
+    }
+
+    &__nav-link {
+        display: flex;
+        align-items: center;
+
+        color: #333333;
+        font-size: 18px;
+
+        text-decoration: none;
+    }
+
+    &__arrow-icon {
+        width: 25px;
+        height: 25px;
+    }
 
     &__content {
         max-width: 801px;
@@ -38,24 +58,7 @@ $(b) {
         margin-bottom: 8px;
 
         font-weight: bold;
-    }
-
-    &__header {
-        display: flex;
-        align-items: flex-end;
-    }
-
-    &__header-left {
-        display: flex;
-        align-items: center;
-    }
-
-    &__header-right {
-        margin-bottom: 8px;
-    }
-
-    &__header-button {
-        margin-right: 8px;
+        font-size: 32px;
     }
 
     &__delete-btn {
@@ -83,10 +86,6 @@ $(b) {
 
     &__select-contol {
         width: 170px;
-    }
-
-    &__routes {
-        min-width: 170px;
     }
 
     &__remove-fields-btn {

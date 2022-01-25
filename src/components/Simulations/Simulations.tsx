@@ -3,6 +3,7 @@ import { Header, TextField, Select, Tile, Pagination } from '@megafon/ui-core';
 import { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Select';
 import { cnCreate } from '@megafon/ui-helpers';
 import { ReactComponent as DeleteIcon } from '@megafon/ui-icons/basic-16-delete_16.svg';
+import { NavLink } from 'react-router-dom';
 import editIcon from 'static/favicon/edit-icon.svg';
 import plusIcon from 'static/favicon/plus.svg';
 import { useSelector } from 'store/hooks';
@@ -25,8 +26,6 @@ const Simulations: React.FC = () => {
     const lastSimulationOnPageIndex = firstSimulationOnPageIndex + MAX_SIMULATIONS_ON_PAGE;
     const simulationListOnPage = simulationList.slice(firstSimulationOnPageIndex, lastSimulationOnPageIndex);
     const totalSimulationPages = Math.ceil(simulationList.length / MAX_SIMULATIONS_ON_PAGE);
-
-    function handleAddSimulationButtonClick() {}
 
     function handleSimulationEditButtonClick(id: number) {
         id;
@@ -76,12 +75,12 @@ const Simulations: React.FC = () => {
                     <Header className={cn('active-simulations-header')} as="h3">
                         Active simulations
                     </Header>
-                    <button type="button" className={cn('add-btn')} onClick={handleAddSimulationButtonClick}>
+                    <NavLink className={cn('nav-link')} to="/simulations/new">
                         <span className={cn('button-content')}>
                             <img className={cn('plus-icon')} src={plusIcon} alt="plus-icon" />
                             ADD NEW
                         </span>
-                    </button>
+                    </NavLink>
                 </div>
                 <div className={cn('fields')}>
                     <TextField
@@ -103,13 +102,15 @@ const Simulations: React.FC = () => {
             <Tile className={cn('tile')} radius="rounded" shadowLevel="high">
                 <ul className={cn('list')}>{rendeSimulationList()}</ul>
             </Tile>
-            <div className={cn('pagination-wrap')}>
-                <Pagination
-                    totalPages={totalSimulationPages}
-                    activePage={activePage}
-                    onChange={handlePaginationChange}
-                />
-            </div>
+            {simulationList.length > MAX_SIMULATIONS_ON_PAGE && (
+                <div className={cn('pagination-wrap')}>
+                    <Pagination
+                        totalPages={totalSimulationPages}
+                        activePage={activePage}
+                        onChange={handlePaginationChange}
+                    />
+                </div>
+            )}
         </div>
     );
 };
