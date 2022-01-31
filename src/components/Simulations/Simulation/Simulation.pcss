@@ -1,0 +1,130 @@
+$b: .simulation;
+
+$(b) {
+
+    &__wrapper {
+        display: flex;
+        justify-content: space-between;
+
+        margin-top: 16px;
+    }
+
+    &__back-link {
+        display: flex;
+        align-items: center;
+
+        color: #333333;
+        font-size: 18px;
+
+        text-decoration: none;
+
+        cursor: pointer;
+    }
+
+    &__arrow-icon {
+        width: 25px;
+        height: 25px;
+    }
+
+    &__content {
+        max-width: 801px;
+
+        border: 1px solid #EDEDED;
+        border-radius: 8px;
+    }
+
+    &__content-header-container {
+        display: flex;
+        justify-content: space-between;
+
+        padding: 7px 21px 7px 29px;
+
+        background-color: #F6F6F6;
+    }
+
+    &__content-header {
+        color: rgba(51, 51, 51, 0.5);
+    }
+
+    &__content-body {
+        padding: 26px 29px;
+    }
+
+    &__collapse-content {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    &__title {
+        margin-bottom: 48px;
+
+        font-weight: bold;
+        font-size: 32px;
+    }
+
+    &__action-button {
+        display: flex;
+
+        justify-content: center;
+    }
+
+    &__delete-btn {
+        width: 22px;
+        height: 22px;
+
+        cursor: pointer;
+    }
+
+    &__field {
+        flex-grow: 1;
+    }
+
+    &__field-list {
+        width: 100%;
+    }
+
+    &__input,
+    &__select-contol {
+        height: 42px;
+        min-height: 42px;
+
+        border-radius: 12px;
+    }
+
+    &__select-contol {
+        width: 170px;
+    }
+
+    &__remove-fields-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+
+        padding: 0;
+    }
+
+    &__remove-icon {
+        width: 20px;
+        height: 20px;
+        margin-top: 2px;
+    }
+
+    &__fields {
+        display: flex;
+        gap: 16px;
+        align-items: center;
+
+        width: 100%;
+        margin-bottom: 16px;
+    }
+
+    &__editor {
+        min-width: 600px;
+        max-width: 700px;
+        margin-top: 8px;
+        margin-bottom: 30px;
+    }
+}

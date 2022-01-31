@@ -1,5 +1,6 @@
 import type { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Select';
 import type { SimulationResponse } from 'api/types';
+import { SimulationItem } from 'api/types';
 import {
     BodyType,
     ServerState,
@@ -61,6 +62,14 @@ export const initialServerState: SimulationsServerState = {
     requiresState: [],
     transitionsState: [],
     removesState: [],
+};
+
+export const initialPairState: SimulationItem = {
+    request: {},
+    response: {
+        status: 200,
+        body: '',
+    },
 };
 
 export const initialHeaderQuery: SimulationHeadersQueryState = {

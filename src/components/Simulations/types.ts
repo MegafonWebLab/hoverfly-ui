@@ -1,5 +1,10 @@
 import type { HoverflyMatcher } from 'api/types';
 
+export type RouteItem = {
+    name: string;
+    index: number;
+};
+
 export type ServerState = {
     key?: string;
     value: string;
@@ -31,7 +36,7 @@ export type SimulationHtmlState = {
 };
 
 export type SimulationCodeMirrorOptions = {
-    theme: 'material';
+    theme: string;
     lineNumbers: boolean;
     mode?:
         | string

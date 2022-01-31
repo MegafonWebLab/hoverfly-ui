@@ -19,6 +19,7 @@ import type {
     BodyType,
     SimulationCodeMirrorOptions,
     SimulationHtmlState,
+    RouteItem,
 } from './types';
 import 'highlight.js/styles/github.css';
 
@@ -26,13 +27,13 @@ hljs.registerLanguage('xml', xmlLang);
 hljs.registerLanguage('json', jsonLang);
 
 // eslint-disable-next-line import/prefer-default-export
-export const getRouteList = (pairs: SimulationItem[]): string[] =>
-    pairs.map(pair => {
+export const getRouteList = (pairs: SimulationItem[]): RouteItem[] =>
+    pairs.map<RouteItem>((pair, index) => {
         const pathValue = pair.request.path?.[0].value;
         const method = pair.request.method?.[0].value || 'GET';
         const isRequiresState = !!pair.request.requiresState;
 
-        return `${method} ${pathValue}${isRequiresState ? ' [stateful]' : ''}`;
+        return { name: `${method} ${pathValue}${isRequiresState ? ' [stateful]' : ''}`, index };
     });
 
 export const getRequireStateList = (pair: SimulationItem): ServerState[] =>
@@ -167,10 +168,10 @@ export const changeServerState = (
     index: number,
     value: string,
 ): SimulationsServerState => {
-    const newState = [...state[key]];
-    newState[index][name] = value;
+    const newState = cloneDeep(state);
+    newState[key][index][name] = value;
 
-    return { ...state, [key]: newState };
+    return { ...newState };
 };
 
 export const changeHeaderState = (
@@ -226,7 +227,7 @@ export const hightlightHtml = (code: string): AutoHighlightResult => hljs.highli
 
 export const getCodeMirrorConfig = (type: BodyType): SimulationCodeMirrorOptions => {
     const options: SimulationCodeMirrorOptions = {
-        theme: 'material',
+        theme: 'default',
         lineNumbers: true,
     };
     switch (type) {
