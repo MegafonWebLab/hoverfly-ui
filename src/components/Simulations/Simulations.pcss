@@ -41,6 +41,7 @@ $(b) {
         text-decoration: none;
 
         background-color: #00B956;
+        cursor: pointer;
 
         &_disabled {
             background-color: #D8D8D8;
@@ -89,16 +90,39 @@ $(b) {
 
     &__edit-btn {
         margin-right: 8px;
+
+        cursor: pointer;
+
+        fill: #404D46;
+
+        &_disabled {
+            fill: #CCCCCC;
+        }
     }
 
     &__delete-btn {
         width: 22px;
         height: 22px;
         margin-right: 21px;
+
+        cursor: pointer;
+
+        &_disabled {
+            fill: #CCCCCC;
+        }
     }
 
     &__pagination-wrap {
         display: flex;
         justify-content: center;
+    }
+
+    &__delete-loader {
+        margin-left: 16px;
+    }
+
+    &__popup-buttons {
+        display: flex;
+        justify-content: space-between;
     }
 }

@@ -1,17 +1,17 @@
 import React from 'react';
 import { cnCreate } from '@megafon/ui-helpers';
 import AddNewFieldsButton from 'components/Simulations/AddNewFieldsButton/AddNewFieldsButton';
-import './NewSimulationFieldsBlock.pcss';
+import './SimulationFieldsBlock.pcss';
 
-type NewSimulationFieldsBlockProps = {
+type SimulationFieldsBlockProps = {
     title: string;
     hasAddButton?: boolean;
     children: React.ReactNode | React.ReactNode[];
     onAddButtonClick?: () => void;
 };
 
-const cn = cnCreate('new-simulation-fields-block');
-const NewSimulationFieldsBlock: React.FC<NewSimulationFieldsBlockProps> = ({
+const cn = cnCreate('simulation-fields-block');
+const SimulationFieldsBlock: React.FC<SimulationFieldsBlockProps> = ({
     title,
     children,
     hasAddButton = false,
@@ -28,4 +28,4 @@ const NewSimulationFieldsBlock: React.FC<NewSimulationFieldsBlockProps> = ({
     </div>
 );
 
-export default NewSimulationFieldsBlock;
+export default SimulationFieldsBlock;

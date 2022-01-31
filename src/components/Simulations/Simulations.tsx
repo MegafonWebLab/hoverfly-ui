@@ -1,42 +1,74 @@
-import React, { useState } from 'react';
-import { Header, TextField, Select, Tile, Pagination } from '@megafon/ui-core';
-import { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Select';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Header, TextField, Select, Tile, Pagination, Preloader, Button, Paragraph } from '@megafon/ui-core';
+import type { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Select';
 import { cnCreate } from '@megafon/ui-helpers';
 import { ReactComponent as DeleteIcon } from '@megafon/ui-icons/basic-16-delete_16.svg';
-import { NavLink } from 'react-router-dom';
-import editIcon from 'static/favicon/edit-icon.svg';
+import { ReactComponent as EditIcon } from 'static/favicon/edit-icon.svg';
 import plusIcon from 'static/favicon/plus.svg';
 import { useSelector } from 'store/hooks';
+import Popup from '../Popup/Popup';
+import type { RouteItem } from './types';
 import { getRouteList } from './utils';
 import './Simulations.pcss';
 
 const MAX_SIMULATIONS_ON_PAGE = 16;
 const sortTypeItems = [{ title: 'By require', value: 'By require' }];
 
+interface ISimulationsProps {
+    onChange: (index: number | undefined, type: 'edit' | 'delete' | 'new') => void;
+}
+
 const cn = cnCreate('simulations');
-const Simulations: React.FC = () => {
+const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
     const simulationStore = useSelector(state => state.simulation);
 
+    const [pathValue, setPathValue] = useState<string>('');
+    const [search, setSearch] = useState<string>('');
     const [sortType, setSortType] = useState<ISelectItem<string>>(sortTypeItems[0]);
     const [activePage, setActivePage] = useState<number>(1);
+    const [simulations, setSimulations] = useState<RouteItem[]>([]);
+    const [deleteIndex, setDeleteIndex] = useState<number | undefined>(undefined);
+    const [isOpen, setIsOpen] = useState<boolean>(false);
 
-    const simulationList: string[] =
-        simulationStore.type === 'success' ? getRouteList(simulationStore.value.data.pairs) : [];
+    const searchSimulations = React.useMemo(
+        () => simulations.filter(({ name }) => name.search(search) !== -1),
+        [search, simulations],
+    );
+
     const firstSimulationOnPageIndex = (activePage - 1) * MAX_SIMULATIONS_ON_PAGE;
     const lastSimulationOnPageIndex = firstSimulationOnPageIndex + MAX_SIMULATIONS_ON_PAGE;
-    const simulationListOnPage = simulationList.slice(firstSimulationOnPageIndex, lastSimulationOnPageIndex);
-    const totalSimulationPages = Math.ceil(simulationList.length / MAX_SIMULATIONS_ON_PAGE);
+    const simulationListOnPage = searchSimulations.slice(firstSimulationOnPageIndex, lastSimulationOnPageIndex);
+    const totalSimulationPages = Math.ceil(searchSimulations.length / MAX_SIMULATIONS_ON_PAGE);
 
-    function handleSimulationEditButtonClick(id: number) {
-        id;
+    const handleOpen = useCallback(() => setIsOpen(true), []);
+    const handleClose = useCallback(() => {
+        setDeleteIndex(undefined);
+        setIsOpen(false);
+    }, []);
 
-        return () => {};
+    function handleSimulationEditButtonClick(index: number) {
+        return () => onChange(index, 'edit');
     }
 
-    function handleSimulationDeleteButtonClick(id: number) {
-        id;
+    function handleSimulationDeleteButtonClick(index: number) {
+        return () => {
+            if (deleteIndex === undefined && simulationStore.type === 'success') {
+                const pair = simulationStore.value.data.pairs[index];
 
-        return () => {};
+                setPathValue(`${pair.request?.method?.[0].value} ${pair.request?.path?.[0].value}`);
+                setDeleteIndex(index);
+                handleOpen();
+            }
+        };
+    }
+
+    function handleAdd() {
+        onChange(undefined, 'new');
+    }
+
+    function handleDelete() {
+        setIsOpen(false);
+        deleteIndex !== undefined && onChange(deleteIndex, 'delete');
     }
 
     function handlePaginationChange(currentPage: number) {
@@ -50,18 +82,48 @@ const Simulations: React.FC = () => {
         item && setSortType(item);
     }
 
-    const rendeSimulationList = () =>
-        simulationListOnPage.map((request, id) => (
-            <li className={cn('item')}>
+    function handleChangeSearch(e: React.ChangeEvent<HTMLInputElement>) {
+        if (activePage !== 1) {
+            setActivePage(1);
+        }
+
+        setSearch(e.target.value);
+    }
+
+    useEffect(() => {
+        if (simulationStore.type === 'success') {
+            setSimulations(getRouteList(simulationStore.value.data.pairs));
+            setDeleteIndex(undefined);
+        }
+    }, [simulationStore.type]);
+
+    const renderSimulationList = () =>
+        simulationListOnPage.map(({ name, index }) => (
+            <li className={cn('item')} key={`${index + name}`}>
                 <div className={cn('item-buttons')}>
-                    <button type="button" className={cn('edit-btn')} onClick={handleSimulationEditButtonClick(id)}>
-                        <img className={cn('edit-btn')} src={editIcon} alt="edit-icon" />
+                    <button
+                        className={cn('edit-btn', { disabled: !isOpen && index === deleteIndex })}
+                        type="button"
+                        disabled={index === deleteIndex}
+                        onClick={handleSimulationEditButtonClick(index)}
+                    >
+                        <EditIcon />
                     </button>
-                    <button type="button" className={cn('delete-btn')} onClick={handleSimulationDeleteButtonClick(id)}>
+                    <button
+                        className={cn('delete-btn', { disabled: !isOpen && index === deleteIndex })}
+                        type="button"
+                        disabled={index === deleteIndex}
+                        onClick={handleSimulationDeleteButtonClick(index)}
+                    >
                         <DeleteIcon />
                     </button>
                 </div>
-                <span>{request}</span>
+                <span>{name}</span>
+                {!isOpen && index === deleteIndex && (
+                    <div className={cn('delete-loader')}>
+                        <Preloader color="black" />
+                    </div>
+                )}
             </li>
         ));
 
@@ -75,18 +137,19 @@ const Simulations: React.FC = () => {
                     <Header className={cn('active-simulations-header')} as="h3">
                         Active simulations
                     </Header>
-                    <NavLink className={cn('nav-link')} to="/simulations/new">
+                    <button className={cn('nav-link')} type="button" onClick={handleAdd}>
                         <span className={cn('button-content')}>
                             <img className={cn('plus-icon')} src={plusIcon} alt="plus-icon" />
                             ADD NEW
                         </span>
-                    </NavLink>
+                    </button>
                 </div>
                 <div className={cn('fields')}>
                     <TextField
                         classes={{
                             input: cn('input'),
                         }}
+                        onChange={handleChangeSearch}
                         placeholder="Search simulation"
                     />
                     <Select<string>
@@ -100,9 +163,9 @@ const Simulations: React.FC = () => {
                 </div>
             </div>
             <Tile className={cn('tile')} radius="rounded" shadowLevel="high">
-                <ul className={cn('list')}>{rendeSimulationList()}</ul>
+                <ul className={cn('list')}>{renderSimulationList()}</ul>
             </Tile>
-            {simulationList.length > MAX_SIMULATIONS_ON_PAGE && (
+            {simulations.length > MAX_SIMULATIONS_ON_PAGE && (
                 <div className={cn('pagination-wrap')}>
                     <Pagination
                         totalPages={totalSimulationPages}
@@ -111,6 +174,23 @@ const Simulations: React.FC = () => {
                     />
                 </div>
             )}
+            <Popup open={isOpen} onClose={handleClose}>
+                <Paragraph align="center">Delete {pathValue}?</Paragraph>
+                <div className={cn('popup-buttons')}>
+                    <Button
+                        className={cn('popup-button')}
+                        sizeAll="small"
+                        type="outline"
+                        actionType="button"
+                        onClick={handleDelete}
+                    >
+                        Delete
+                    </Button>
+                    <Button sizeAll="small" actionType="button" onClick={handleClose}>
+                        Cancel
+                    </Button>
+                </div>
+            </Popup>
         </div>
     );
 };

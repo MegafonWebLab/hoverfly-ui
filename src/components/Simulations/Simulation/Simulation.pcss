@@ -1,4 +1,4 @@
-$b: .new-simulations;
+$b: .simulation;
 
 $(b) {
 
@@ -9,7 +9,7 @@ $(b) {
         margin-top: 16px;
     }
 
-    &__nav-link {
+    &__back-link {
         display: flex;
         align-items: center;
 
@@ -17,6 +17,8 @@ $(b) {
         font-size: 18px;
 
         text-decoration: none;
+
+        cursor: pointer;
     }
 
     &__arrow-icon {
@@ -55,10 +57,16 @@ $(b) {
     }
 
     &__title {
-        margin-bottom: 8px;
+        margin-bottom: 48px;
 
         font-weight: bold;
         font-size: 32px;
+    }
+
+    &__action-button {
+        display: flex;
+
+        justify-content: center;
     }
 
     &__delete-btn {

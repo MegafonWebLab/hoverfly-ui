@@ -52,6 +52,7 @@ export const updateSimulationAsync = createAsyncThunk<SimulationResponse, Simula
     'simulation/update',
     async (content: SimulationResponse, thunkAPI) => {
         const { data } = await thunkAPI.extra.hoverfly.updateSimulation(content);
+
         if (data) {
             return removeBodyFileKey(data);
         }
@@ -77,10 +78,13 @@ export const simulationSlice = createSlice<ISimulationState, {}, 'simulation'>({
                 defaultRejectedCase<ISimulationState, SimulationRequest>('Simulation'),
             )
             .addCase(createSimulationAsync.pending, defaultPendingCase<ISimulationState>())
-            .addCase(createSimulationAsync.fulfilled, defaultFulfilledCase<ISimulationState, SimulationResponse>())
+            .addCase(
+                createSimulationAsync.fulfilled,
+                defaultFulfilledCase<ISimulationState, SimulationResponse>('Simulations updated'),
+            )
             .addCase(
                 createSimulationAsync.rejected,
-                defaultRejectedCase<ISimulationState, SimulationResponse>('Simulation create'),
+                defaultRejectedCase<ISimulationState, SimulationResponse>('Simulations update'),
             )
             .addCase(updateSimulationAsync.pending, defaultPendingCase<ISimulationState>())
             .addCase(updateSimulationAsync.fulfilled, defaultFulfilledCase<ISimulationState, SimulationResponse>())

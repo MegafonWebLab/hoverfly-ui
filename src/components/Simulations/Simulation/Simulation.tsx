@@ -1,22 +1,21 @@
 import React, { useMemo, useEffect, useCallback, useState } from 'react';
 import { Button, Checkbox, Header, Select, TextField } from '@megafon/ui-core';
-import { ReactComponent as DeleteIcon } from '@megafon/ui-icons/basic-16-delete_16.svg';
-import { ReactComponent as ArrowIcon } from '@megafon/ui-icons/system-16-arrow_left_16.svg';
 import type { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Select';
 import { cnCreate } from '@megafon/ui-helpers';
+import { ReactComponent as DeleteIcon } from '@megafon/ui-icons/basic-16-delete_16.svg';
+import { ReactComponent as ArrowIcon } from '@megafon/ui-icons/system-16-arrow_left_16.svg';
 import { ReactComponent as Minus } from '@megafon/ui-icons/system-16-minus_16.svg';
 import { Controlled as CodeMirror } from 'react-codemirror2';
-import { NavLink } from 'react-router-dom';
 import type { SimulationResponse, HoverflyMatcher, PairItemRequest, SimulationItem, PairItemResponse } from 'api/types';
 import CollapseWrapper from 'components/CollapseWrapper/CollapseWrapper';
-import './NewSimulation.pcss';
-import { useDispatch, useSelector } from 'store/hooks';
-import { getSimulationAsync } from 'store/simulation/simulationSlice';
+import './Simulation.pcss';
+import { useSelector } from 'store/hooks';
 import {
     BODY_FORMATS,
     headerEmpty,
     initialBodyState,
     initialHeaderQuery,
+    initialPairState,
     initialServerState,
     initialState,
     MATCHES,
@@ -46,11 +45,14 @@ import {
     getResponseHeaderStateList,
     getTransitionStateList,
     hightlightHtml,
+    mergeBodyStateToCurrentPair,
+    mergeCurrentStateToMainState,
+    mergeHeaderStateToCurrentPair,
+    mergeServerStateToCurrentPair,
 } from '../utils';
 
 import 'codemirror/lib/codemirror.css';
-import 'codemirror/theme/material.css';
-import NewSimulationFieldsBlock from './NewSimulationFieldsBlock/NewSimulationFieldsBlock';
+import SimulationFieldsBlock from './SimulationFieldsBlock/SimulationFieldsBlock';
 
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/javascript/javascript');
@@ -61,25 +63,48 @@ type ChangeCurrentNames = keyof Omit<PairItemRequest, 'headers' | 'query' | 'req
 
 const useZeroMemo = (el: JSX.Element) => useMemo(() => el, []);
 
-const cn = cnCreate('new-simulations');
-const NewSimulation: React.FC = () => {
-    const dispatch = useDispatch();
-    const statusState = !!useSelector(state => state.status.value);
+interface ISimulationProps {
+    routeIndex?: number;
+    onChange: (state: SimulationResponse) => void;
+    onBack: () => void;
+}
+
+const cn = cnCreate('simulation');
+const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }) => {
     const simulationStore = useSelector(state => state.simulation);
 
-    const [routeIndex] = useState<number | undefined>(undefined);
-    const [state, setState] = useState<SimulationResponse>(initialState);
+    const [state, setState] = useState<SimulationResponse>(() => {
+        if (simulationStore.type === 'success') {
+            return simulationStore.value;
+        }
+
+        return initialState;
+    });
     const [serverState, setServerState] = useState<SimulationsServerState>(initialServerState);
-    const [currentPair, setCurrentPair] = useState<SimulationItem | undefined>(undefined);
+    const [currentPair, setCurrentPair] = useState<SimulationItem | undefined>(initialPairState);
     const [headerQuery, setHeaderQuery] = useState<SimulationHeadersQueryState>(initialHeaderQuery);
     const [body, setBody] = useState<SimulationHtmlState>(initialBodyState);
 
-    const [showDestination, setShowDestination] = useState(true);
-    const [showPath, setShowPath] = useState(true);
-
     const { transitionsState, requiresState } = serverState;
 
-    const isRouteIndex = routeIndex !== undefined;
+    function handleSubmit() {
+        if (state) {
+            const pair = currentPair
+                ? mergeServerStateToCurrentPair(
+                      mergeHeaderStateToCurrentPair(mergeBodyStateToCurrentPair(currentPair, body), headerQuery),
+                      serverState,
+                  )
+                : null;
+            const newState = pair
+                ? mergeCurrentStateToMainState(
+                      state,
+                      pair,
+                      routeIndex !== undefined ? routeIndex : state.data.pairs.length,
+                  )
+                : state;
+            onChange(newState);
+        }
+    }
 
     function handleToggleServerState(key: keyof SimulationsServerState, index?: number) {
         return () =>
@@ -93,7 +118,7 @@ const NewSimulation: React.FC = () => {
         return (e: InputChange) => setServerState(prev => changeServerState(prev, key, name, index, e.target.value));
     }
 
-    function handleToogleHeaderQuery(key: keyof SimulationHeadersQueryState, index?: number) {
+    function handleToggleHeaderQuery(key: keyof SimulationHeadersQueryState, index?: number) {
         return () =>
             setHeaderQuery(prev => ({
                 ...prev,
@@ -158,16 +183,13 @@ const NewSimulation: React.FC = () => {
     }
 
     useEffect(() => {
-        statusState && dispatch(getSimulationAsync());
-    }, [statusState]);
-
-    useEffect(() => {
         simulationStore.type === 'success' && setState(simulationStore.value);
     }, [simulationStore]);
 
     useEffect(() => {
         if (routeIndex !== undefined && state) {
             const pair = state.data.pairs[routeIndex];
+
             const content: SimulationsServerState = {
                 requiresState: getRequireStateList(pair),
                 transitionsState: getTransitionStateList(pair),
@@ -191,6 +213,7 @@ const NewSimulation: React.FC = () => {
                 },
             };
 
+            setCurrentPair(pair);
             setServerState(content);
             setHeaderQuery(headers);
             setBody(routeBody);
@@ -204,24 +227,23 @@ const NewSimulation: React.FC = () => {
     );
 
     const renderField = useCallback(
-        (onChange: (e: InputChange) => void, value: string, placeholder?: string) => (
+        (onChangeField: (e: InputChange) => void, value: string, placeholder?: string) => (
             <TextField
                 className={cn('field')}
                 classes={{ input: cn('input') }}
-                // disabled={!isRouteIndex}
                 placeholder={placeholder}
                 value={value || ''}
-                onChange={onChange}
+                onChange={onChangeField}
             />
         ),
-        [isRouteIndex],
+        [],
     );
 
     const renderFieldList = (list: ServerState[], name: keyof SimulationsServerState) => (
         <div className={cn('field-list')}>
             {list.map((values, index) => (
+                // eslint-disable-next-line react/no-array-index-key
                 <div className={cn('fields')} key={index}>
-                    {console.log(values, index)}
                     {renderField(handleChangeServerState(name, 'key', index), values.key || '', 'State key')}
                     {renderField(handleChangeServerState(name, 'value', index), values.value || '', 'State value')}
                     {renderDeleteButton(handleToggleServerState(name, index))}
@@ -232,106 +254,99 @@ const NewSimulation: React.FC = () => {
 
     return (
         <div className={cn()}>
-            <NavLink className={cn('nav-link')} to="/simulations">
+            <button className={cn('back-link')} type="button" onClick={onBack}>
                 <ArrowIcon className={cn('arrow-icon')} />
                 Back to Simulations
-            </NavLink>
+            </button>
             <div className={cn('wrapper')}>
-                {useZeroMemo(
-                    <Header className={cn('title')} as="h3">
-                        New Simulation
-                    </Header>,
-                )}
+                <div>
+                    {useZeroMemo(
+                        <Header className={cn('title')} as="h3">
+                            {routeIndex === undefined ? 'New' : 'Update'} Simulation
+                        </Header>,
+                    )}
+                    <div className={cn('action-button')}>
+                        <Button sizeAll="medium" fullWidth onClick={handleSubmit}>
+                            {routeIndex === undefined ? 'Create' : 'Update'}
+                        </Button>
+                    </div>
+                </div>
                 <div className={cn('content')}>
                     <div className={cn('content-header-container')}>
                         <Header className={cn('content-header')} as="h5">
-                            Create new simulation
+                            {routeIndex === undefined ? 'Create new' : 'Update'} simulation
                         </Header>
                         <button type="button" className={cn('delete-btn')} onClick={handleClearButtonClick}>
                             <DeleteIcon />
                         </button>
                     </div>
                     <div className={cn('content-body')}>
-                            <CollapseWrapper isOpenDefault title="Stateful settings">
+                        <CollapseWrapper isOpenDefault title="Stateful settings">
                             <div className={cn('collapse-content')}>
-                                <NewSimulationFieldsBlock
+                                <SimulationFieldsBlock
                                     hasAddButton
                                     title="Require states"
                                     onAddButtonClick={handleToggleServerState('requiresState')}
                                 >
                                     {!!requiresState.length && renderFieldList(requiresState, 'requiresState')}
-                                </NewSimulationFieldsBlock>
-                                <NewSimulationFieldsBlock
+                                </SimulationFieldsBlock>
+                                <SimulationFieldsBlock
                                     hasAddButton
                                     title="New states"
                                     onAddButtonClick={handleToggleServerState('transitionsState')}
                                 >
                                     {!!transitionsState.length && renderFieldList(transitionsState, 'transitionsState')}
-                                </NewSimulationFieldsBlock>
+                                </SimulationFieldsBlock>
                             </div>
                         </CollapseWrapper>
-                            <CollapseWrapper isOpenDefault title="Request matchers">
+                        <CollapseWrapper isOpenDefault title="Request matchers">
                             <div className={cn('collapse-content')}>
-                                <NewSimulationFieldsBlock title="Method">
+                                <SimulationFieldsBlock title="Method">
                                     <div className={cn('fields')}>
                                         <Select
                                             classes={{ control: cn('select-contol') }}
                                             currentValue={currentPair?.request.method?.[0].value || 'GET'}
                                             items={METHODS}
-                                            // disabled={!isRouteIndex}
                                             onSelect={handleChooseCurrentValueRequest('method', 'value')}
                                         />
                                     </div>
-                                </NewSimulationFieldsBlock>
-                                <NewSimulationFieldsBlock
-                                    title="Destination"
-                                    onAddButtonClick={() => setShowDestination(true)}
-                                >
-                                    {showDestination && (
-                                        <div className={cn('fields')}>
-                                            <Select
-                                                classes={{ control: cn('select-contol') }}
-                                                items={MATCHES}
-                                                // disabled={!isRouteIndex}
-                                                currentValue={
-                                                    currentPair?.request.destination?.[0].matcher || MATCHES[0].value
-                                                }
-                                                onSelect={handleChooseCurrentValueRequest('destination', 'matcher')}
-                                            />
-                                            {renderField(
-                                                handleChangeCurrentRequest('destination', 'value'),
-                                                currentPair?.request.destination?.[0].value || '',
-                                                'localhost:8080',
-                                            )}
-                                            {renderDeleteButton(() => setShowDestination(false))}
-                                        </div>
-                                    )}
-                                </NewSimulationFieldsBlock>
-                                <NewSimulationFieldsBlock title="Path" onAddButtonClick={() => setShowPath(true)}>
-                                    {showPath && (
-                                        <div className={cn('fields')}>
-                                            <Select
-                                                items={MATCHES}
-                                                // disabled={!isRouteIndex}
-                                                classes={{ control: cn('select-contol') }}
-                                                currentValue={
-                                                    currentPair?.request.path?.[0].matcher || MATCHES[0].value
-                                                }
-                                                onSelect={handleChooseCurrentValueRequest('path', 'matcher')}
-                                            />
-                                            {renderField(
-                                                handleChangeCurrentRequest('path', 'value'),
-                                                currentPair?.request.path?.[0].value || '',
-                                                'api/v1/match',
-                                            )}
-                                            {renderDeleteButton(() => setShowPath(false))}
-                                        </div>
-                                    )}
-                                </NewSimulationFieldsBlock>
-                                <NewSimulationFieldsBlock
+                                </SimulationFieldsBlock>
+                                <SimulationFieldsBlock title="Destination">
+                                    <div className={cn('fields')}>
+                                        <Select
+                                            classes={{ control: cn('select-contol') }}
+                                            items={MATCHES}
+                                            currentValue={
+                                                currentPair?.request.destination?.[0].matcher || MATCHES[0].value
+                                            }
+                                            onSelect={handleChooseCurrentValueRequest('destination', 'matcher')}
+                                        />
+                                        {renderField(
+                                            handleChangeCurrentRequest('destination', 'value'),
+                                            currentPair?.request.destination?.[0].value || '',
+                                            'localhost:8080',
+                                        )}
+                                    </div>
+                                </SimulationFieldsBlock>
+                                <SimulationFieldsBlock title="Path">
+                                    <div className={cn('fields')}>
+                                        <Select
+                                            items={MATCHES}
+                                            classes={{ control: cn('select-contol') }}
+                                            currentValue={currentPair?.request.path?.[0].matcher || MATCHES[0].value}
+                                            onSelect={handleChooseCurrentValueRequest('path', 'matcher')}
+                                        />
+                                        {renderField(
+                                            handleChangeCurrentRequest('path', 'value'),
+                                            currentPair?.request.path?.[0].value || '',
+                                            'api/v1/match',
+                                        )}
+                                    </div>
+                                </SimulationFieldsBlock>
+                                <SimulationFieldsBlock
                                     hasAddButton
                                     title="Query"
-                                    onAddButtonClick={handleToogleHeaderQuery('query')}
+                                    onAddButtonClick={handleToggleHeaderQuery('query')}
                                 >
                                     {!!headerQuery.query.length && (
                                         <div className={cn('field-list')}>
@@ -341,12 +356,11 @@ const NewSimulation: React.FC = () => {
                                                     {renderField(
                                                         handleChangeHeaderQuery('query', 'key', index),
                                                         header.key,
-                                                        'Query key'
+                                                        'Query key',
                                                     )}
                                                     <Select
-                                                                classes={{ control: cn('select-contol') }}
+                                                        classes={{ control: cn('select-contol') }}
                                                         items={MATCHES}
-                                                        // disabled={!isRouteIndex}
                                                         currentValue={header.match}
                                                         onSelect={handleChooseHeaderQuery('query', index)}
                                                     />
@@ -355,16 +369,16 @@ const NewSimulation: React.FC = () => {
                                                         header.value,
                                                         'Query keys(s)',
                                                     )}
-                                                    {renderDeleteButton(handleToogleHeaderQuery('query', index))}
+                                                    {renderDeleteButton(handleToggleHeaderQuery('query', index))}
                                                 </div>
                                             ))}
                                         </div>
                                     )}
-                                </NewSimulationFieldsBlock>
-                                <NewSimulationFieldsBlock
+                                </SimulationFieldsBlock>
+                                <SimulationFieldsBlock
                                     hasAddButton
                                     title="Header"
-                                    onAddButtonClick={handleToogleHeaderQuery('request')}
+                                    onAddButtonClick={handleToggleHeaderQuery('request')}
                                 >
                                     {!!headerQuery.request.length && (
                                         <div className={cn('field-list')}>
@@ -379,7 +393,6 @@ const NewSimulation: React.FC = () => {
                                                     <Select
                                                         classes={{ control: cn('select-contol') }}
                                                         items={MATCHES}
-                                                        // disabled={!isRouteIndex}
                                                         currentValue={header.match}
                                                         onSelect={handleChooseHeaderQuery('request', index)}
                                                     />
@@ -388,13 +401,13 @@ const NewSimulation: React.FC = () => {
                                                         header.value,
                                                         'Header keys(s)',
                                                     )}
-                                                    {renderDeleteButton(handleToogleHeaderQuery('request', index))}
+                                                    {renderDeleteButton(handleToggleHeaderQuery('request', index))}
                                                 </div>
                                             ))}
                                         </div>
                                     )}
-                                </NewSimulationFieldsBlock>
-                                <NewSimulationFieldsBlock
+                                </SimulationFieldsBlock>
+                                <SimulationFieldsBlock
                                     title="Body"
                                     onAddButtonClick={() => handleChangeBody('request')}
                                 >
@@ -405,12 +418,10 @@ const NewSimulation: React.FC = () => {
                                                     <Select
                                                         classes={{ control: cn('select-contol') }}
                                                         items={MATCHES}
-                                                        disabled={!isRouteIndex}
                                                         currentValue={rBody.matcher || MATCHES[0].value}
                                                         onSelect={handleChooseCurrentValueRequest('body', 'matcher')}
                                                     />
                                                     <Select
-                                                        disabled={!isRouteIndex}
                                                         items={BODY_FORMATS}
                                                         currentValue={rBody.type}
                                                         onSelect={handleChooseBodyType('request')}
@@ -425,25 +436,24 @@ const NewSimulation: React.FC = () => {
                                             ))}
                                         </>
                                     )}
-                                </NewSimulationFieldsBlock>
+                                </SimulationFieldsBlock>
                             </div>
                         </CollapseWrapper>
-                            <CollapseWrapper isOpenDefault title="Response">
+                        <CollapseWrapper isOpenDefault title="Response">
                             <div className={cn('collapse-content')}>
-                                <NewSimulationFieldsBlock title="Status code">
+                                <SimulationFieldsBlock title="Status code">
                                     <div className={cn('fields')}>
                                         <Select
                                             classes={{ control: cn('select-contol') }}
                                             items={STATUS_CODES}
-                                            // disabled={!isRouteIndex}
                                             currentValue={currentPair?.response.status || STATUS_CODES[0].value}
                                             onSelect={handleChooseCurrentResponse('status')}
                                         />
                                     </div>
-                                </NewSimulationFieldsBlock>
-                                <NewSimulationFieldsBlock
+                                </SimulationFieldsBlock>
+                                <SimulationFieldsBlock
                                     title="Header"
-                                    onAddButtonClick={handleToogleHeaderQuery('response')}
+                                    onAddButtonClick={handleToggleHeaderQuery('response')}
                                 >
                                     {!!headerQuery.response.length && (
                                         <>
@@ -459,7 +469,6 @@ const NewSimulation: React.FC = () => {
                                                         className={cn('select')}
                                                         classes={{ control: cn('select-contol') }}
                                                         items={MATCHES}
-                                                        // disabled={!isRouteIndex}
                                                         currentValue={header.match}
                                                         onSelect={handleChooseHeaderQuery('response', index)}
                                                     />
@@ -468,20 +477,19 @@ const NewSimulation: React.FC = () => {
                                                         header.value,
                                                         'Header value(s)',
                                                     )}
-                                                    {renderDeleteButton(handleToogleHeaderQuery('response', index))}
+                                                    {renderDeleteButton(handleToggleHeaderQuery('response', index))}
                                                 </div>
                                             ))}
                                         </>
                                     )}
-                                </NewSimulationFieldsBlock>
-                                <NewSimulationFieldsBlock title="Body">
+                                </SimulationFieldsBlock>
+                                <SimulationFieldsBlock title="Body">
                                     <div>
                                         <Select
                                             className={cn('select')}
                                             classes={{ control: cn('select-contol') }}
                                             items={BODY_FORMATS}
-                                            // disabled={!isRouteIndex}
-                                            currentValue={body.response.type || BODY_FORMATS[0].value}
+                                            currentValue={body.response.type || BODY_FORMATS[3].value}
                                             onSelect={handleChooseBodyType('response')}
                                         />
                                         <CodeMirror
@@ -491,10 +499,9 @@ const NewSimulation: React.FC = () => {
                                             onBeforeChange={handleChangeBody('response')}
                                         />
                                     </div>
-                                </NewSimulationFieldsBlock>
+                                </SimulationFieldsBlock>
                                 <div className={cn('checkboxes')}>
                                     <Checkbox
-                                        disabled={!isRouteIndex}
                                         fontSize="small"
                                         checked={currentPair?.response.templated}
                                         onChange={handleChangeResponseCheckbox('templated')}
@@ -502,7 +509,6 @@ const NewSimulation: React.FC = () => {
                                         Enable templating
                                     </Checkbox>
                                     <Checkbox
-                                        disabled={!isRouteIndex}
                                         fontSize="small"
                                         checked={currentPair?.response.encodedBody}
                                         onChange={handleChangeResponseCheckbox('encodedBody')}
@@ -512,10 +518,10 @@ const NewSimulation: React.FC = () => {
                                 </div>
                             </div>
                         </CollapseWrapper>
-                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     );
 };
-export default NewSimulation;
+export default Simulation;
