@@ -5,18 +5,26 @@ import Journal from 'components/Journal/Journal';
 import Logs from 'components/Logs/Logs';
 
 const cn = cnCreate('dashboard');
-const Dashboard: React.FC = () => (
-    <div className={cn()}>
-        <Header as="h2">Dashboard</Header>
-        <Tabs>
-            <Tab title="Journal">
-                <Journal />
-            </Tab>
-            <Tab title="Logs">
-                <Logs />
-            </Tab>
-        </Tabs>
-    </div>
-);
+const Dashboard: React.FC = () => {
+    const [activeIndex, setActiveIndex] = React.useState<number>(0);
+
+    function handleTabClick(index: number) {
+        setActiveIndex(index);
+    }
+
+    return (
+        <div className={cn()}>
+            <Header as="h2">Dashboard</Header>
+            <Tabs onTabClick={handleTabClick}>
+                <Tab title="Journal">
+                    <Journal isActive={activeIndex === 0} />
+                </Tab>
+                <Tab title="Logs">
+                    <Logs isActive={activeIndex === 1} />
+                </Tab>
+            </Tabs>
+        </div>
+    );
+};
 
 export default Dashboard;

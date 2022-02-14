@@ -29,7 +29,7 @@ const SimulationsWrapper: React.FC = (): JSX.Element => {
                 },
             };
 
-            dispatch(createSimulationAsync(newSimulations));
+            dispatch(createSimulationAsync({ data: newSimulations, type: 'simulation' }));
         }
     }
 
@@ -53,7 +53,7 @@ const SimulationsWrapper: React.FC = (): JSX.Element => {
 
     function handleChange(newState: SimulationResponse) {
         setIsUpdating(true);
-        dispatch(createSimulationAsync(newState));
+        dispatch(createSimulationAsync({ data: newState, type: 'simulation' }));
     }
 
     function handleBack() {

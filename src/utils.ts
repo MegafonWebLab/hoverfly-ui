@@ -1,4 +1,15 @@
 // eslint-disable-next-line import/prefer-default-export
+import type { AutoHighlightResult } from 'highlight.js';
+import hljs from 'highlight.js/lib/core';
+import 'highlight.js/styles/github.css';
+import jsonLang from 'highlight.js/lib/languages/json';
+import xmlLang from 'highlight.js/lib/languages/xml';
+
+hljs.registerLanguage('xml', xmlLang);
+hljs.registerLanguage('json', jsonLang);
+
+export type MirrorBodyType = 'xml' | 'json' | 'html' | 'text' | '';
+
 export const setCookie = (name: string, value: string, days = 1): void => {
     let expires = '';
     if (days) {
@@ -44,3 +55,5 @@ export const showNotification = (title: string, message?: string, isError = true
         );
     });
 };
+
+export const hightlightHtml = (code: string): AutoHighlightResult => hljs.highlightAuto(code, ['json', 'xml', 'html']);

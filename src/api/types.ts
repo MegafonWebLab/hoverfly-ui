@@ -251,6 +251,8 @@ export type SimulationResponse = {
     };
 };
 
+export type CreateSimulationResponse = { data: SimulationResponse; type: 'simulation' | 'setting' };
+
 export type AuthRequest = { username: string; password: string };
 export type AuthResponse = { token: string };
 

@@ -19,7 +19,7 @@ const TopBar: React.FC = () => {
     const shutdownState = useSelector(state => state.shutdown);
     const authState = useSelector(state => state.auth);
 
-    const username = authState.username || 'Nikita Safonov';
+    const { username } = authState;
     const versionServer = mainInfo.type === 'success' ? mainInfo.value.version : 'v*.*.*';
 
     const hasCachePending = cacheState.type === 'pending';
@@ -77,10 +77,14 @@ const TopBar: React.FC = () => {
                 </div>
             </GridColumn>
             <GridColumn all="6" tablet="5" mobile="12" className={cn('profile')}>
-                <Header as="h2" className={cn('profile-username')}>
-                    {username}
-                </Header>
-                <ProfileIcon className={cn('profile-icon')} />
+                {username && (
+                    <>
+                        <Header as="h2" className={cn('profile-username')}>
+                            {username}
+                        </Header>
+                        <ProfileIcon className={cn('profile-icon')} />
+                    </>
+                )}
             </GridColumn>
         </Grid>
     );

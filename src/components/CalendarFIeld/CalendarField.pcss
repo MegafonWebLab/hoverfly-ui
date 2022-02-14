@@ -1,0 +1,49 @@
+$b: .calendar-field;
+
+$(b) {
+    position: relative;
+
+    &__field {
+        display: flex;
+        justify-content: space-between;
+        width: 200px;
+        padding: 12px 12px 12px 24px;
+        border-radius: 12px;
+
+        color: #999999;
+
+        &:not(&_disabled) {
+            box-shadow: 0 0 0 1px #D8D8D8;
+        }
+
+        &_value {
+            color: inherit;
+        }
+
+        &_disabled {
+            background: #EDEDED;
+        }
+    }
+
+    &__icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    &__calendar {
+        position: absolute;
+        top: 56px;
+
+        display: none;
+        padding: 0 12px;
+        border-radius: 12px;
+
+        background: #FFFFFF;
+        box-shadow: 0 0 0 1px #D8D8D8;
+
+
+        &_open {
+            display: block;
+        }
+    }
+}

@@ -1,4 +1,5 @@
 import type { HoverflyMatcher } from 'api/types';
+import type { MirrorBodyType } from 'utils';
 
 export type RouteItem = {
     name: string;
@@ -28,11 +29,9 @@ export type SimulationHeadersQueryState = {
     query: SimulationHeaderState[];
 };
 
-export type BodyType = 'xml' | 'json' | 'html' | 'text' | '';
-
 export type SimulationHtmlState = {
-    request: Array<HoverflyMatcher & { type: BodyType }>;
-    response: Partial<HoverflyMatcher> & { type: BodyType };
+    request: Array<HoverflyMatcher & { type: MirrorBodyType }>;
+    response: Partial<HoverflyMatcher> & { type: MirrorBodyType };
 };
 
 export type SimulationCodeMirrorOptions = {

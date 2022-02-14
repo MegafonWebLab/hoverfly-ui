@@ -21,6 +21,7 @@ interface ISimulationsProps {
 const cn = cnCreate('simulations');
 const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
     const simulationStore = useSelector(state => state.simulation);
+    const statusState = !!useSelector(state => state.status.value);
 
     const [pathValue, setPathValue] = useState<string>('');
     const [search, setSearch] = useState<string>('');
@@ -102,17 +103,17 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
             <li className={cn('item')} key={`${index + name}`}>
                 <div className={cn('item-buttons')}>
                     <button
-                        className={cn('edit-btn', { disabled: !isOpen && index === deleteIndex })}
+                        className={cn('edit-btn', { disabled: (!isOpen && index === deleteIndex) || !statusState })}
                         type="button"
-                        disabled={index === deleteIndex}
+                        disabled={index === deleteIndex || !statusState}
                         onClick={handleSimulationEditButtonClick(index)}
                     >
                         <EditIcon />
                     </button>
                     <button
-                        className={cn('delete-btn', { disabled: !isOpen && index === deleteIndex })}
+                        className={cn('delete-btn', { disabled: (!isOpen && index === deleteIndex) || !statusState })}
                         type="button"
-                        disabled={index === deleteIndex}
+                        disabled={index === deleteIndex || !statusState}
                         onClick={handleSimulationDeleteButtonClick(index)}
                     >
                         <DeleteIcon />
@@ -137,7 +138,12 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
                     <Header className={cn('active-simulations-header')} as="h3">
                         Active simulations
                     </Header>
-                    <button className={cn('nav-link')} type="button" onClick={handleAdd}>
+                    <button
+                        className={cn('nav-link', { disabled: !statusState })}
+                        type="button"
+                        onClick={handleAdd}
+                        disabled={!statusState}
+                    >
                         <span className={cn('button-content')}>
                             <img className={cn('plus-icon')} src={plusIcon} alt="plus-icon" />
                             ADD NEW

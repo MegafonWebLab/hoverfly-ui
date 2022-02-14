@@ -2,7 +2,7 @@ import React from 'react';
 import './App.pcss';
 import { cnCreate } from '@megafon/ui-helpers';
 import { positions, Provider as AlertProvider } from 'react-alert';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Dashboard from 'components/Dashboard/Dashboard';
 import Footer from 'components/Footer/Footer';
 import AlertLayout from 'components/layouts/AlertLayout/AlertLayout';
@@ -11,19 +11,33 @@ import Layout from 'components/layouts/Layout/Layout';
 import Login from 'components/Login/Login';
 import Navigation from 'components/Navigation/Navigation';
 import Notification from 'components/Notification/Notification';
+import ServerOffline from 'components/ServerOffline/ServerOffline';
 import ServerSettings from 'components/ServerSettings/ServerSettings';
 import SimulationsWrapper from 'components/Simulations/SimulationsWrapper';
 import TopBar from 'components/TopBar/TopBar';
-import { useDispatch } from 'store/hooks';
+import { useDispatch, useSelector } from 'store/hooks';
 import { fetchStatusAsync } from 'store/status/statusSlice';
 
 const cn = cnCreate('app');
 function App(): JSX.Element {
     const dispatch = useDispatch();
+    const nav = useNavigate();
+    const isNeedAuth = useSelector(state => state.auth.isNeedAuth);
 
     React.useEffect(() => {
         dispatch(fetchStatusAsync());
-    }, [dispatch]);
+    }, []);
+
+    React.useEffect(() => {
+        if (isNeedAuth) {
+            nav('/login');
+
+            return;
+        }
+        if (window.location.pathname === '/login') {
+            nav('/');
+        }
+    }, [isNeedAuth, nav]);
 
     return (
         <div className={cn()}>
@@ -42,6 +56,7 @@ function App(): JSX.Element {
                                         </aside>
                                         <main className={cn('main')}>
                                             <ContentLayout>
+                                                <ServerOffline />
                                                 <Routes>
                                                     <Route path="/" element={<Dashboard />} />
                                                     <Route path="/simulations" element={<SimulationsWrapper />} />
