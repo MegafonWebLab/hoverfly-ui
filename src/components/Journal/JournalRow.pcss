@@ -2,28 +2,59 @@ $b: .journal-row;
 
 $(b) {
     &__row {
-        border-top: 2px solid #FFFFFF;
-        border-bottom: 2px solid #FFFFFF;
-
-        background: #EBF5FF;
+        background: #FFFFFF;
 
         cursor: pointer;
     }
 
     &__td {
-        padding: 8px 8px 8px 0;
+        padding: 12px;
+
+        border-top: 1px solid #D8D8D8;
+        border-bottom: 1px solid #D8D8D8;
+
+        &:first-child {
+            border-left: 1px solid #D8D8D8;
+            border-top-left-radius: 12px;
+            border-bottom-left-radius: 12px;
+        }
+
+        &:last-child {
+            border-right: 1px solid #D8D8D8;
+            border-top-right-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        &_method {
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        &_green {
+            color: #00B956;
+        }
+
+        &_orange {
+            color: #FFA717;
+        }
+    }
+
+    &__icon-wrapper {
+        display: flex;
+        justify-content: right;
+    }
+
+    &__icon {
+        width: 24px;
+        height: 24px;
     }
 
     &__content {
-        padding-left: 28px;
+        padding-left: 80px;
     }
 
     &__content-row {
         padding: 8px 8px 8px 0;
-
-        &:not(:last-child) {
-            border-bottom: 1px solid #CCCCCC;
-        }
     }
 
     &__row-header {
@@ -38,12 +69,15 @@ $(b) {
     }
 
     &__param-body {
-        max-width: 900px;
+        width: 1px;
         max-height: 400px;
-        overflow: scroll;
+
+        margin-bottom: 16px;
     }
 
     &__param-name {
-        width: 250px;
+        width: 300px;
+
+        color: rgba(51, 51, 51, 0.5);
     }
 }

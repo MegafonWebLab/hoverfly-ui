@@ -2,14 +2,16 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { ThunkApiConfig } from 'api/types';
 import { loadMainAsync } from 'store/main/mainSlice';
 import { getServerStateAsync } from '../serverState/serverStateSlice';
+import { getSimulationAsync } from '../simulation/simulationSlice';
 
-const DISPATCH_SECONDS = 10000;
+const DISPATCH_SECONDS = 5000;
 
 interface IStatusState {
     value: boolean;
+    type: 'idle' | 'success' | 'error';
 }
 
-const initialState: IStatusState = { value: false };
+const initialState: IStatusState = { value: false, type: 'idle' };
 
 export const fetchStatusAsync = createAsyncThunk<IStatusState, void, ThunkApiConfig>(
     'status/healthCheck',
@@ -19,12 +21,17 @@ export const fetchStatusAsync = createAsyncThunk<IStatusState, void, ThunkApiCon
         }, DISPATCH_SECONDS);
 
         await thunkAPI.extra.hoverfly.fetchHealtCheck();
+        const { main } = thunkAPI.getState();
+
         if (!thunkAPI.getState().status.value) {
             thunkAPI.dispatch(loadMainAsync());
-            thunkAPI.dispatch(getServerStateAsync());
+            if (window.location.pathname !== '/login' && main.type === 'success') {
+                thunkAPI.dispatch(getServerStateAsync());
+                thunkAPI.dispatch(getSimulationAsync());
+            }
         }
 
-        return { value: true };
+        return { value: true, type: 'success' };
     },
 );
 
@@ -35,11 +42,13 @@ export const statusSlice = createSlice<IStatusState, {}, 'status'>({
     reducers: {},
     extraReducers: builder => {
         builder
-            .addCase(fetchStatusAsync.fulfilled, state => {
-                state.value = true;
+            .addCase(fetchStatusAsync.fulfilled, (state, action) => {
+                state.value = action.payload.value;
+                state.type = 'success';
             })
             .addCase(fetchStatusAsync.rejected, state => {
                 state.value = false;
+                state.type = 'error';
             });
     },
 });

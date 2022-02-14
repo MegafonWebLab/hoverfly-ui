@@ -5,6 +5,7 @@ $(b) {
 
     &__content {
         margin-bottom: 16px;
+        padding-top: 52px;
     }
 
     &__filter {
@@ -44,6 +45,14 @@ $(b) {
         }
     }
 
+    &__filter-control {
+        border-radius: 12px;
+    }
+
+    &__checkbox {
+        border-radius: 4px;
+    }
+
     &__time-title-inner {
         margin-left: 8px;
     }
@@ -54,6 +63,14 @@ $(b) {
 
     &__delete {
         margin-right: 8px;
+        border-radius: 12px;
+
+        box-shadow: 0 0 0 1px #D8D8D8 !important;
+
+        &:not(&_disabled):hover {
+            background: #EDEDED !important;
+            box-shadow: 0 0 0 1px #D8D8D8 !important;
+        }
     }
 
     &__select-icon {
@@ -64,8 +81,8 @@ $(b) {
     &__table {
         width: 100%;
 
-        border-collapse: collapse;
-        border-spacing: 0 8px;
+        border-collapse: separate;
+        border-spacing: 0 1px;
         overflow: hidden;
     }
 
@@ -74,14 +91,19 @@ $(b) {
     }
 
     &__th {
-        padding: 4px 4px 4px 0;
+        padding: 12px 12px 12px 12px;
 
-        border-bottom: 1px solid #CCCCCC;
+        color: rgba(51, 51, 51, 0.5);
+        font-weight: 500;
     }
 
     &__td-empty {
         padding: 8px;
 
         text-align: center;
+    }
+
+    &__canvas {
+        height: 400px;
     }
 }

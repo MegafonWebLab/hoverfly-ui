@@ -1,29 +1,48 @@
 import React from 'react';
-import { Collapse, Header } from '@megafon/ui-core';
+import { Collapse } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
 import { ReactComponent as ArrowDown } from '@megafon/ui-icons/system-16-arrow-list_down_16.svg';
-import { ReactComponent as ArrowUp } from '@megafon/ui-icons/system-16-arrow-list_up_16.svg';
+import { ReactComponent as ArrowRight } from '@megafon/ui-icons/system-16-arrow-list_right_16.svg';
 import formatDistanceToNow from 'date-fns/formatDistanceToNow';
+import { Controlled as CodeMirror } from 'react-codemirror2';
 import type { JournalItem } from 'api/types';
 import './JournalRow.pcss';
+import 'codemirror/lib/codemirror.css';
+import { MirrorBodyType, hightlightHtml } from 'utils';
+import { getCodeMirrorConfig } from '../Simulations/utils';
+import { getDate, getTimestamp } from './utils';
+
+require('codemirror/mode/xml/xml');
+require('codemirror/mode/javascript/javascript');
+require('codemirror/mode/htmlmixed/htmlmixed');
 
 const cn = cnCreate('journal-row');
-const JournalRow: React.FC<JournalItem> = props => {
-    const { request, response, latency, mode, timeStarted } = props;
+const JournalRow: React.FC<JournalItem & { bodyWidth: string }> = props => {
+    const { request, response, latency, mode, timeStarted, bodyWidth } = props;
+    const isGet = request.method === 'GET';
 
     const [isOpen, setIsOpen] = React.useState<boolean>(false);
+    const [bodyType, setBodyType] = React.useState<MirrorBodyType>('json');
 
     function handleClick() {
         setIsOpen(prev => !prev);
     }
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    function handleChange() {}
+
+    React.useEffect(() => {
+        setBodyType(hightlightHtml(response.body).language as MirrorBodyType);
+    }, []);
 
     return (
         <>
             <tr className={cn('row')} onClick={handleClick}>
-                <td className={cn('td')} width={20}>
-                    {isOpen ? <ArrowUp /> : <ArrowDown />}
+                <td className={cn('td', { icon: true })} width={40}>
+                    <div className={cn('icon-wrapper')}>
+                        {isOpen ? <ArrowDown className={cn('icon')} /> : <ArrowRight className={cn('icon')} />}
+                    </div>
                 </td>
-                <td className={cn('td')}>{request.method}</td>
+                <td className={cn('td', { method: true, green: isGet, orange: !isGet })}>{request.method}</td>
                 <td className={cn('td')}>{request.path}</td>
                 <td className={cn('td')} />
                 <td className={cn('td')}>{response.status}</td>
@@ -37,42 +56,42 @@ const JournalRow: React.FC<JournalItem> = props => {
                         <div className={cn('content')}>
                             <div className={cn('content-row')}>
                                 <div className={cn('param')}>
-                                    <div className={cn('param-name')}>Timesamp</div> [some content]
+                                    <div className={cn('param-name')}>Timesamp</div>{' '}
+                                    {getTimestamp(getDate(timeStarted))}
                                 </div>
-                            </div>
-                            <div className={cn('content-row')}>
-                                <Header className={cn('row-header')} as="h3">
-                                    Request
-                                </Header>
+                                <div className={cn('param')}>
+                                    <div className={cn('param-name')}>Status</div> {response.status}
+                                </div>
                                 <div className={cn('param')}>
                                     <div className={cn('param-name')}>Method</div> {request.method}
                                 </div>
                                 <div className={cn('param')}>
-                                    <div className={cn('param-name')}>Path</div> {request.path}
+                                    <div className={cn('param-name')}>Route</div> {request.path}
+                                </div>
+                                {request.query && (
+                                    <div className={cn('param')}>
+                                        <div className={cn('param-name')}>Query</div> {request.query}
+                                    </div>
+                                )}
+                                <div className={cn('param')}>
+                                    <div className={cn('param-name')}>Request headers</div>{' '}
+                                    {JSON.stringify(request.headers)}
                                 </div>
                                 <div className={cn('param')}>
-                                    <div className={cn('param-name')}>Query</div> {request.query}
-                                </div>
-                                <div className={cn('param')}>
-                                    <div className={cn('param-name')}>Headers</div> {JSON.stringify(request.headers)}
-                                </div>
-                            </div>
-                            <div className={cn('content-row')}>
-                                <Header className={cn('row-header')} as="h3">
-                                    Response
-                                </Header>
-                                <div className={cn('param')}>
-                                    <div className={cn('param-name')}>Status code</div> {response.status}
-                                </div>
-                                <div className={cn('param')}>
-                                    <div className={cn('param-name')}>Headers</div> {JSON.stringify(response.headers)}
-                                </div>
-                                <div className={cn('param')}>
-                                    <div className={cn('param-name')}>Encoded body</div> {response.encodedBody}
+                                    <div className={cn('param-name')}>Response Headers</div>{' '}
+                                    {JSON.stringify(response.headers)}
                                 </div>
                                 <div>
-                                    <div className={cn('param-name')}>Body</div>
-                                    <div className={cn('param-body')}>{response.body}</div>
+                                    <div className={cn('param-body')} style={{ width: bodyWidth || '0' }}>
+                                        <CodeMirror
+                                            value={response.body}
+                                            options={{
+                                                ...getCodeMirrorConfig(bodyType),
+                                                lineNumbers: false,
+                                            }}
+                                            onBeforeChange={handleChange}
+                                        />
+                                    </div>
                                 </div>
                             </div>
                         </div>

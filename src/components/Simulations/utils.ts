@@ -1,8 +1,4 @@
 import cloneDeep from 'clone-deep';
-import type { AutoHighlightResult } from 'highlight.js';
-import hljs from 'highlight.js/lib/core';
-import jsonLang from 'highlight.js/lib/languages/json';
-import xmlLang from 'highlight.js/lib/languages/xml';
 import type {
     SimulationResponse,
     SimulationItem,
@@ -11,20 +7,16 @@ import type {
     PairItemResponse,
     HoverflyMatcherValues,
 } from 'api/types';
+import type { MirrorBodyType } from 'utils';
 import type {
     ServerState,
     SimulationsServerState,
     SimulationHeaderState,
     SimulationHeadersQueryState,
-    BodyType,
     SimulationCodeMirrorOptions,
     SimulationHtmlState,
     RouteItem,
 } from './types';
-import 'highlight.js/styles/github.css';
-
-hljs.registerLanguage('xml', xmlLang);
-hljs.registerLanguage('json', jsonLang);
 
 // eslint-disable-next-line import/prefer-default-export
 export const getRouteList = (pairs: SimulationItem[]): RouteItem[] =>
@@ -223,9 +215,7 @@ export const changeCurrentPairResponse = (
               },
           };
 
-export const hightlightHtml = (code: string): AutoHighlightResult => hljs.highlightAuto(code, ['json', 'xml', 'html']);
-
-export const getCodeMirrorConfig = (type: BodyType): SimulationCodeMirrorOptions => {
+export const getCodeMirrorConfig = (type: MirrorBodyType): SimulationCodeMirrorOptions => {
     const options: SimulationCodeMirrorOptions = {
         theme: 'default',
         lineNumbers: true,

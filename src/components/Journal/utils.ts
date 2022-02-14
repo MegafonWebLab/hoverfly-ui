@@ -1,10 +1,12 @@
-import { Chart, registerables } from 'chart.js';
+import { Chart, ChartOptions, Color, LegendItem, registerables } from 'chart.js';
 import addDays from 'date-fns/addDays';
 import addHours from 'date-fns/addHours';
 import closestIndexTo from 'date-fns/closestIndexTo';
 import differenceInHours from 'date-fns/differenceInHours';
+import eachDayOfInterval from 'date-fns/eachDayOfInterval';
 import eachMinuteOfInterval from 'date-fns/eachMinuteOfInterval';
 import format from 'date-fns/format';
+import parseISO from 'date-fns/parseISO';
 import type { JournalItem } from 'api/types';
 import { TIMESTAMP_DIVIDER } from 'constants/date';
 import type { DrawChartOptions, IJournalFilterState } from './types';
@@ -15,12 +17,66 @@ const TIME_MULTIPLIER = 5;
 const drawChart = (data: DrawChartOptions, diagram: HTMLCanvasElement): Chart => {
     Chart.register(...registerables);
 
+    const options = {
+        // cast type because radius not typed in current version
+        radius: 0,
+        scales: {
+            y: {
+                title: {
+                    display: true,
+                    text: 'Requests',
+                    font: {
+                        size: 20,
+                        weight: '500',
+                    },
+                },
+                ticks: {
+                    callback(val) {
+                        return Number(val) % 1 === 0 ? val : '';
+                    },
+                    font: {
+                        weight: '600',
+                    },
+                },
+            },
+            x: {
+                ticks: {
+                    font: {
+                        weight: '700',
+                    },
+                },
+            },
+        },
+        plugins: {
+            legend: {
+                position: 'bottom',
+                align: 'start',
+                labels: {
+                    boxHeight: 24,
+                    boxWidth: 24,
+                    padding: 20,
+                    generateLabels: chart =>
+                        chart.data.datasets.map<LegendItem>((dataset, index) => ({
+                            text: dataset.label || '',
+                            fillStyle: dataset.borderColor as Color,
+                            datasetIndex: index,
+                            lineWidth: 0,
+                            borderRadius: 4,
+                        })),
+                },
+            },
+        },
+        responsive: true,
+        maintainAspectRatio: false,
+    } as ChartOptions;
+
     return new Chart(diagram, {
         type: data.type || 'line',
         data: {
             labels: data.labels,
             datasets: data.datasets,
         },
+        options,
     });
 };
 
@@ -44,19 +100,25 @@ export const getFromUnix = (formatType: FromType): number | undefined => {
     return +(time / TIMESTAMP_DIVIDER).toFixed(0);
 };
 
-export const getDates = (fromDate?: string): Date[] => {
+export const getDates = (fromDate?: string): { dates: Date[]; type: 'day' | 'hour' } => {
     const date = new Date();
     const pastDate = fromDate ? new Date(fromDate) : addHours(date, -1);
     const differentHours = differenceInHours(date, pastDate);
-    const delimiter = differentHours < 1 ? TIME_MULTIPLIER : differentHours * TIME_MULTIPLIER;
+    const delimiter = differentHours < 1 ? TIME_MULTIPLIER : differentHours * TIME_MULTIPLIER * 2;
 
-    return eachMinuteOfInterval(
-        {
-            start: differentHours < 1 ? addHours(date, -1) : pastDate,
-            end: date,
-        },
-        { step: delimiter },
-    );
+    // eslint-disable-next-line no-magic-numbers
+    return differentHours > 24
+        ? { dates: eachDayOfInterval({ start: pastDate, end: date }), type: 'day' }
+        : {
+              dates: eachMinuteOfInterval(
+                  {
+                      start: differentHours < 1 ? addHours(date, -1) : pastDate,
+                      end: date,
+                  },
+                  { step: delimiter },
+              ),
+              type: 'hour',
+          };
 };
 
 export const getDatesDataset = (list: Date[], searchList: Date[]): number[] => {
@@ -75,7 +137,9 @@ export const getDatesDataset = (list: Date[], searchList: Date[]): number[] => {
     return searchList.map((_item, i) => (indexList[i] ? indexList[i] : 0));
 };
 
-export const getLabels = (dates: Date[]): string[] => dates.map(d => format(d, 'kk:mm'));
+export const getLabels = (dates: Date[], dateFormat = 'kk:mm'): string[] => dates.map(d => format(d, dateFormat));
+export const getDate = (date: string): Date => parseISO(date);
+export const getTimestamp = (date: Date): string => format(date, 'MMM dd, yyyy HH:mm:ss');
 
 export const filterJournal = (journal: JournalItem[], filter: IJournalFilterState): JournalItem[] =>
     journal.filter(item => {

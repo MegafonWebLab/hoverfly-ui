@@ -1,8 +1,7 @@
 import type { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Select';
-import type { SimulationResponse } from 'api/types';
-import { SimulationItem } from 'api/types';
+import type { SimulationResponse, SimulationItem } from 'api/types';
+import type { MirrorBodyType } from 'utils';
 import {
-    BodyType,
     ServerState,
     SimulationHeadersQueryState,
     SimulationHeaderState,
@@ -85,7 +84,7 @@ export const initialBodyState: SimulationHtmlState = {
     response: { value: '', type: '' },
 };
 
-export const BODY_FORMATS: Array<ISelectItem<BodyType>> = [
+export const BODY_FORMATS: Array<ISelectItem<MirrorBodyType>> = [
     {
         value: 'json',
         title: 'JSON',

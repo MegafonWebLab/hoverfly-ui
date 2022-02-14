@@ -1,14 +1,12 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
-import { Header, Select, Button, Checkbox } from '@megafon/ui-core';
+import { Select, Button, Checkbox } from '@megafon/ui-core';
 import type { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Select';
 import { cnCreate } from '@megafon/ui-helpers';
-import { ReactComponent as ClockIcon } from '@megafon/ui-icons/basic-16-clock_16.svg';
 import { ReactComponent as DeleteIcon } from '@megafon/ui-icons/basic-16-delete_16.svg';
-import { ReactComponent as StatisticIcon } from '@megafon/ui-icons/basic-16-statistics_16.svg';
 import type { ChartType } from 'chart.js';
 import equal from 'fast-deep-equal';
-import type { JournalResponse } from 'api/types';
+import type { JournalResponse, JournalItem } from 'api/types';
 import { REQUEST_TIMER_SECONDS } from 'constants/timers';
 import { useDispatch, useSelector } from 'store/hooks';
 import { getJournalAsync, deleteJournalAsync } from 'store/journal/journalSlice';
@@ -25,6 +23,8 @@ import drawChart, {
 } from './utils';
 import './Journal.pcss';
 
+const WIDTH_MILLISECONDS = 300;
+const BODY_PADDING = 100;
 const NEUTRAL_STATUS = 300;
 const GREEN_COLOR = '#00B956';
 const RED_COLOR = '#ff0000';
@@ -49,7 +49,7 @@ const TIMES: FromType[] = ['all', 'day', 'hour'];
 const FORMATS: ChartType[] = ['line', 'bar', 'pie', 'doughnut', 'polarArea', 'radar'];
 
 const cn = cnCreate('journal');
-const Journal: React.FC = () => {
+const Journal: React.FC<{ isActive: boolean }> = ({ isActive }) => {
     const dispatch = useDispatch();
     const statusState = !!useSelector(state => state.status.value);
     const journalStore = useSelector(state => state.journal);
@@ -57,8 +57,10 @@ const Journal: React.FC = () => {
     const [state, setState] = React.useState<JournalResponse>(INITIAL_STATE);
     const [filterState, setFilterState] = React.useState<IJournalFilterState>(INITIAL_FILTER_STATE);
     const [time, setTime] = React.useState<FromType>('all');
+    const [bodyWidth, setBodyWidth] = React.useState<string>('0');
+    const [filteredJournal, setFilterJournal] = React.useState<JournalItem[]>([]);
     const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
-    const filteredJournal = filterJournal(state.journal, filterState);
+    const tableRef = React.useRef<HTMLTableElement | null>(null);
 
     function handleChangeFilter(name: keyof IJournalFilterState) {
         return (
@@ -88,16 +90,41 @@ const Journal: React.FC = () => {
         dispatch(deleteJournalAsync());
     }
 
+    React.useEffect(() => {
+        setTimeout(() => setFilterJournal(filterJournal(state.journal, filterState)));
+    }, [filterState, state.journal]);
+
+    React.useEffect(() => {
+        function changeBodyWidth() {
+            if (tableRef.current) {
+                const { current } = tableRef;
+                setBodyWidth('0');
+
+                setTimeout(() => {
+                    setBodyWidth(`${current.offsetWidth - BODY_PADDING}px`);
+                }, WIDTH_MILLISECONDS);
+            }
+        }
+
+        changeBodyWidth();
+
+        window.addEventListener('resize', changeBodyWidth);
+
+        return () => {
+            window.removeEventListener('resize', changeBodyWidth);
+        };
+    }, []);
+
     // eslint-disable-next-line consistent-return
     React.useEffect(() => {
         if (canvasRef.current) {
             const [firstJournal] = state.journal;
-            const dates = getDates(firstJournal?.timeStarted);
+            const { dates, type: dateType } = getDates(firstJournal?.timeStarted);
             const journal = state.journal.filter(item => (filterState.mode ? item.mode === filterState.mode : true));
 
             const data: DrawChartOptions = {
                 type: filterState.format,
-                labels: getLabels(dates),
+                labels: dateType === 'day' ? getLabels(dates, 'E dd') : getLabels(dates),
                 datasets: [],
             };
 
@@ -120,18 +147,19 @@ const Journal: React.FC = () => {
                     .filter(item => item.response.status !== SUCCESS_STATUS_CODE)
                     .map(item => new Date(item.timeStarted));
 
+                data.datasets.push({
+                    label: 'Fail',
+                    data: getDatesDataset(errorDates, dates),
+                    borderColor: '#F62434',
+                });
+
                 if (!filterState.isAllErrors) {
                     data.datasets.push({
-                        label: 'success',
+                        label: 'Success',
                         data: getDatesDataset(successDates, dates),
                         borderColor: '#00B956',
                     });
                 }
-                data.datasets.push({
-                    label: 'error',
-                    data: getDatesDataset(errorDates, dates),
-                    borderColor: '#ff0000',
-                });
             }
 
             const chart = drawChart(data, canvasRef.current);
@@ -149,10 +177,12 @@ const Journal: React.FC = () => {
     }, [journalStore, state]);
 
     React.useEffect(() => {
-        const filter = { from: getFromUnix(time) };
-        if (statusState) {
-            dispatch(getJournalAsync(filter));
+        if (!isActive || !statusState) {
+            return;
         }
+        const filter = { from: getFromUnix(time) };
+
+        dispatch(getJournalAsync(filter));
 
         const timer = statusState
             ? setInterval(() => {
@@ -160,22 +190,24 @@ const Journal: React.FC = () => {
               }, REQUEST_TIMER_SECONDS)
             : undefined;
 
+        // eslint-disable-next-line consistent-return
         return () => {
             clearInterval(timer as undefined);
         };
-    }, [statusState, time]);
+    }, [statusState, time, isActive]);
 
     return (
         <div className={cn()}>
-            <Header as="h2">Journal</Header>
             <div className={cn('content')}>
                 <canvas ref={canvasRef} className={cn('canvas')} />
             </div>
             <div className={cn('filter')}>
                 <div className={cn('filter-left')}>
                     <Select
+                        disabled={!statusState}
                         classes={{
                             root: cn('filter-item', { status: true }),
+                            control: cn('filter-control'),
                         }}
                         placeholder="Status code"
                         currentValue={filterState.status}
@@ -186,10 +218,12 @@ const Journal: React.FC = () => {
                         onSelect={handleChangeFilter('status')}
                     />
                     <Select
+                        disabled={!statusState}
                         classes={{
                             root: cn('filter-item', { mode: true }),
+                            control: cn('filter-control'),
                         }}
-                        placeholder="Mode"
+                        placeholder="Simulate"
                         currentValue={filterState.mode}
                         items={MODES.map(item => ({
                             title: item,
@@ -197,63 +231,54 @@ const Journal: React.FC = () => {
                         }))}
                         onSelect={handleChangeFilter('mode')}
                     />
-                    <Checkbox checked={filterState.isAllErrors} onChange={handleChangeAllErrors} fontSize="small">
+                    <Checkbox
+                        disabled={!statusState}
+                        classes={{ icon: cn('checkbox') }}
+                        checked={filterState.isAllErrors}
+                        onChange={handleChangeAllErrors}
+                        fontSize="small"
+                    >
                         Show only errors
                     </Checkbox>
                 </div>
                 <div className={cn('filter-right')}>
                     <Button
-                        className={cn('delete')}
-                        theme="purple"
+                        disabled={!statusState}
+                        className={cn('delete', { disabled: !statusState })}
+                        theme="black"
                         icon={<DeleteIcon />}
-                        sizeAll="small"
+                        type="outline"
                         onClick={handleRemoveJournal}
                     />
                     <Select
+                        disabled={!statusState}
                         classes={{
                             root: cn('filter-item', { time: true }),
-                            titleInner: cn('time-title-inner'),
-                            listItem: cn('time-list-item'),
+                            control: cn('filter-control'),
                         }}
                         currentValue={time}
                         items={TIMES.map(item => ({
                             title: item,
                             value: item,
-                            view: (
-                                <>
-                                    <ClockIcon className={cn('select-icon')} /> {item}
-                                </>
-                            ),
-                            selectedView: (
-                                <>
-                                    <ClockIcon className={cn('select-icon')} /> {item}
-                                </>
-                            ),
                         }))}
                         onSelect={handleChangeTime}
                     />
                     <Select
+                        disabled={!statusState}
                         classes={{
                             root: cn('filter-item', { format: true }),
-                            titleInner: cn('time-title-inner'),
-                            listItem: cn('time-list-item'),
+                            control: cn('filter-control'),
                         }}
                         currentValue={filterState.format}
                         items={FORMATS.map(item => ({
                             title: item === 'line' ? 'Default' : item.charAt(0).toUpperCase() + item.slice(1),
                             value: item,
-                            selectedView: (
-                                <>
-                                    <StatisticIcon className={cn('select-icon')} />{' '}
-                                    {item === 'line' ? 'Default' : item.charAt(0).toUpperCase() + item.slice(1)}
-                                </>
-                            ),
                         }))}
                         onSelect={handleChangeFilter('format')}
                     />
                 </div>
             </div>
-            <table className={cn('table')}>
+            <table className={cn('table')} ref={tableRef}>
                 <thead className={cn('table-head')}>
                     <tr className={cn('head-row')}>
                         <th className={cn('th')} />
@@ -270,12 +295,14 @@ const Journal: React.FC = () => {
                     {filteredJournal.length > 0 ? (
                         filteredJournal.map((item, index) => (
                             <JournalRow
+                                /* eslint-disable-next-line react/no-array-index-key */
                                 key={item.timeStarted + index}
                                 request={item.request}
                                 response={item.response}
                                 mode={item.mode}
                                 timeStarted={item.timeStarted}
                                 latency={item.latency}
+                                bodyWidth={bodyWidth}
                             />
                         ))
                     ) : (

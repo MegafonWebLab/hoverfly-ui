@@ -1,23 +1,17 @@
 $b: .logs;
 
 $(b) {
-    &__title {
-        margin-bottom: 16px;
-    }
-
     &__info {
         height: 500px;
-        padding: 8px;
+        padding: 16px 28px;
 
-        overflow: scroll;
-
-        background: #000000;
+        overflow-y: scroll;
     }
 
     &__item {
         margin-bottom: 8px;
 
-        color: #FFFFFF;
+        color: #000000;
     }
 
     &__item-additional {
@@ -26,27 +20,8 @@ $(b) {
 
     &__header-wrapper {
         display: flex;
-        justify-content: space-between;
-    }
 
-    &__calendar-icon {
-        width: 32px;
-        height: 32px;
-
-        cursor: pointer;
-    }
-
-    &__time {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-
-    &__cancel-icon {
-        width: 32px;
-        height: 32px;
-
-        cursor: pointer;
+        padding: 16px 0;
     }
 
     &__calendar-footer {
@@ -54,21 +29,11 @@ $(b) {
         justify-content: space-around;
     }
 
-    &__select {
-        width: 100px;
+    &__calendar {
+        margin-right: 16px;
     }
 
-    &__select-title {
-        background: none;
-    }
-
-    &__select-item {
-        padding: 8px 24px;
-    }
-
-    &__select-item-title {
-        &:after {
-            background: none;
-        }
+    &__limit {
+        border-radius: 12px;
     }
 }

@@ -10,6 +10,7 @@ import type { SimulationResponse, HoverflyMatcher, PairItemRequest, SimulationIt
 import CollapseWrapper from 'components/CollapseWrapper/CollapseWrapper';
 import './Simulation.pcss';
 import { useSelector } from 'store/hooks';
+import { hightlightHtml, MirrorBodyType } from 'utils';
 import {
     BODY_FORMATS,
     headerEmpty,
@@ -29,7 +30,6 @@ import type {
     SimulationHeadersQueryState,
     SimulationHeaderState,
     SimulationHtmlState,
-    BodyType,
 } from '../types';
 import {
     addOrRemoveEl,
@@ -44,7 +44,6 @@ import {
     getRequireStateList,
     getResponseHeaderStateList,
     getTransitionStateList,
-    hightlightHtml,
     mergeBodyStateToCurrentPair,
     mergeCurrentStateToMainState,
     mergeHeaderStateToCurrentPair,
@@ -167,7 +166,7 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
     }
 
     function handleChooseBodyType(key: keyof SimulationHtmlState) {
-        return (_e: React.MouseEvent<HTMLDivElement>, dataItem?: ISelectItem<BodyType>) => {
+        return (_e: React.MouseEvent<HTMLDivElement>, dataItem?: ISelectItem<MirrorBodyType>) => {
             setBody(prev => ({ ...prev, [key]: { ...prev[key], type: dataItem?.value } }));
         };
     }
@@ -205,11 +204,11 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
                     pair.request.body?.map(bodyEl => ({
                         matcher: bodyEl.matcher || 'exact',
                         value: bodyEl.value || '',
-                        type: (hightlightHtml(bodyEl.value || '').language || 'text') as BodyType,
+                        type: (hightlightHtml(bodyEl.value || '').language || 'text') as MirrorBodyType,
                     })) || [],
                 response: {
                     value: pair.response.body,
-                    type: (hightlightHtml(pair.response.body).language || 'text') as BodyType,
+                    type: (hightlightHtml(pair.response.body).language || 'text') as MirrorBodyType,
                 },
             };
 
@@ -414,6 +413,7 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
                                     {!!body.request.length && (
                                         <>
                                             {body.request.map((rBody, index) => (
+                                                // eslint-disable-next-line react/no-array-index-key
                                                 <div className={cn('fields')} key={index}>
                                                     <Select
                                                         classes={{ control: cn('select-contol') }}

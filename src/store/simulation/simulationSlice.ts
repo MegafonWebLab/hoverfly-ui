@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import type { SimulationRequest, SimulationResponse, ThunkApiConfig } from 'api/types';
-import { omitKey } from 'utils';
-import type { IRequestState } from '../types';
+import type { CreateSimulationResponse, SimulationRequest, SimulationResponse, ThunkApiConfig } from 'api/types';
+import { omitKey, showNotification } from 'utils';
+import type { IRequestState, IRequestStateSuccess } from '../types';
 import { defaultFulfilledCase, defaultPendingCase, defaultRejectedCase } from '../utils';
 
 const removeBodyFileKey = (data: SimulationResponse): SimulationResponse => ({
@@ -36,17 +36,18 @@ export const getSimulationAsync = createAsyncThunk<SimulationResponse, Simulatio
     },
 );
 
-export const createSimulationAsync = createAsyncThunk<SimulationResponse, SimulationResponse, ThunkApiConfig>(
-    'simulation/create',
-    async (content: SimulationResponse, thunkAPI) => {
-        const { data } = await thunkAPI.extra.hoverfly.createSimulation(content);
-        if (data) {
-            return removeBodyFileKey(data);
-        }
+export const createSimulationAsync = createAsyncThunk<
+    CreateSimulationResponse,
+    CreateSimulationResponse,
+    ThunkApiConfig
+>('simulation/create', async (content: CreateSimulationResponse, thunkAPI) => {
+    const { data } = await thunkAPI.extra.hoverfly.createSimulation(content.data);
+    if (data) {
+        return { data: removeBodyFileKey(data), type: content.type };
+    }
 
-        return thunkAPI.rejectWithValue(new Error('Request error'));
-    },
-);
+    return thunkAPI.rejectWithValue(new Error('Request error'));
+});
 
 export const updateSimulationAsync = createAsyncThunk<SimulationResponse, SimulationResponse, ThunkApiConfig>(
     'simulation/update',
@@ -78,13 +79,15 @@ export const simulationSlice = createSlice<ISimulationState, {}, 'simulation'>({
                 defaultRejectedCase<ISimulationState, SimulationRequest>('Simulation'),
             )
             .addCase(createSimulationAsync.pending, defaultPendingCase<ISimulationState>())
-            .addCase(
-                createSimulationAsync.fulfilled,
-                defaultFulfilledCase<ISimulationState, SimulationResponse>('Simulations updated'),
-            )
+            .addCase(createSimulationAsync.fulfilled, (state: IRequestStateSuccess<SimulationResponse>, action) => {
+                const name = action.payload.type === 'simulation' ? 'Simulation updated' : 'Settings updated';
+                showNotification(name, '', false);
+                state.type = 'success';
+                state.value = action.payload.data;
+            })
             .addCase(
                 createSimulationAsync.rejected,
-                defaultRejectedCase<ISimulationState, SimulationResponse>('Simulations update'),
+                defaultRejectedCase<ISimulationState, CreateSimulationResponse>('Simulation/settings update'),
             )
             .addCase(updateSimulationAsync.pending, defaultPendingCase<ISimulationState>())
             .addCase(updateSimulationAsync.fulfilled, defaultFulfilledCase<ISimulationState, SimulationResponse>())
