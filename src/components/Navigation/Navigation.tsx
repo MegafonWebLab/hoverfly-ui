@@ -8,7 +8,8 @@ import { NavLink } from 'react-router-dom';
 import './Navigation.pcss';
 
 const cn = cnCreate('navigation');
-const setActiveLink = ({ isActive }: any) => (isActive ? cn('link', { active: true }) : cn('link'));
+const setActiveLink: React.ComponentProps<typeof NavLink>['className'] = ({ isActive }) =>
+    isActive ? cn('link', { active: true }) : cn('link');
 
 const Navigation: React.FC = () => (
     <nav className={cn()}>

@@ -12,10 +12,10 @@ $ yarn install
 $ yarn start
 ```
 
-### TODO
-* почистить webpack config
-* отображать нотификации для DELETE методов
-* добавить yarn скрипты по запуску тестов и линтов
+## Run lint
+```bash
+$ yarn lint
+```
 
 ## Contributing
 

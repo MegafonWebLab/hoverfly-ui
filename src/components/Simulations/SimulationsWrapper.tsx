@@ -62,7 +62,7 @@ const SimulationsWrapper: React.FC = (): JSX.Element => {
 
     useEffect(() => {
         statusState && dispatch(getSimulationAsync());
-    }, [statusState]);
+    }, [dispatch, statusState]);
 
     useEffect(() => {
         if (simulationStore.type === 'success' && isUpdating) {

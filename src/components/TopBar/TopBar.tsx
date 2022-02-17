@@ -77,14 +77,16 @@ const TopBar: React.FC = () => {
                 </div>
             </GridColumn>
             <GridColumn all="6" tablet="5" mobile="12" className={cn('profile')}>
-                {username && (
-                    <>
-                        <Header as="h2" className={cn('profile-username')}>
-                            {username}
-                        </Header>
-                        <ProfileIcon className={cn('profile-icon')} />
-                    </>
-                )}
+                <>
+                    {username && (
+                        <>
+                            <Header as="h2" className={cn('profile-username')}>
+                                {username}
+                            </Header>
+                            <ProfileIcon className={cn('profile-icon')} />
+                        </>
+                    )}
+                </>
             </GridColumn>
         </Grid>
     );

@@ -3,6 +3,7 @@ import { Header, TextField, Select, Tile, Pagination, Preloader, Button, Paragra
 import type { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Select';
 import { cnCreate } from '@megafon/ui-helpers';
 import { ReactComponent as DeleteIcon } from '@megafon/ui-icons/basic-16-delete_16.svg';
+import Skeleton from 'react-loading-skeleton';
 import { ReactComponent as EditIcon } from 'static/favicon/edit-icon.svg';
 import plusIcon from 'static/favicon/plus.svg';
 import { useSelector } from 'store/hooks';
@@ -13,6 +14,9 @@ import './Simulations.pcss';
 
 const MAX_SIMULATIONS_ON_PAGE = 16;
 const sortTypeItems = [{ title: 'By require', value: 'By require' }];
+// eslint-disable-next-line no-magic-numbers
+const SKELETON_LIST = [80, 120, 60, 80, 120, 80, 120, 60, 80, 120, 80, 120, 60, 80, 120];
+const WIDTH_MULTIPLIER = 3;
 
 interface ISimulationsProps {
     onChange: (index: number | undefined, type: 'edit' | 'delete' | 'new') => void;
@@ -96,7 +100,17 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
             setSimulations(getRouteList(simulationStore.value.data.pairs));
             setDeleteIndex(undefined);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [simulationStore.type]);
+
+    const renderPreloader = () =>
+        SKELETON_LIST.map(width => (
+            <div className={cn('preloader-item')}>
+                <Skeleton className={cn('preloader-circle')} circle width={22} height={22} />
+                <Skeleton className={cn('preloader-circle')} circle width={22} height={22} />
+                <Skeleton width={width * WIDTH_MULTIPLIER} height={22} />
+            </div>
+        ));
 
     const renderSimulationList = () =>
         simulationListOnPage.map(({ name, index }) => (
@@ -169,7 +183,9 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
                 </div>
             </div>
             <Tile className={cn('tile')} radius="rounded" shadowLevel="high">
-                <ul className={cn('list')}>{renderSimulationList()}</ul>
+                <ul className={cn('list')}>
+                    {simulationStore.type === 'pending' ? renderPreloader() : renderSimulationList()}
+                </ul>
             </Tile>
             {simulations.length > MAX_SIMULATIONS_ON_PAGE && (
                 <div className={cn('pagination-wrap')}>

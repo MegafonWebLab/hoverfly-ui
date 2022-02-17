@@ -25,7 +25,7 @@ type MultiValue = {
     value: string;
 };
 
-type ChangeCheckboxFnType = (_e: React.ChangeEvent<HTMLInputElement>) => void;
+type ChangeCheckboxFnType = (checked: boolean) => void;
 
 const cn = cnCreate('mode-info');
 const ServerSettingsMode: React.FC = (): JSX.Element => {
@@ -61,7 +61,7 @@ const ServerSettingsMode: React.FC = (): JSX.Element => {
     }
 
     function handleChangeCheckbox(name: 'stateful' | 'overwriteDuplicate'): ChangeCheckboxFnType {
-        return (_e: React.ChangeEvent<HTMLInputElement>): void => {
+        return (): void => {
             setArgumentsState(state => ({
                 ...state,
                 [name]: !state[name],

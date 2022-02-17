@@ -60,6 +60,7 @@ require('codemirror/mode/htmlmixed/htmlmixed');
 type InputChange = React.ChangeEvent<HTMLInputElement>;
 type ChangeCurrentNames = keyof Omit<PairItemRequest, 'headers' | 'query' | 'requiresState'>;
 
+// eslint-disable-next-line react-hooks/exhaustive-deps
 const useZeroMemo = (el: JSX.Element) => useMemo(() => el, []);
 
 interface ISimulationProps {
@@ -406,10 +407,7 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
                                         </div>
                                     )}
                                 </SimulationFieldsBlock>
-                                <SimulationFieldsBlock
-                                    title="Body"
-                                    onAddButtonClick={() => handleChangeBody('request')}
-                                >
+                                <SimulationFieldsBlock title="Body">
                                     {!!body.request.length && (
                                         <>
                                             {body.request.map((rBody, index) => (

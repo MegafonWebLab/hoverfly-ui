@@ -30,6 +30,7 @@ const Logs: React.FC<{ isActive: boolean }> = ({ isActive }) => {
     const [fieldLimit, setFieldLimit] = React.useState<number | undefined>(undefined);
     const [limit, setLimit] = React.useState<number | undefined>(undefined);
     const tmpDiv = React.useRef<HTMLDivElement>(document.createElement('div'));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleChangeLimit = React.useCallback(
         debounce((value: number | undefined) => {
             setLimit(value);
@@ -41,6 +42,7 @@ const Logs: React.FC<{ isActive: boolean }> = ({ isActive }) => {
         const value = getNumber(e.target.value);
         setFieldLimit(value);
         handleChangeLimit(value);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     function handleChangeTime(value: Date) {
@@ -68,7 +70,7 @@ const Logs: React.FC<{ isActive: boolean }> = ({ isActive }) => {
         return () => {
             clearInterval(timer as undefined);
         };
-    }, [statusState, time, limit, isActive]);
+    }, [statusState, time, limit, isActive, dispatch]);
 
     React.useEffect(() => {
         if (logsStore.type === 'success') {
@@ -110,7 +112,7 @@ const Logs: React.FC<{ isActive: boolean }> = ({ isActive }) => {
                 />
             </div>
         ),
-        [time, fieldLimit, statusState],
+        [time, statusState, fieldLimit, handleChangeFieldLimit],
     );
 
     if (logsStore.type === 'failed') {

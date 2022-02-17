@@ -194,7 +194,7 @@ const Journal: React.FC<{ isActive: boolean }> = ({ isActive }) => {
         return () => {
             clearInterval(timer as undefined);
         };
-    }, [statusState, time, isActive]);
+    }, [statusState, time, isActive, dispatch]);
 
     return (
         <div className={cn()}>

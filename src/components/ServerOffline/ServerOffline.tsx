@@ -7,17 +7,17 @@ import './ServerOffline.pcss';
 
 const cn = cnCreate('server-offline');
 const ServerOffline: React.FC = () => {
-    const statusState = !!useSelector(({ status }) => status.type === 'success');
+    const isError = !!useSelector(({ status }) => status.type === 'error');
 
     return React.useMemo(
         () =>
-            !statusState ? (
+            isError ? (
                 <div className={cn()}>
                     <AlertIcon className={cn('icon')} />
                     <Paragraph hasMargin={false}>Hoverfly server is offline</Paragraph>
                 </div>
             ) : null,
-        [statusState],
+        [isError],
     );
 };
 

@@ -23,6 +23,7 @@ const ServerSettings: React.FC = (): JSX.Element => {
 
     const [globalDelay, setGlobalDelay] = useState('');
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const updateServer = React.useCallback(
         debounce((value: string) => {
             if (simulationStore.type === 'success') {
@@ -62,6 +63,7 @@ const ServerSettings: React.FC = (): JSX.Element => {
         if (simulationStore.type === 'success') {
             setGlobalDelay(String(simulationStore.value.data.globalActions.delays?.[0]?.delay || ''));
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [simulationStore.type]);
 
     return (

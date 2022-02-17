@@ -2,7 +2,7 @@ import React from 'react';
 import './App.pcss';
 import { cnCreate } from '@megafon/ui-helpers';
 import { positions, Provider as AlertProvider } from 'react-alert';
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 import Dashboard from 'components/Dashboard/Dashboard';
 import Footer from 'components/Footer/Footer';
 import AlertLayout from 'components/layouts/AlertLayout/AlertLayout';
@@ -16,17 +16,30 @@ import ServerSettings from 'components/ServerSettings/ServerSettings';
 import SimulationsWrapper from 'components/Simulations/SimulationsWrapper';
 import TopBar from 'components/TopBar/TopBar';
 import { useDispatch, useSelector } from 'store/hooks';
+import { loadMainAsync } from 'store/main/mainSlice';
 import { fetchStatusAsync } from 'store/status/statusSlice';
+
+type LocationState = {
+    referrer?: string;
+};
 
 const cn = cnCreate('app');
 function App(): JSX.Element {
     const dispatch = useDispatch();
     const nav = useNavigate();
+    const location = useLocation();
     const isNeedAuth = useSelector(state => state.auth.isNeedAuth);
 
     React.useEffect(() => {
         dispatch(fetchStatusAsync());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    React.useEffect(() => {
+        if (location.state && (location?.state as LocationState).referrer === '/login') {
+            dispatch(loadMainAsync());
+        }
+    }, [location.state, dispatch]);
 
     React.useEffect(() => {
         if (isNeedAuth) {
@@ -35,9 +48,9 @@ function App(): JSX.Element {
             return;
         }
         if (window.location.pathname === '/login') {
-            nav('/');
+            nav('/', { state: { referrer: location.pathname } });
         }
-    }, [isNeedAuth, nav]);
+    }, [isNeedAuth, nav, location.pathname]);
 
     return (
         <div className={cn()}>

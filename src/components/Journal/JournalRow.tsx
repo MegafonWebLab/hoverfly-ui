@@ -32,6 +32,7 @@ const JournalRow: React.FC<JournalItem & { bodyWidth: string }> = props => {
 
     React.useEffect(() => {
         setBodyType(hightlightHtml(response.body).language as MirrorBodyType);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
