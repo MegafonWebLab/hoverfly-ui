@@ -12,6 +12,7 @@
 /.env
 
 /coverage
+/build
 
 /public/*
 
