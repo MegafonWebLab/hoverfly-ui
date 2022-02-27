@@ -44,7 +44,6 @@ const INITIAL_FILTER_STATE: IJournalFilterState = {
     format: 'line',
 };
 
-const STATUSES: string[] = ['default', '200', '404', '502'];
 const MODES: string[] = ['default', 'simulate', 'synthesize', 'modify', 'capture', 'spy', 'diff'];
 const TIMES: FromType[] = ['all', 'day', 'hour'];
 const FORMATS: ChartType[] = ['line', 'bar', 'pie', 'doughnut', 'polarArea', 'radar'];
@@ -63,6 +62,12 @@ const Journal: React.FC<{ isActive: boolean }> = ({ isActive }) => {
     const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
     const tableRef = React.useRef<HTMLTableElement | null>(null);
     const deleteRef = React.useRef<HTMLButtonElement | null>(null);
+    const statuses = React.useMemo(() => {
+        const statusList = Array.from(new Set<string>(state.journal.map(j => String(j.response.status))));
+        statusList.sort((a, b) => Number(a) - Number(b));
+
+        return ['default', ...statusList];
+    }, [state]);
 
     function handleChangeFilter(name: keyof IJournalFilterState) {
         return (
@@ -213,7 +218,7 @@ const Journal: React.FC<{ isActive: boolean }> = ({ isActive }) => {
                         }}
                         placeholder="Status code"
                         currentValue={filterState.status}
-                        items={STATUSES.map(item => ({
+                        items={statuses.map(item => ({
                             title: item,
                             value: item,
                         }))}

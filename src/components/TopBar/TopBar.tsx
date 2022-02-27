@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Grid, GridColumn, Header, Preloader } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
 import { ReactComponent as ProfileIcon } from '@megafon/ui-icons/basic-16-profile_16.svg';
@@ -6,6 +6,7 @@ import { ReactComponent as ClearIcon } from '@megafon/ui-icons/system-16-refresh
 import disabledDownIcon from 'static/favicon/disabled_shut_down.svg';
 import hoverflyIcon from 'static/favicon/hoverfly.png';
 import shutDownIcon from 'static/favicon/shut_down.svg';
+import { setUserName } from 'store/auth/authSlice';
 import { deleteCacheAsync } from 'store/cache/cacheSlice';
 import { useDispatch, useSelector } from 'store/hooks';
 import { deleteShutdownAsync } from 'store/shutdown/shutdownSlice';
@@ -34,6 +35,12 @@ const TopBar: React.FC = () => {
         e.preventDefault();
         dispatch(deleteShutdownAsync());
     }
+
+    useEffect(() => {
+        if (mainInfo.type === 'success') {
+            dispatch(setUserName());
+        }
+    }, [mainInfo.type]);
 
     const preloader = <Preloader sizeAll="small" color="black" className={cn('button-preloader')} />;
 

@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { CaseReducer } from '@reduxjs/toolkit/src/createReducer';
 import type { AuthRequest, AuthResponse, ThunkApiConfig } from 'api/types';
-import { TOKEN_NAME } from 'constants/cookie';
-import { setCookie, showNotification } from 'utils';
+import { TOKEN_NAME, USER_NAME } from 'constants/cookie';
+import { getCookie, setCookie, showNotification } from 'utils';
 import type { IRequestState, IRequestStateFailed, IRequestStateSuccess } from '../types';
 
 export type IAuthState<T = IRequestState<AuthResponse>> = {
@@ -23,6 +23,7 @@ export const getAuthorizeAsync = createAsyncThunk<AuthResponse, AuthRequest, Thu
 
         if (data) {
             setCookie(TOKEN_NAME, data.token);
+            setCookie(USER_NAME, formData.username);
 
             return data;
         }
@@ -32,12 +33,20 @@ export const getAuthorizeAsync = createAsyncThunk<AuthResponse, AuthRequest, Thu
 );
 
 // eslint-disable-next-line @typescript-eslint/ban-types
-export const authSlice = createSlice<IAuthState, { needAuth: CaseReducer<IAuthState> }, 'auth'>({
+export const authSlice = createSlice<
+    IAuthState,
+    { needAuth: CaseReducer<IAuthState>; setUserName: CaseReducer<IAuthState> },
+    'auth'
+>({
     name: 'auth',
     initialState,
     reducers: {
         needAuth(state: IAuthState) {
             state.isNeedAuth = true;
+            state.username = '';
+        },
+        setUserName(state: IAuthState) {
+            state.username = getCookie(USER_NAME) || '';
         },
     },
     extraReducers: builder => {
@@ -59,6 +68,6 @@ export const authSlice = createSlice<IAuthState, { needAuth: CaseReducer<IAuthSt
     },
 });
 
-export const { needAuth } = authSlice.actions;
+export const { needAuth, setUserName } = authSlice.actions;
 
 export default authSlice.reducer;
