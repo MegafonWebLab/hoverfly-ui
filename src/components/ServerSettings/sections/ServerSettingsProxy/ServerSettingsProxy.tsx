@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Header, TextField } from '@megafon/ui-core';
+import { Button, Header, TextField } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
 import CollapseWrapper from 'components/CollapseWrapper/CollapseWrapper';
-import editIcon from 'static/favicon/edit-icon.svg';
 import { useDispatch, useSelector } from 'store/hooks';
 import { getDestinationAsync, updateDestinationAsync } from 'store/proxy/destinationSlice';
 import { getUpstreamProxyAsync } from 'store/proxy/upstreamProxySlice';
-import ServerSettingsButton from '../ServerSettingsButton/ServerSettingsButton';
 import './ServerSettingsProxy.pcss';
 
 const cn = cnCreate('server-settings-proxy');
@@ -17,24 +15,15 @@ const ServerSettingsProxy: React.FC = () => {
     const destinationStore = useSelector(state => state.destination);
     const upstreamStore = useSelector(state => state.upstreamProxy);
 
-    const [editable, setEditable] = useState<boolean>(false);
     const [destination, setDestination] = useState<string>('-');
     const [upstream, setUpstream] = useState<string>('link anywhere');
-
-    function handleCloseDestinationEditForm(): void {
-        setEditable(false);
-    }
-
-    function handleDestinationEditButtonClick(): void {
-        setEditable(prev => !prev);
-    }
 
     function handleDestinationEditFormChange(_e: React.ChangeEvent<HTMLInputElement>): void {
         setDestination(_e.target.value);
     }
 
-    function handleSaveButtonClick(): void {
-        handleCloseDestinationEditForm();
+    function handleSaveDestination(e: React.FormEvent<HTMLFormElement>): void {
+        e.preventDefault();
         dispatch(updateDestinationAsync({ destination }));
     }
 
@@ -58,12 +47,17 @@ const ServerSettingsProxy: React.FC = () => {
     }, [upstreamStore]);
 
     const renderDestinationTextField = (): JSX.Element => (
-        <form onSubmit={handleCloseDestinationEditForm}>
+        <form className={cn('destination-form')} onSubmit={handleSaveDestination}>
             <TextField
+                className={cn('field')}
+                classes={{ input: cn('field-input') }}
                 value={destination}
                 onChange={handleDestinationEditFormChange}
-                onBlur={handleCloseDestinationEditForm}
             />
+
+            <Button disabled={!statusState} sizeAll="small" type="outline" actionType="submit">
+                Save destination
+            </Button>
         </form>
     );
 
@@ -75,12 +69,7 @@ const ServerSettingsProxy: React.FC = () => {
                         <Header className={cn('title')} as="h5">
                             Destination
                         </Header>
-                        <div className={cn('destination-edit-block')}>
-                            {editable ? renderDestinationTextField() : <span>{destination}</span>}
-                            <button type="button" className={cn('edit-btn')} onClick={handleDestinationEditButtonClick}>
-                                <img src={editIcon} alt="edit icon" />
-                            </button>
-                        </div>
+                        <div className={cn('destination-edit-block')}>{renderDestinationTextField()}</div>
                     </div>
                     <div className={cn('upstream-wrap')}>
                         <Header className={cn('title')} as="h5">
@@ -89,11 +78,6 @@ const ServerSettingsProxy: React.FC = () => {
                         <span>{upstream}</span>
                     </div>
                 </div>
-                <ServerSettingsButton
-                    text="Save proxy settings"
-                    disabled={!statusState}
-                    onClick={handleSaveButtonClick}
-                />
             </CollapseWrapper>
         </div>
     );

@@ -192,7 +192,7 @@ export type JournalSearchRequest = {
     };
 };
 
-export type HoverflyMatcherValues = 'exact' | 'glob';
+export type HoverflyMatcherValues = 'exact' | 'glob' | 'regex' | 'xml' | 'xpath' | 'json' | 'jsonPartial' | 'jsonpath';
 
 export type HoverflyMatcher = {
     matcher: HoverflyMatcherValues;

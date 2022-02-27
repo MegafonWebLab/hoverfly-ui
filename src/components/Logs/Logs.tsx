@@ -1,10 +1,10 @@
-import React from 'react';
-import { Tile, TextField } from '@megafon/ui-core';
+import React, { useCallback, useEffect, useMemo } from 'react';
+import { Tile, TextField, Button, Preloader } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
+import { ReactComponent as Refresh } from '@megafon/ui-icons/system-16-refresh_16.svg';
 import debounce from 'lodash.debounce';
 import type { LogsItem, LogsResponse } from 'api/types';
 import { TIMESTAMP_DIVIDER } from 'constants/date';
-import { REQUEST_TIMER_SECONDS } from 'constants/timers';
 import { useDispatch, useSelector } from 'store/hooks';
 import { getLogsAsync } from 'store/logs/logsSlice';
 import './Logs.pcss';
@@ -29,10 +29,12 @@ const Logs: React.FC<{ isActive: boolean }> = ({ isActive }) => {
     const [time, setTime] = React.useState<Date | undefined>(undefined);
     const [fieldLimit, setFieldLimit] = React.useState<number | undefined>(undefined);
     const [limit, setLimit] = React.useState<number | undefined>(undefined);
+    const [isChanged, setIsChaged] = React.useState<boolean>(false);
     const tmpDiv = React.useRef<HTMLDivElement>(document.createElement('div'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleChangeLimit = React.useCallback(
         debounce((value: number | undefined) => {
+            setIsChaged(true);
             setLimit(value);
         }, DEBOUNCE_MILLISECONDS),
         [],
@@ -41,42 +43,34 @@ const Logs: React.FC<{ isActive: boolean }> = ({ isActive }) => {
     const handleChangeFieldLimit = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const value = getNumber(e.target.value);
         setFieldLimit(value);
+        setIsChaged(true);
         handleChangeLimit(value);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const handleSubmit = useCallback(() => {
+        setIsChaged(false);
+        dispatch(getLogsAsync(time ? { from: time.getTime() / TIMESTAMP_DIVIDER, limit } : { limit }));
+    }, [limit, time]);
 
     function handleChangeTime(value: Date) {
         setTime(value);
     }
 
-    React.useEffect(() => {
-        if (!isActive) {
+    useEffect(() => {
+        if (!isActive || logsStore.type !== 'idle') {
             return;
         }
         if (statusState) {
             dispatch(getLogsAsync(time ? { from: time.getTime() / TIMESTAMP_DIVIDER, limit } : { limit }));
         }
+    }, [statusState, time, limit, isActive, dispatch, logsStore.type]);
 
-        const timer = statusState
-            ? setInterval(() => {
-                  const formData = time ? { from: time.getTime() / TIMESTAMP_DIVIDER, limit } : { limit };
-                  if (statusState) {
-                      dispatch(getLogsAsync(formData));
-                  }
-              }, REQUEST_TIMER_SECONDS)
-            : undefined;
-
-        // eslint-disable-next-line consistent-return
-        return () => {
-            clearInterval(timer as undefined);
-        };
-    }, [statusState, time, limit, isActive, dispatch]);
-
-    React.useEffect(() => {
+    useEffect(() => {
         if (logsStore.type === 'success') {
             setState(logsStore.value.logs || []);
         }
-    }, [logsStore]);
+    }, [logsStore.type]);
 
     const renderAdditional = (log: LogsItem) => {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -101,18 +95,49 @@ const Logs: React.FC<{ isActive: boolean }> = ({ isActive }) => {
     const header = React.useMemo(
         () => (
             <div className={cn('header-wrapper')}>
-                <CalendarField className={cn('calendar')} value={time} onChange={handleChangeTime} />
-                <TextField
+                <div className={cn('fields-wrapper')}>
+                    <CalendarField className={cn('calendar')} value={time} onChange={handleChangeTime} />
+                    <TextField
+                        className={cn('limit-wrapper')}
+                        disabled={!statusState}
+                        classes={{ input: cn('limit') }}
+                        placeholder="Limit"
+                        isControlled
+                        value={fieldLimit}
+                        onChange={handleChangeFieldLimit}
+                    />
+                    <Button
+                        className={cn('submit')}
+                        actionType="button"
+                        disabled={!statusState || !isChanged}
+                        onClick={handleSubmit}
+                    >
+                        Submit
+                    </Button>
+                </div>
+                <Button
                     disabled={!statusState}
-                    classes={{ input: cn('limit') }}
-                    placeholder="Limit"
-                    isControlled
-                    value={fieldLimit}
-                    onChange={handleChangeFieldLimit}
+                    className={cn('refresh', { disabled: !statusState })}
+                    theme="black"
+                    icon={<Refresh />}
+                    type="outline"
+                    onClick={handleSubmit}
                 />
             </div>
         ),
-        [time, statusState, fieldLimit, handleChangeFieldLimit],
+        [time, statusState, fieldLimit, isChanged, handleChangeFieldLimit, handleSubmit, logsStore.type],
+    );
+
+    const renderLogs = useMemo(
+        () =>
+            state.map((log, index) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <div className={cn('item')} key={index}>
+                    {log.time} [{log.level}] {log.msg}
+                    {renderAdditional(log)}
+                </div>
+            )),
+        [state],
     );
 
     if (logsStore.type === 'failed') {
@@ -121,15 +146,12 @@ const Logs: React.FC<{ isActive: boolean }> = ({ isActive }) => {
 
     return (
         <div className={cn()}>
+            <div className={cn('loader', { show: logsStore.type === 'pending' })}>
+                <Preloader />
+            </div>
             {header}
             <Tile className={cn('info')} shadowLevel="high" theme="light">
-                {state.map((log, index) => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <div className={cn('item')} key={index}>
-                        {log.time} [{log.level}] {log.msg}
-                        {renderAdditional(log)}
-                    </div>
-                ))}
+                {renderLogs}
             </Tile>
         </div>
     );

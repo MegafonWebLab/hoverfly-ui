@@ -1,18 +1,23 @@
 import React, { useEffect } from 'react';
+import { Route, Routes, useNavigate } from 'react-router-dom';
 import type { SimulationResponse } from 'api/types';
 import { useDispatch, useSelector } from 'store/hooks';
 import { createSimulationAsync, getSimulationAsync } from 'store/simulation/simulationSlice';
 import Simulation from './Simulation/Simulation';
 import Simulations from './Simulations';
 
-type SimulationsWrapperViewState = 'list' | 'edit' | 'new';
+enum SimulationRoutes {
+    INDEX = '/simulations',
+    EDIT = '/simulations/edit',
+    NEW = '/simulations/new',
+}
 
 const SimulationsWrapper: React.FC = (): JSX.Element => {
     const dispatch = useDispatch();
     const statusState = !!useSelector(state => state.status.value);
     const simulationStore = useSelector(state => state.simulation);
 
-    const [view, setView] = React.useState<SimulationsWrapperViewState>('list');
+    const nav = useNavigate();
     const [routeIndex, setRouteIndex] = React.useState<number | undefined>(undefined);
     const [isUpdating, setIsUpdating] = React.useState<boolean>(false);
 
@@ -36,8 +41,8 @@ const SimulationsWrapper: React.FC = (): JSX.Element => {
     function handleChangeSimulation(index: number | undefined, type: 'edit' | 'delete' | 'new') {
         switch (type) {
             case 'edit': {
-                setView('edit');
                 setRouteIndex(index);
+                nav(SimulationRoutes.EDIT);
                 break;
             }
             case 'delete': {
@@ -46,7 +51,7 @@ const SimulationsWrapper: React.FC = (): JSX.Element => {
             }
             default:
             case 'new': {
-                setView('new');
+                nav(SimulationRoutes.NEW);
             }
         }
     }
@@ -57,7 +62,7 @@ const SimulationsWrapper: React.FC = (): JSX.Element => {
     }
 
     function handleBack() {
-        setView('list');
+        nav(SimulationRoutes.INDEX);
     }
 
     useEffect(() => {
@@ -66,20 +71,27 @@ const SimulationsWrapper: React.FC = (): JSX.Element => {
 
     useEffect(() => {
         if (simulationStore.type === 'success' && isUpdating) {
-            setView('list');
+            nav(SimulationRoutes.INDEX);
             setIsUpdating(false);
         }
-    }, [isUpdating, simulationStore.type]);
+    }, [isUpdating, simulationStore.type, nav]);
 
-    switch (view) {
-        default:
-        case 'list':
-            return <Simulations onChange={handleChangeSimulation} />;
-        case 'edit':
-            return <Simulation routeIndex={routeIndex} onBack={handleBack} onChange={handleChange} />;
-        case 'new':
-            return <Simulation onBack={handleBack} onChange={handleChange} />;
-    }
+    useEffect(() => {
+        if (window.location.pathname === SimulationRoutes.EDIT && routeIndex === undefined) {
+            nav(SimulationRoutes.INDEX);
+        }
+    }, [routeIndex, nav]);
+
+    return (
+        <Routes>
+            <Route
+                path="/edit"
+                element={<Simulation routeIndex={routeIndex} onBack={handleBack} onChange={handleChange} />}
+            />
+            <Route path="/new" element={<Simulation onBack={handleBack} onChange={handleChange} />} />
+            <Route path="/" element={<Simulations onChange={handleChangeSimulation} />} />
+        </Routes>
+    );
 };
 
 export default SimulationsWrapper;

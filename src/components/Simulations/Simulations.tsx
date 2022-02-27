@@ -4,8 +4,7 @@ import type { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Se
 import { cnCreate } from '@megafon/ui-helpers';
 import { ReactComponent as DeleteIcon } from '@megafon/ui-icons/basic-16-delete_16.svg';
 import Skeleton from 'react-loading-skeleton';
-import { ReactComponent as EditIcon } from 'static/favicon/edit-icon.svg';
-import plusIcon from 'static/favicon/plus.svg';
+import { ReactComponent as PlusIcon } from 'static/favicon/plus.svg';
 import { useSelector } from 'store/hooks';
 import Popup from '../Popup/Popup';
 import type { RouteItem } from './types';
@@ -56,7 +55,8 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
     }
 
     function handleSimulationDeleteButtonClick(index: number) {
-        return () => {
+        return (e: React.MouseEvent<HTMLButtonElement>) => {
+            e.stopPropagation();
             if (deleteIndex === undefined && simulationStore.type === 'success') {
                 const pair = simulationStore.value.data.pairs[index];
 
@@ -106,24 +106,28 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
     const renderPreloader = () =>
         SKELETON_LIST.map(width => (
             <div className={cn('preloader-item')}>
-                <Skeleton className={cn('preloader-circle')} circle width={22} height={22} />
-                <Skeleton className={cn('preloader-circle')} circle width={22} height={22} />
                 <Skeleton width={width * WIDTH_MULTIPLIER} height={22} />
+                <Skeleton className={cn('preloader-circle')} circle width={22} height={22} />
             </div>
         ));
 
     const renderSimulationList = () =>
         simulationListOnPage.map(({ name, index }) => (
-            <li className={cn('item')} key={`${index + name}`}>
+            <li
+                className={cn('item')}
+                key={`${index + name}`}
+                onClick={handleSimulationEditButtonClick(index)}
+                aria-hidden
+            >
+                <div className={cn('item-text')}>
+                    <span>{name}</span>
+                    {!isOpen && index === deleteIndex && (
+                        <div className={cn('delete-loader')}>
+                            <Preloader color="black" />
+                        </div>
+                    )}
+                </div>
                 <div className={cn('item-buttons')}>
-                    <button
-                        className={cn('edit-btn', { disabled: (!isOpen && index === deleteIndex) || !statusState })}
-                        type="button"
-                        disabled={index === deleteIndex || !statusState}
-                        onClick={handleSimulationEditButtonClick(index)}
-                    >
-                        <EditIcon />
-                    </button>
                     <button
                         className={cn('delete-btn', { disabled: (!isOpen && index === deleteIndex) || !statusState })}
                         type="button"
@@ -133,12 +137,6 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
                         <DeleteIcon />
                     </button>
                 </div>
-                <span>{name}</span>
-                {!isOpen && index === deleteIndex && (
-                    <div className={cn('delete-loader')}>
-                        <Preloader color="black" />
-                    </div>
-                )}
             </li>
         ));
 
@@ -158,10 +156,7 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
                         onClick={handleAdd}
                         disabled={!statusState}
                     >
-                        <span className={cn('button-content')}>
-                            <img className={cn('plus-icon')} src={plusIcon} alt="plus-icon" />
-                            ADD NEW
-                        </span>
+                        <PlusIcon />
                     </button>
                 </div>
                 <div className={cn('fields')}>

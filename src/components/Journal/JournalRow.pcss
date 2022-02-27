@@ -1,4 +1,5 @@
 $b: .journal-row;
+$code: .CodeMirror;
 
 $(b) {
     &__row {
@@ -79,5 +80,9 @@ $(b) {
         width: 300px;
 
         color: rgba(51, 51, 51, 0.5);
+    }
+
+    &__code-headers $(code) {
+        height: auto;
     }
 }

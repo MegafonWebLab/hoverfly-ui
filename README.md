@@ -15,11 +15,11 @@ Before run project need to start any hoverfly server.
 
 ### Run hoverfly server
 ```bash
-$ hoverfly -webserver -cors -dev
+$ hoverfly -webserver -dev
 
 # or run with auth
 
-$ hoverlfy -webserver -cors -dev -auth -username admin -password admin
+$ hoverlfy -webserver -dev -auth -username admin -password admin
 ```
 
 ### Run project

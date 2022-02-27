@@ -7,15 +7,13 @@ const cn = cnCreate('footer');
 const Footer: React.FC = () => (
     <footer className={cn()}>
         <div>
-            2021. Developed with love by
-            {'\u00A0'}
-            <TextLink color="blue" href="#" target="_blank" rel="noopener noreferrer">
+            <TextLink color="blue" href="https://www.megafon.ru" target="_blank" rel="noopener noreferrer">
                 MegaFon
             </TextLink>
-            {'\u00A0'}
-            CKO
         </div>
-        <span>Open source project for free</span>
+        <span>
+            Developed with <span className={cn('heart')}>❤</span>
+        </span>
     </footer>
 );
 

@@ -57,7 +57,7 @@ const JournalRow: React.FC<JournalItem & { bodyWidth: string }> = props => {
                         <div className={cn('content')}>
                             <div className={cn('content-row')}>
                                 <div className={cn('param')}>
-                                    <div className={cn('param-name')}>Timesamp</div>{' '}
+                                    <div className={cn('param-name')}>Date and time</div>{' '}
                                     {getTimestamp(getDate(timeStarted))}
                                 </div>
                                 <div className={cn('param')}>
@@ -76,22 +76,47 @@ const JournalRow: React.FC<JournalItem & { bodyWidth: string }> = props => {
                                 )}
                                 <div className={cn('param')}>
                                     <div className={cn('param-name')}>Request headers</div>{' '}
-                                    {JSON.stringify(request.headers)}
-                                </div>
-                                <div className={cn('param')}>
-                                    <div className={cn('param-name')}>Response Headers</div>{' '}
-                                    {JSON.stringify(response.headers)}
-                                </div>
-                                <div>
-                                    <div className={cn('param-body')} style={{ width: bodyWidth || '0' }}>
+                                    {isOpen && (
                                         <CodeMirror
-                                            value={response.body}
+                                            className={cn('code-headers')}
+                                            value={JSON.stringify(request.headers)}
                                             options={{
-                                                ...getCodeMirrorConfig(bodyType),
+                                                ...getCodeMirrorConfig('json'),
                                                 lineNumbers: false,
+                                                readOnly: 'nocursor',
                                             }}
                                             onBeforeChange={handleChange}
                                         />
+                                    )}
+                                </div>
+                                <div className={cn('param')}>
+                                    <div className={cn('param-name')}>Response headers</div>{' '}
+                                    {isOpen && (
+                                        <CodeMirror
+                                            className={cn('code-headers')}
+                                            value={JSON.stringify(response.headers)}
+                                            options={{
+                                                ...getCodeMirrorConfig('json'),
+                                                lineNumbers: false,
+                                                readOnly: 'nocursor',
+                                            }}
+                                            onBeforeChange={handleChange}
+                                        />
+                                    )}
+                                </div>
+                                <div>
+                                    <div className={cn('param-body')} style={{ width: bodyWidth || '0' }}>
+                                        {isOpen && (
+                                            <CodeMirror
+                                                value={response.body}
+                                                options={{
+                                                    ...getCodeMirrorConfig(bodyType),
+                                                    lineNumbers: false,
+                                                    readOnly: 'nocursor',
+                                                }}
+                                                onBeforeChange={handleChange}
+                                            />
+                                        )}
                                     </div>
                                 </div>
                             </div>

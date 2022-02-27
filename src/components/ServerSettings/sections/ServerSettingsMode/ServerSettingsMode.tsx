@@ -119,6 +119,7 @@ const ServerSettingsMode: React.FC = (): JSX.Element => {
                     classNamePrefix={cn('')}
                     className={cn('multi-select')}
                     isMulti
+                    placeholder="Start typing and press Enter to add new"
                     options={headersWhitelist.map(header => ({
                         value: header,
                         label: header,

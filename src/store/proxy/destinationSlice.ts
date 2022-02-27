@@ -46,8 +46,14 @@ export const middlewareSlice = createSlice<IDestinationState, {}, 'destination'>
             .addCase(getDestinationAsync.fulfilled, defaultFulfilledCase<IDestinationState, Destination>())
             .addCase(getDestinationAsync.rejected, defaultRejectedCase<IDestinationState, Destination>())
             .addCase(updateDestinationAsync.pending, defaultPendingCase<IDestinationState>())
-            .addCase(updateDestinationAsync.fulfilled, defaultFulfilledCase<IDestinationState, Destination>())
-            .addCase(updateDestinationAsync.rejected, defaultRejectedCase<IDestinationState, Destination>());
+            .addCase(
+                updateDestinationAsync.fulfilled,
+                defaultFulfilledCase<IDestinationState, Destination>('Destination updated'),
+            )
+            .addCase(
+                updateDestinationAsync.rejected,
+                defaultRejectedCase<IDestinationState, Destination>('Destination error'),
+            );
     },
 });
 

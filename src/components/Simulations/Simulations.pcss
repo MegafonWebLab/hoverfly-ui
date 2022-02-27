@@ -33,8 +33,11 @@ $(b) {
     }
 
     &__nav-link {
-        height: fit-content;
-        padding: 3px 9px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
 
         border-radius: 24px;
 
@@ -76,16 +79,22 @@ $(b) {
         display: flex;
         flex-direction: column;
 
-        gap: 24px;
+        gap: 16px;
     }
 
     &__item {
         display: flex;
         align-items: center;
-    }
+        justify-content: space-between;
+        height: 40px;
+        padding: 0 12px;
+        border-radius: 12px;
 
-    &__item-buttons {
-        height: 24px;
+        cursor: pointer;
+
+        &:hover {
+            background: #EEEEEE;
+        }
     }
 
     &__edit-btn {
@@ -101,11 +110,19 @@ $(b) {
     }
 
     &__delete-btn {
+        box-sizing: content-box;
         width: 22px;
         height: 22px;
-        margin-right: 21px;
+        padding: 8px;
+        border-radius: 12px;
 
         cursor: pointer;
+
+
+
+        &:not(&_disabled):hover {
+            background: #CCCCCC;
+        }
 
         &_disabled {
             fill: #CCCCCC;
@@ -129,6 +146,7 @@ $(b) {
     &__preloader-item {
         display: flex;
         align-items: center;
+        justify-content: space-between;
     }
 
     &__preloader-circle {

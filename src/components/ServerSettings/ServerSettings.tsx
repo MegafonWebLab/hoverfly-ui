@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Header, TextField } from '@megafon/ui-core';
+import { Button, Header, TextField } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
 import debounce from 'lodash.debounce';
 import type { SimulationResponse } from 'api/types';
 import { useDispatch, useSelector } from 'store/hooks';
+import { createSimulationAsync } from 'store/simulation/simulationSlice';
 import { getDigits } from 'utils';
-import { createSimulationAsync } from '../../store/simulation/simulationSlice';
 import ServerSettingsCORS from './sections/ServerSettingsCORS/ServerSettingsCORS';
 import ServerSettingsMiddleware from './sections/ServerSettingsMiddleware/ServerSettingsMiddleware';
 import ServerSettingsMode from './sections/ServerSettingsMode/ServerSettingsMode';
@@ -21,13 +21,14 @@ const ServerSettings: React.FC = (): JSX.Element => {
     const simulationStore = useSelector(state => state.simulation);
     const statusState = !!useSelector(state => state.status.value);
 
-    const [globalDelay, setGlobalDelay] = useState('');
-
+    const [serverGlobalDelay, setServerGlobalDelay] = useState<string>('');
+    const [globalDelay, setGlobalDelay] = useState<string>('');
+    const [isNotActive, setIsNotActive] = useState<boolean>(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const updateServer = React.useCallback(
         debounce((value: string) => {
             if (simulationStore.type === 'success') {
-                const test: SimulationResponse = {
+                const requestData: SimulationResponse = {
                     data: {
                         pairs: simulationStore.value.data.pairs,
                         globalActions: {
@@ -43,25 +44,33 @@ const ServerSettings: React.FC = (): JSX.Element => {
                     },
                     meta: simulationStore.value.meta,
                 };
-
-                dispatch(createSimulationAsync({ data: test, type: 'setting' }));
+                dispatch(createSimulationAsync({ data: requestData, type: 'setting' }));
             }
         }, DEBOUNCE_MILLISECONDS),
         [simulationStore.type],
     );
 
+    function handleSubmit() {
+        updateServer(globalDelay);
+        setIsNotActive(true);
+    }
+
     function handleDelayInputChange(e: React.ChangeEvent<HTMLInputElement>): void {
         const val = getDigits(e.target.value);
         setGlobalDelay(val);
 
-        if (val) {
-            updateServer(val);
+        if (val !== serverGlobalDelay) {
+            setIsNotActive(false);
+        } else {
+            setIsNotActive(true);
         }
     }
 
     React.useEffect(() => {
         if (simulationStore.type === 'success') {
-            setGlobalDelay(String(simulationStore.value.data.globalActions.delays?.[0]?.delay || ''));
+            const delay = String(simulationStore.value.data.globalActions.delays?.[0]?.delay || '');
+            setGlobalDelay(delay);
+            setServerGlobalDelay(delay);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [simulationStore.type]);
@@ -74,13 +83,25 @@ const ServerSettings: React.FC = (): JSX.Element => {
             <div className={cn('content-wrap')}>
                 <div className={cn('global-delay')}>
                     <TextField
+                        className={cn('global-delay-wrapper')}
                         disabled={!statusState}
                         isControlled
                         value={globalDelay}
                         placeholder="Global Delay"
+                        noticeText="Delay for all simulations in milliseconds"
                         classes={{ input: cn('global-delay-input') }}
                         onChange={handleDelayInputChange}
                     />
+                    <Button
+                        actionType="button"
+                        sizeAll="small"
+                        fullWidth
+                        disabled={isNotActive}
+                        showLoader={simulationStore.type === 'pending'}
+                        onClick={handleSubmit}
+                    >
+                        Apply
+                    </Button>
                 </div>
                 <div className={cn('sections')}>
                     <ServerSettingsMiddleware />

@@ -22,8 +22,9 @@ $(b) {
         }
     }
 
-    &__destination-wrap {
-        max-width: 401px;
+    &__destination-form {
+        display: flex;
+        align-items: center;
     }
 
     &__upstream-wrap {
@@ -41,7 +42,12 @@ $(b) {
         font-weight: 600;
     }
 
-    &__edit-btn {
-        cursor: pointer;
+    &__field {
+        margin-right: 16px;
+    }
+
+    &__field-input {
+        min-height: 42px;
+        border-radius: 12px;
     }
 }

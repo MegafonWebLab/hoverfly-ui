@@ -1,6 +1,26 @@
 $b: .logs;
 
 $(b) {
+    position: relative;
+
+    &__loader {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+
+        display: none;
+        align-items: center;
+        justify-content: center;
+
+        background: rgba(255, 255, 255, 0.5);
+
+        &_show {
+            display: flex;
+        }
+    }
+
     &__info {
         height: 500px;
         padding: 16px 28px;
@@ -20,8 +40,13 @@ $(b) {
 
     &__header-wrapper {
         display: flex;
+        justify-content: space-between;
 
         padding: 16px 0;
+    }
+
+    &__fields-wrapper {
+        display: flex;
     }
 
     &__calendar-footer {
@@ -33,7 +58,26 @@ $(b) {
         margin-right: 16px;
     }
 
+    &__limit-wrapper {
+        margin-right: 16px;
+    }
+
     &__limit {
         border-radius: 12px;
+    }
+
+    &__submit {
+        border-radius: 12px;
+    }
+
+    &__refresh {
+        border-radius: 12px;
+
+        box-shadow: 0 0 0 1px #D8D8D8 !important;
+
+        &:not(&_disabled):hover {
+            background: #EDEDED !important;
+            box-shadow: 0 0 0 1px #D8D8D8 !important;
+        }
     }
 }

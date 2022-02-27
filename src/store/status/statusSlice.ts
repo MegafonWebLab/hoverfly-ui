@@ -21,10 +21,11 @@ export const fetchStatusAsync = createAsyncThunk<IStatusState, void, ThunkApiCon
         }, DISPATCH_SECONDS);
 
         await thunkAPI.extra.hoverfly.fetchHealtCheck();
-        const { main } = thunkAPI.getState();
 
         if (!thunkAPI.getState().status.value) {
-            thunkAPI.dispatch(loadMainAsync());
+            await thunkAPI.dispatch(loadMainAsync());
+            const { main } = thunkAPI.getState();
+
             if (window.location.pathname !== '/login' && main.type === 'success') {
                 thunkAPI.dispatch(getServerStateAsync());
                 thunkAPI.dispatch(getSimulationAsync());

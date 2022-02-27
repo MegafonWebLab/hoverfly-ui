@@ -72,7 +72,7 @@ function App(): JSX.Element {
                                                 <ServerOffline />
                                                 <Routes>
                                                     <Route path="/" element={<Dashboard />} />
-                                                    <Route path="/simulations" element={<SimulationsWrapper />} />
+                                                    <Route path="/simulations/*" element={<SimulationsWrapper />} />
                                                     <Route path="/settings" element={<ServerSettings />} />
                                                     <Route path="/*" element={<Navigate to="/" />} />
                                                 </Routes>

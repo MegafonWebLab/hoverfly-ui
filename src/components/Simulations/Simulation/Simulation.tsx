@@ -359,7 +359,7 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
                                                         'Query key',
                                                     )}
                                                     <Select
-                                                        classes={{ control: cn('select-contol') }}
+                                                        classes={{ control: cn('select-control') }}
                                                         items={MATCHES}
                                                         currentValue={header.match}
                                                         onSelect={handleChooseHeaderQuery('query', index)}
@@ -450,11 +450,12 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
                                     </div>
                                 </SimulationFieldsBlock>
                                 <SimulationFieldsBlock
+                                    hasAddButton
                                     title="Header"
                                     onAddButtonClick={handleToggleHeaderQuery('response')}
                                 >
                                     {!!headerQuery.response.length && (
-                                        <>
+                                        <div className={cn('field-list')}>
                                             {headerQuery.response.map((header, index) => (
                                                 // eslint-disable-next-line react/no-array-index-key
                                                 <div className={cn('fields')} key={index}>
@@ -463,13 +464,6 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
                                                         header.key,
                                                         'Header key',
                                                     )}
-                                                    <Select
-                                                        className={cn('select')}
-                                                        classes={{ control: cn('select-contol') }}
-                                                        items={MATCHES}
-                                                        currentValue={header.match}
-                                                        onSelect={handleChooseHeaderQuery('response', index)}
-                                                    />
                                                     {renderField(
                                                         handleChangeHeaderQuery('response', 'value', index),
                                                         header.value,
@@ -478,7 +472,7 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
                                                     {renderDeleteButton(handleToggleHeaderQuery('response', index))}
                                                 </div>
                                             ))}
-                                        </>
+                                        </div>
                                     )}
                                 </SimulationFieldsBlock>
                                 <SimulationFieldsBlock title="Body">

@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
-import { Select, Button, Checkbox } from '@megafon/ui-core';
+import { Select, Button, Checkbox, Tooltip } from '@megafon/ui-core';
 import type { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Select';
 import { cnCreate } from '@megafon/ui-helpers';
 import { ReactComponent as DeleteIcon } from '@megafon/ui-icons/basic-16-delete_16.svg';
@@ -19,6 +19,7 @@ import drawChart, {
     getDatesDataset,
     getFromUnix,
     getLabels,
+    capFirstLetter,
     SUCCESS_STATUS_CODE,
 } from './utils';
 import './Journal.pcss';
@@ -61,6 +62,7 @@ const Journal: React.FC<{ isActive: boolean }> = ({ isActive }) => {
     const [filteredJournal, setFilterJournal] = React.useState<JournalItem[]>([]);
     const canvasRef = React.useRef<HTMLCanvasElement | null>(null);
     const tableRef = React.useRef<HTMLTableElement | null>(null);
+    const deleteRef = React.useRef<HTMLButtonElement | null>(null);
 
     function handleChangeFilter(name: keyof IJournalFilterState) {
         return (
@@ -226,14 +228,14 @@ const Journal: React.FC<{ isActive: boolean }> = ({ isActive }) => {
                         placeholder="Simulate"
                         currentValue={filterState.mode}
                         items={MODES.map(item => ({
-                            title: item,
+                            title: capFirstLetter(item),
                             value: item,
                         }))}
                         onSelect={handleChangeFilter('mode')}
                     />
                     <Checkbox
                         disabled={!statusState}
-                        classes={{ icon: cn('checkbox') }}
+                        classes={{ icon: cn('checkbox'), inner: cn('checkbox-inner') }}
                         checked={filterState.isAllErrors}
                         onChange={handleChangeAllErrors}
                         fontSize="small"
@@ -248,8 +250,12 @@ const Journal: React.FC<{ isActive: boolean }> = ({ isActive }) => {
                         theme="black"
                         icon={<DeleteIcon />}
                         type="outline"
+                        buttonRef={deleteRef}
                         onClick={handleRemoveJournal}
                     />
+                    <Tooltip paddings="small" triggerElement={deleteRef}>
+                        Clear dashboard
+                    </Tooltip>
                     <Select
                         disabled={!statusState}
                         classes={{
@@ -258,7 +264,7 @@ const Journal: React.FC<{ isActive: boolean }> = ({ isActive }) => {
                         }}
                         currentValue={time}
                         items={TIMES.map(item => ({
-                            title: item,
+                            title: capFirstLetter(item),
                             value: item,
                         }))}
                         onSelect={handleChangeTime}

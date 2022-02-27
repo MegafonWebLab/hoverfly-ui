@@ -26,8 +26,32 @@ export const MATCHES: Array<ISelectItem<string>> = [
         title: 'Exact match',
     },
     {
-        value: 'Glob',
+        value: 'glob',
         title: 'Glob match',
+    },
+    {
+        value: 'regex',
+        title: 'Regex match',
+    },
+    {
+        value: 'xml',
+        title: 'Xml match',
+    },
+    {
+        value: 'xpath',
+        title: 'Xpath match',
+    },
+    {
+        value: 'json',
+        title: 'Json match',
+    },
+    {
+        value: 'jsonPartial',
+        title: 'JsonPartial match',
+    },
+    {
+        value: 'jsonpath',
+        title: 'Jsonpath match',
     },
 ];
 
