@@ -10,6 +10,8 @@ $(b) {
     }
 
     &__content-wrap {
+        position: relative;
+
         display: flex;
 
         gap: 82px;
@@ -23,7 +25,11 @@ $(b) {
     }
 
     &__global-delay {
+        position: sticky;
+        top: 40px;
+
         flex-grow: 1;
+        height: 120px;
     }
 
     &__global-delay-wrapper {

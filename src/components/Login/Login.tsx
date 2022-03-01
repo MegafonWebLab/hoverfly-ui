@@ -26,9 +26,6 @@ const Login: React.FC = () => {
     return (
         <div className={cn()}>
             <div className={cn('wrapper')}>
-                <Header className={cn('title')} as="h1">
-                    Welcome to Hoverfly MF Edition
-                </Header>
                 <Header className={cn('title')} as="h2">
                     Login
                 </Header>

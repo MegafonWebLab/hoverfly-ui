@@ -36,8 +36,8 @@ const ServerSettingsCORS: React.FC = () => {
                 <ul className={cn('list')}>
                     {createCorsList().map(({ title, value }) => (
                         <li className={cn('item')} key={title}>
-                            <span className={cn('title')}>{title}</span>
-                            <span className={cn('value')}>{value}</span>
+                            <span className={cn('td', { title: true })}>{title}</span>
+                            <span className={cn('td', { value: true })}>{value}</span>
                         </li>
                     ))}
                 </ul>

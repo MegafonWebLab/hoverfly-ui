@@ -112,15 +112,16 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
         ));
 
     const renderSimulationList = () =>
-        simulationListOnPage.map(({ name, index }) => (
+        simulationListOnPage.map(({ method, name, index }) => (
             <li
-                className={cn('item')}
+                className={cn('item', { method })}
                 key={`${index + name}`}
                 onClick={handleSimulationEditButtonClick(index)}
                 aria-hidden
             >
                 <div className={cn('item-text')}>
-                    <span>{name}</span>
+                    <span className={cn('item-method', { method })}>{method}</span>
+                    <span className={cn('item-route')}>{name}</span>
                     {!isOpen && index === deleteIndex && (
                         <div className={cn('delete-loader')}>
                             <Preloader color="black" />

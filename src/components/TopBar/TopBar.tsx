@@ -13,7 +13,7 @@ import { deleteShutdownAsync } from 'store/shutdown/shutdownSlice';
 import './TopBar.pcss';
 
 const cn = cnCreate('topbar');
-const TopBar: React.FC = () => {
+const TopBar: React.FC<{ isLogin?: boolean }> = ({ isLogin }) => {
     const dispatch = useDispatch();
     const mainInfo = useSelector(state => state.main);
     const cacheState = useSelector(state => state.cache);
@@ -43,6 +43,16 @@ const TopBar: React.FC = () => {
     }, [mainInfo.type]);
 
     const preloader = <Preloader sizeAll="small" color="black" className={cn('button-preloader')} />;
+
+    if (isLogin) {
+        return (
+            <Grid className={cn()} vAlign="center" hAlign="between">
+                <GridColumn all="2" tablet="3" mobile="5">
+                    <img src={hoverflyIcon} alt="Hoverfly" width="137" height="21" />
+                </GridColumn>
+            </Grid>
+        );
+    }
 
     return (
         <Grid className={cn()} vAlign="center" hAlign="between">
@@ -83,7 +93,7 @@ const TopBar: React.FC = () => {
                     {hasShutdownPending && preloader}
                 </div>
             </GridColumn>
-            <GridColumn all="6" tablet="5" mobile="12" className={cn('profile')}>
+            <GridColumn all="6" tablet="5" mobile="12" className={cn('profile', { hidden: !username })}>
                 <>
                     {username && (
                         <>

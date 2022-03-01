@@ -2,12 +2,10 @@ $b: .server-settings-cors;
 
 $(b) {
     &__list {
-        display: flex;
-        flex-direction: column;
-
-        gap: 16px;
-
-        max-width: 350px;
+        display: grid;
+        border: 1px solid #EEEEEE;
+        border-radius: 12px;
+        overflow: hidden;
     }
 
     &__item {
@@ -15,12 +13,14 @@ $(b) {
         justify-content: space-between;
     }
 
-    &__title {
-        color: rgba(51, 51, 51, 0.5);
-        font-weight: 600;
+    &__td {
+        width: 50%;
+        padding: 8px 12px;
+        border: 1px solid #EEEEEE;
     }
 
-    &__value {
-        text-align: end;
+    &__td_title {
+        color: rgba(51, 51, 51, 0.5);
+        font-weight: 600;
     }
 }

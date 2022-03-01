@@ -57,28 +57,38 @@ function App(): JSX.Element {
             <AlertProvider template={Notification} timeout={5000} position={positions.TOP_RIGHT} offset="5px">
                 <AlertLayout>
                     <Layout>
-                        <TopBar />
                         <Routes>
-                            <Route path="/login" element={<Login />} />
+                            <Route
+                                path="/login"
+                                element={
+                                    <>
+                                        <TopBar isLogin />
+                                        <Login />
+                                    </>
+                                }
+                            />
                             <Route
                                 path="*"
                                 element={
-                                    <div className={cn('middle')}>
-                                        <aside className={cn('aside')}>
-                                            <Navigation />
-                                        </aside>
-                                        <main className={cn('main')}>
-                                            <ContentLayout>
-                                                <ServerOffline />
-                                                <Routes>
-                                                    <Route path="/" element={<Dashboard />} />
-                                                    <Route path="/simulations/*" element={<SimulationsWrapper />} />
-                                                    <Route path="/settings" element={<ServerSettings />} />
-                                                    <Route path="/*" element={<Navigate to="/" />} />
-                                                </Routes>
-                                            </ContentLayout>
-                                        </main>
-                                    </div>
+                                    <>
+                                        <TopBar />
+                                        <div className={cn('middle')}>
+                                            <aside className={cn('aside')}>
+                                                <Navigation />
+                                            </aside>
+                                            <main className={cn('main')}>
+                                                <ContentLayout>
+                                                    <ServerOffline />
+                                                    <Routes>
+                                                        <Route path="/" element={<Dashboard />} />
+                                                        <Route path="/simulations/*" element={<SimulationsWrapper />} />
+                                                        <Route path="/settings" element={<ServerSettings />} />
+                                                        <Route path="/*" element={<Navigate to="/" />} />
+                                                    </Routes>
+                                                </ContentLayout>
+                                            </main>
+                                        </div>
+                                    </>
                                 }
                             />
                         </Routes>

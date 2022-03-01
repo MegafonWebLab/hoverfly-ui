@@ -25,7 +25,11 @@ export const getRouteList = (pairs: SimulationItem[]): RouteItem[] =>
         const method = pair.request.method?.[0].value || 'GET';
         const isRequiresState = !!pair.request.requiresState;
 
-        return { name: `${method} ${pathValue}${isRequiresState ? ' [stateful]' : ''}`, index };
+        return {
+            name: `${pathValue}${isRequiresState ? ' [stateful]' : ''}`,
+            index,
+            method: method.toLowerCase(),
+        };
     });
 
 export const getRequireStateList = (pair: SimulationItem): ServerState[] =>

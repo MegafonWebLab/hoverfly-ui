@@ -18,6 +18,14 @@ export const METHODS: Array<ISelectItem<string>> = [
         value: 'POST',
         title: 'POST',
     },
+    {
+        value: 'PUT',
+        title: 'PUT',
+    },
+    {
+        value: 'DELETE',
+        title: 'DELETE',
+    },
 ];
 
 export const MATCHES: Array<ISelectItem<string>> = [
@@ -88,7 +96,14 @@ export const initialServerState: SimulationsServerState = {
 };
 
 export const initialPairState: SimulationItem = {
-    request: {},
+    request: {
+        method: [
+            {
+                value: 'GET',
+                matcher: 'exact',
+            },
+        ],
+    },
     response: {
         status: 200,
         body: '',

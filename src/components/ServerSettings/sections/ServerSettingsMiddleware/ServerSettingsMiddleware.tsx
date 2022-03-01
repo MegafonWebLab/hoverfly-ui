@@ -87,7 +87,7 @@ const ServerSettingsMiddleware: React.FC = () => {
         <div className={cn('binary-fields')}>
             <ServerSettingsTextField
                 title="Binary path"
-                placeholder="State key"
+                placeholder="/usr/local/bin/python3"
                 value={state.binary.value}
                 onChange={handleChangeState('binary')}
             />

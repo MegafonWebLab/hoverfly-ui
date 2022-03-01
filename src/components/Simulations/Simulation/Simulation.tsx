@@ -2,7 +2,6 @@ import React, { useMemo, useEffect, useCallback, useState } from 'react';
 import { Button, Checkbox, Header, Select, TextField } from '@megafon/ui-core';
 import type { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Select';
 import { cnCreate } from '@megafon/ui-helpers';
-import { ReactComponent as DeleteIcon } from '@megafon/ui-icons/basic-16-delete_16.svg';
 import { ReactComponent as ArrowIcon } from '@megafon/ui-icons/system-16-arrow_left_16.svg';
 import { ReactComponent as Minus } from '@megafon/ui-icons/system-16-minus_16.svg';
 import { Controlled as CodeMirror } from 'react-codemirror2';
@@ -124,12 +123,6 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
                 ...prev,
                 [key]: addOrRemoveEl(prev[key], { add: headerEmpty, remove: index }),
             }));
-    }
-
-    function handleClearButtonClick() {
-        setServerState(initialServerState);
-        setCurrentPair(undefined);
-        setHeaderQuery(initialHeaderQuery);
     }
 
     function handleChangeHeaderQuery(
@@ -266,7 +259,12 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
                         </Header>,
                     )}
                     <div className={cn('action-button')}>
-                        <Button sizeAll="medium" fullWidth onClick={handleSubmit}>
+                        <Button
+                            sizeAll="medium"
+                            fullWidth
+                            disabled={!currentPair?.request?.path?.[0]?.value}
+                            onClick={handleSubmit}
+                        >
                             {routeIndex === undefined ? 'Create' : 'Update'}
                         </Button>
                     </div>
@@ -276,9 +274,6 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
                         <Header className={cn('content-header')} as="h5">
                             {routeIndex === undefined ? 'Create new' : 'Update'} simulation
                         </Header>
-                        <button type="button" className={cn('delete-btn')} onClick={handleClearButtonClick}>
-                            <DeleteIcon />
-                        </button>
                     </div>
                     <div className={cn('content-body')}>
                         <CollapseWrapper isOpenDefault title="Stateful settings">
@@ -494,14 +489,12 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
                                 </SimulationFieldsBlock>
                                 <div className={cn('checkboxes')}>
                                     <Checkbox
-                                        fontSize="small"
                                         checked={currentPair?.response.templated}
                                         onChange={handleChangeResponseCheckbox('templated')}
                                     >
                                         Enable templating
                                     </Checkbox>
                                     <Checkbox
-                                        fontSize="small"
                                         checked={currentPair?.response.encodedBody}
                                         onChange={handleChangeResponseCheckbox('encodedBody')}
                                     >

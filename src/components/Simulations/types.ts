@@ -3,6 +3,7 @@ import type { MirrorBodyType } from 'utils';
 
 export type RouteItem = {
     name: string;
+    method: string;
     index: number;
 };
 

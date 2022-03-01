@@ -86,15 +86,87 @@ $(b) {
         display: flex;
         align-items: center;
         justify-content: space-between;
-        height: 40px;
-        padding: 0 12px;
+        height: 48px;
+        padding: 4px 12px;
         border-radius: 12px;
+
+        background: rgba(238, 238, 238, 0.8);
+        box-shadow: 0 0 0 1px #999999;
 
         cursor: pointer;
 
         &:hover {
-            background: #EEEEEE;
+            background: rgba(238, 238, 238, 1);
         }
+
+        &_method_get {
+            background: rgba(52, 170, 242, 0.1);
+            box-shadow: 0 0 0 1px #34AAF2;
+
+            &:hover {
+                background: rgba(52, 170, 242, 0.2);
+            }
+        }
+
+        &_method_post {
+            background: rgba(0, 185, 86, 0.1);
+            box-shadow: 0 0 0 1px #00B956;
+
+            &:hover {
+                background: rgba(0, 185, 86, 0.2);
+            }
+        }
+
+        &_method_delete {
+            background: rgba(246, 36, 52, 0.1);
+            box-shadow: 0 0 0 1px #F62434;
+
+            &:hover {
+                background: rgba(246, 36, 52, 0.2);
+            }
+        }
+
+        &_method_put {
+            background: rgba(255, 167, 23, 0.1);
+            box-shadow: 0 0 0 1px #FFA717;
+
+            &:hover {
+                background: rgba(255, 167, 23, 0.2);
+            }
+        }
+    }
+
+    &__item-method {
+        margin-right: 8px;
+        padding: 6px 8px;
+        border-radius: 4px;
+
+        color: #FFFFFF;
+
+        font-weight: 600;
+        text-transform: uppercase;
+
+        background: #999999;
+
+        &_method_get {
+            background: #34AAF2;
+        }
+
+        &_method_post {
+            background: #00B956;
+        }
+
+        &_method_delete {
+            background: #F62434;
+        }
+
+        &_method_put {
+            background: #FFA717;
+        }
+    }
+
+    &__item-route {
+        font-weight: 600;
     }
 
     &__edit-btn {
