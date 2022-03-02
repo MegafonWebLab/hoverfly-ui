@@ -36,13 +36,16 @@ const ServerSettingsMode: React.FC = (): JSX.Element => {
     const statusState = useSelector(state => state.status.value);
 
     const isWebserver = mainState.type === 'success' ? mainState.value.isWebServer : false;
-    const mode = modeState.type === 'success' ? modeState.value.mode : 'simulate';
     const modeItems = isWebserver ? modeWebser : modeValues;
 
-    const [modeValue, setModeState] = useState<ModeState['mode']>(mode);
+    const [modeValue, setModeState] = useState<ModeState['mode']>('simulate');
     const [argumentsState, setArgumentsState] = useState<Required<ModeState['arguments']>>(initialArguments);
 
     const { headersWhitelist, matchingStrategy, overwriteDuplicate, stateful } = argumentsState;
+    const multiSelectOptions = headersWhitelist.map(header => ({
+        value: header,
+        label: header,
+    }));
 
     const isCaptureMode = modeValue === 'capture';
     const isShouldRenderHeaders = modeValue === 'capture' || modeValue === 'diff';
@@ -83,8 +86,10 @@ const ServerSettingsMode: React.FC = (): JSX.Element => {
     }
 
     useEffect(() => {
-        setModeState(mode);
-    }, [mode]);
+        if (modeState.type === 'success') {
+            setModeState(modeState.value.mode);
+        }
+    }, [modeState.type, setModeState]);
 
     useEffect(() => {
         if (modeState.type === 'success') {
@@ -120,10 +125,8 @@ const ServerSettingsMode: React.FC = (): JSX.Element => {
                     className={cn('multi-select')}
                     isMulti
                     placeholder="Start typing and press Enter to add new"
-                    options={headersWhitelist.map(header => ({
-                        value: header,
-                        label: header,
-                    }))}
+                    value={multiSelectOptions}
+                    options={multiSelectOptions}
                     onChange={handleMultiSelectChange}
                 />
             </div>
@@ -152,7 +155,7 @@ const ServerSettingsMode: React.FC = (): JSX.Element => {
                     />
                 </div>
                 {isCaptureMode && renderCaptureFields()}
-                {!isShouldRenderHeaders && renderHostFields()}
+                {isShouldRenderHeaders && renderHostFields()}
                 <ServerSettingsButton text="Change Mode" disabled={!statusState} onClick={handleSubmit} />
             </CollapseWrapper>
         </div>

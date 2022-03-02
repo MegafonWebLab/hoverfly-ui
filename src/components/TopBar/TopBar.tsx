@@ -56,14 +56,14 @@ const TopBar: React.FC<{ isLogin?: boolean }> = ({ isLogin }) => {
 
     return (
         <Grid className={cn()} vAlign="center" hAlign="between">
-            <GridColumn all="2" tablet="3" mobile="5">
+            <GridColumn all="9" tablet="9" mobile="5">
                 <img src={hoverflyIcon} alt="Hoverfly" width="137" height="21" />
                 <div className={cn('versions')}>
                     <span className={cn('version')}>Server {versionServer}</span>
                     <span className={cn('version')}>UI v{VERSION}</span>
                 </div>
             </GridColumn>
-            <GridColumn all="6" tablet="4" mobile="7" className={cn('buttons')}>
+            <GridColumn all="2" tablet="2" mobile="7" className={cn('buttons')}>
                 <div className={cn('button-wrap')}>
                     <button
                         type="button"
@@ -93,7 +93,7 @@ const TopBar: React.FC<{ isLogin?: boolean }> = ({ isLogin }) => {
                     {hasShutdownPending && preloader}
                 </div>
             </GridColumn>
-            <GridColumn all="6" tablet="5" mobile="12" className={cn('profile', { hidden: !username })}>
+            <GridColumn all="1" tablet="1" mobile="12" className={cn('profile', { hidden: !username })}>
                 <>
                     {username && (
                         <>
