@@ -137,10 +137,9 @@ export const mergeHeaderStateToCurrentPair = (
 export const mergeBodyStateToCurrentPair = (state: SimulationItem, bodyState: SimulationHtmlState): SimulationItem => {
     const newState = cloneDeep(state);
 
-    newState.request.body =
-        bodyState.request.length !== 0
-            ? [{ value: bodyState.request[0].value, matcher: bodyState.request[0].matcher }]
-            : undefined;
+    newState.request.body = bodyState.request.value
+        ? [{ value: bodyState.request.value, matcher: bodyState.request.matcher || 'exact' }]
+        : undefined;
     newState.response.body = bodyState.response.value as string;
 
     return newState;

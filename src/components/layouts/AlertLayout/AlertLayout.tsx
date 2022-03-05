@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import { useAlert } from 'react-alert';
 import NotificationContent from 'components/NotificationContent/NotificationContent';
+import { useSelector } from 'store/hooks';
+
+const MAX_MESSAGE_LENGTH = 120;
 
 type DetailType = Event & {
     detail: {
@@ -12,11 +15,14 @@ type DetailType = Event & {
 
 const AlertLayout: React.FC = ({ children }): JSX.Element => {
     const alert = useAlert();
+    const isOnline = useSelector(state => state.status.value);
 
     const renderAlert = ({ detail }: DetailType) => {
         const { title, message, isError } = detail;
+        const parseMessage =
+            message.length > MAX_MESSAGE_LENGTH ? `${message.substr(0, MAX_MESSAGE_LENGTH)}...` : message;
 
-        alert.show(<NotificationContent title={title} message={message} isError={isError} />);
+        isOnline && alert.show(<NotificationContent title={title} message={parseMessage} isError={isError} />);
     };
 
     useEffect(() => {

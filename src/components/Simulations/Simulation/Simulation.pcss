@@ -9,9 +9,17 @@ $(b) {
         margin-top: 16px;
     }
 
+    &__left {
+        position: sticky;
+        top: 20px;
+
+        height: 100px;
+    }
+
     &__back-link {
         display: flex;
         align-items: center;
+        margin-bottom: 12px;
 
         color: #333333;
         font-size: 15px;
@@ -64,9 +72,6 @@ $(b) {
     }
 
     &__action-button {
-        position: sticky;
-        top: 40px;
-
         display: flex;
 
         justify-content: center;
@@ -97,6 +102,11 @@ $(b) {
 
     &__select-contol {
         width: 170px;
+    }
+
+    &__select-root {
+        width: 170px;
+        margin-bottom: 8px;
     }
 
     &__remove-fields-btn {

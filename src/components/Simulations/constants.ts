@@ -119,8 +119,8 @@ export const initialHeaderQuery: SimulationHeadersQueryState = {
 export const serverStateEmpty: ServerState = { key: '', value: '' };
 export const headerEmpty: SimulationHeaderState = { key: '', value: '', match: 'exact' };
 export const initialBodyState: SimulationHtmlState = {
-    request: [],
-    response: { value: '', type: '' },
+    request: { value: '', type: 'json', matcher: 'exact' },
+    response: { value: '', type: 'json' },
 };
 
 export const BODY_FORMATS: Array<ISelectItem<MirrorBodyType>> = [

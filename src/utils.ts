@@ -56,4 +56,4 @@ export const showNotification = (title: string, message?: string, isError = true
     });
 };
 
-export const hightlightHtml = (code: string): AutoHighlightResult => hljs.highlightAuto(code, ['json', 'xml', 'html']);
+export const hightlightHtml = (code: string): AutoHighlightResult => hljs.highlightAuto(code, ['json', 'html', 'xml']);

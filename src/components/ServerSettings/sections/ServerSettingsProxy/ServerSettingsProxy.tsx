@@ -16,7 +16,7 @@ const ServerSettingsProxy: React.FC = () => {
     const upstreamStore = useSelector(state => state.upstreamProxy);
 
     const [destination, setDestination] = useState<string>('-');
-    const [upstream, setUpstream] = useState<string>('link anywhere');
+    const [upstream, setUpstream] = useState<string>('');
 
     function handleDestinationEditFormChange(_e: React.ChangeEvent<HTMLInputElement>): void {
         setDestination(_e.target.value);

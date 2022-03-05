@@ -5,6 +5,7 @@ import { cnCreate } from '@megafon/ui-helpers';
 import { ReactComponent as ArrowIcon } from '@megafon/ui-icons/system-16-arrow_left_16.svg';
 import { ReactComponent as Minus } from '@megafon/ui-icons/system-16-minus_16.svg';
 import { Controlled as CodeMirror } from 'react-codemirror2';
+import { useParams } from 'react-router-dom';
 import type { SimulationResponse, HoverflyMatcher, PairItemRequest, SimulationItem, PairItemResponse } from 'api/types';
 import CollapseWrapper from 'components/CollapseWrapper/CollapseWrapper';
 import './Simulation.pcss';
@@ -63,13 +64,14 @@ type ChangeCurrentNames = keyof Omit<PairItemRequest, 'headers' | 'query' | 'req
 const useZeroMemo = (el: JSX.Element) => useMemo(() => el, []);
 
 interface ISimulationProps {
-    routeIndex?: number;
     onChange: (state: SimulationResponse) => void;
     onBack: () => void;
 }
 
 const cn = cnCreate('simulation');
-const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }) => {
+const Simulation: React.FC<ISimulationProps> = ({ onBack, onChange }) => {
+    const { routeIndex: paramIndex } = useParams<{ routeIndex?: string }>();
+    const routeIndex = paramIndex !== undefined ? Number(paramIndex) : undefined;
     const simulationStore = useSelector(state => state.simulation);
 
     const [state, setState] = useState<SimulationResponse>(() => {
@@ -84,6 +86,7 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
     const [headerQuery, setHeaderQuery] = useState<SimulationHeadersQueryState>(initialHeaderQuery);
     const [body, setBody] = useState<SimulationHtmlState>(initialBodyState);
 
+    const method = currentPair?.request.method?.[0].value || 'GET';
     const { transitionsState, requiresState } = serverState;
 
     function handleSubmit() {
@@ -159,19 +162,15 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
         return () => setCurrentPair(prev => changeCurrentPairResponse(prev, name, !prev?.response[name]));
     }
 
-    function handleChooseBodyType(key: keyof SimulationHtmlState) {
+    function handleChooseBodyType(key: keyof SimulationHtmlState, name: 'type' | 'matcher') {
         return (_e: React.MouseEvent<HTMLDivElement>, dataItem?: ISelectItem<MirrorBodyType>) => {
-            setBody(prev => ({ ...prev, [key]: { ...prev[key], type: dataItem?.value } }));
+            setBody(prev => ({ ...prev, [key]: { ...prev[key], [name]: dataItem?.value } }));
         };
     }
 
     function handleChangeBody(key: keyof SimulationHtmlState) {
         return (_editor: unknown, _data: unknown, value: string) => {
-            setBody(prev => {
-                const newState = key === 'request' ? [{ ...prev[key][0], value }] : { ...prev[key], value };
-
-                return { ...prev, [key]: newState };
-            });
+            setBody(prev => ({ ...prev, [key]: { ...prev[key], value } }));
         };
     }
 
@@ -180,7 +179,7 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
     }, [simulationStore]);
 
     useEffect(() => {
-        if (routeIndex !== undefined && state) {
+        if (routeIndex !== undefined && state && state.data.pairs.length > 0) {
             const pair = state.data.pairs[routeIndex];
 
             const content: SimulationsServerState = {
@@ -194,12 +193,11 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
                 query: getRequestQueryStateList(pair),
             };
             const routeBody: SimulationHtmlState = {
-                request:
-                    pair.request.body?.map(bodyEl => ({
-                        matcher: bodyEl.matcher || 'exact',
-                        value: bodyEl.value || '',
-                        type: (hightlightHtml(bodyEl.value || '').language || 'text') as MirrorBodyType,
-                    })) || [],
+                request: {
+                    matcher: pair.request.body?.[0]?.matcher || 'exact',
+                    value: pair.request.body?.[0]?.value || '',
+                    type: (hightlightHtml(pair.request.body?.[0]?.value || '').language || 'text') as MirrorBodyType,
+                },
                 response: {
                     value: pair.response.body,
                     type: (hightlightHtml(pair.response.body).language || 'text') as MirrorBodyType,
@@ -247,12 +245,12 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
 
     return (
         <div className={cn()}>
-            <button className={cn('back-link')} type="button" onClick={onBack}>
-                <ArrowIcon className={cn('arrow-icon')} />
-                Back to Simulations
-            </button>
             <div className={cn('wrapper')}>
-                <div>
+                <div className={cn('left')}>
+                    <button className={cn('back-link')} type="button" onClick={onBack}>
+                        <ArrowIcon className={cn('arrow-icon')} />
+                        Back to Simulations
+                    </button>
                     {useZeroMemo(
                         <Header className={cn('title')} as="h3">
                             {routeIndex === undefined ? 'New' : 'Update'} Simulation
@@ -300,7 +298,7 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
                                     <div className={cn('fields')}>
                                         <Select
                                             classes={{ control: cn('select-contol') }}
-                                            currentValue={currentPair?.request.method?.[0].value || 'GET'}
+                                            currentValue={method}
                                             items={METHODS}
                                             onSelect={handleChooseCurrentValueRequest('method', 'value')}
                                         />
@@ -402,34 +400,30 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
                                         </div>
                                     )}
                                 </SimulationFieldsBlock>
-                                <SimulationFieldsBlock title="Body">
-                                    {!!body.request.length && (
-                                        <>
-                                            {body.request.map((rBody, index) => (
-                                                // eslint-disable-next-line react/no-array-index-key
-                                                <div className={cn('fields')} key={index}>
-                                                    <Select
-                                                        classes={{ control: cn('select-contol') }}
-                                                        items={MATCHES}
-                                                        currentValue={rBody.matcher || MATCHES[0].value}
-                                                        onSelect={handleChooseCurrentValueRequest('body', 'matcher')}
-                                                    />
-                                                    <Select
-                                                        items={BODY_FORMATS}
-                                                        currentValue={rBody.type}
-                                                        onSelect={handleChooseBodyType('request')}
-                                                    />
-                                                    <CodeMirror
-                                                        className={cn('editor')}
-                                                        value={rBody.value}
-                                                        options={getCodeMirrorConfig(rBody.type)}
-                                                        onBeforeChange={handleChangeBody('request')}
-                                                    />
-                                                </div>
-                                            ))}
-                                        </>
-                                    )}
-                                </SimulationFieldsBlock>
+                                {method !== 'GET' && (
+                                    <SimulationFieldsBlock title="Body">
+                                        <div>
+                                            <Select
+                                                classes={{ control: cn('select-contol'), root: cn('select-root') }}
+                                                items={MATCHES}
+                                                currentValue={body.request?.matcher || MATCHES[0].value}
+                                                onSelect={handleChooseBodyType('request', 'matcher')}
+                                            />
+                                            <Select
+                                                classes={{ control: cn('select-contol'), root: cn('select-root') }}
+                                                items={BODY_FORMATS}
+                                                currentValue={body.request?.type}
+                                                onSelect={handleChooseBodyType('request', 'type')}
+                                            />
+                                            <CodeMirror
+                                                className={cn('editor')}
+                                                value={body.request.value || ''}
+                                                options={getCodeMirrorConfig(body.request.type)}
+                                                onBeforeChange={handleChangeBody('request')}
+                                            />
+                                        </div>
+                                    </SimulationFieldsBlock>
+                                )}
                             </div>
                         </CollapseWrapper>
                         <CollapseWrapper isOpenDefault title="Response">
@@ -477,7 +471,7 @@ const Simulation: React.FC<ISimulationProps> = ({ routeIndex, onBack, onChange }
                                             classes={{ control: cn('select-contol') }}
                                             items={BODY_FORMATS}
                                             currentValue={body.response.type || BODY_FORMATS[3].value}
-                                            onSelect={handleChooseBodyType('response')}
+                                            onSelect={handleChooseBodyType('response', 'type')}
                                         />
                                         <CodeMirror
                                             className={cn('editor')}

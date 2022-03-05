@@ -42,7 +42,10 @@ export const defaultRejectedCase =
     <T extends IRequestState<unknown>, Data>(name?: string) =>
     (state: T, action: RejectedActionType<Data>): void => {
         if (name) {
-            showNotification(`${name || ''} ${action.error.name?.toLowerCase()}`.trim(), action.error.message);
+            showNotification(
+                `${name || ''} ${action.error.name?.toLowerCase()}`.trim(),
+                action.payload?.message || action.error.message,
+            );
         }
 
         state.type = 'failed';

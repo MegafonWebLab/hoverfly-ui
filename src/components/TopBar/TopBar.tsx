@@ -56,47 +56,48 @@ const TopBar: React.FC<{ isLogin?: boolean }> = ({ isLogin }) => {
 
     return (
         <Grid className={cn()} vAlign="center" hAlign="between">
-            <GridColumn all="9" tablet="9" mobile="5">
+            <GridColumn all="7" tablet="7" mobile="12">
                 <img src={hoverflyIcon} alt="Hoverfly" width="137" height="21" />
                 <div className={cn('versions')}>
                     <span className={cn('version')}>Server {versionServer}</span>
                     <span className={cn('version')}>UI v{VERSION}</span>
                 </div>
             </GridColumn>
-            <GridColumn all="2" tablet="2" mobile="7" className={cn('buttons')}>
-                <div className={cn('button-wrap')}>
-                    <button
-                        type="button"
-                        className={cn('button')}
-                        onClick={handleClickCache}
-                        disabled={hasCachePending}
-                    >
-                        <ClearIcon className={cn('clear-icon', { disabled: hasCachePending })} />
-                        <span>Clear cache</span>
-                    </button>
-                    {hasCachePending && preloader}
+            <GridColumn all="5" tablet="5" mobile="12" className={cn('right')}>
+                <div className={cn('buttons')}>
+                    <div className={cn('button-wrap')}>
+                        <button
+                            type="button"
+                            className={cn('button')}
+                            onClick={handleClickCache}
+                            disabled={hasCachePending}
+                        >
+                            <ClearIcon className={cn('clear-icon', { disabled: hasCachePending })} />
+                            <span>Clear cache</span>
+                        </button>
+                        {hasCachePending && preloader}
+                    </div>
+                    <div className={cn('button-wrap')}>
+                        <button
+                            type="button"
+                            className={cn('button')}
+                            onClick={handleClickShutdown}
+                            disabled={hasShutdownPending}
+                        >
+                            <img
+                                src={hasShutdownPending ? disabledDownIcon : shutDownIcon}
+                                alt="shut down"
+                                className={cn('shut-down-icon')}
+                            />
+                            Shut down
+                        </button>
+                        {hasShutdownPending && preloader}
+                    </div>
                 </div>
-                <div className={cn('button-wrap')}>
-                    <button
-                        type="button"
-                        className={cn('button')}
-                        onClick={handleClickShutdown}
-                        disabled={hasShutdownPending}
-                    >
-                        <img
-                            src={hasShutdownPending ? disabledDownIcon : shutDownIcon}
-                            alt="shut down"
-                            className={cn('shut-down-icon')}
-                        />
-                        Shut down
-                    </button>
-                    {hasShutdownPending && preloader}
-                </div>
-            </GridColumn>
-            <GridColumn all="1" tablet="1" mobile="12" className={cn('profile', { hidden: !username })}>
                 <>
                     {username && (
                         <>
+                            <div className={cn('divider')} />
                             <Header as="h2" className={cn('profile-username')}>
                                 {username}
                             </Header>

@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import type { AxiosError } from 'axios';
 import type { Middleware, ThunkApiConfig } from 'api/types';
 import type { IRequestState } from '../types';
 import { defaultFulfilledCase, defaultPendingCase, defaultRejectedCase } from '../utils';
@@ -28,12 +29,20 @@ export const getMiddlewareAsync = createAsyncThunk<Middleware, void, ThunkApiCon
 export const updateMiddlewareAsync = createAsyncThunk<Middleware, Middleware, ThunkApiConfig>(
     'middleware/update',
     async (content: Middleware, thunkAPI) => {
-        const { data } = await thunkAPI.extra.hoverfly.updateMiddleware(content);
-        if (data) {
-            return data;
-        }
+        try {
+            const { data } = await thunkAPI.extra.hoverfly.updateMiddleware(content);
+            if (data) {
+                return data;
+            }
 
-        return thunkAPI.rejectWithValue(new Error('Request error'));
+            return thunkAPI.rejectWithValue(new Error('Request error'));
+        } catch (e) {
+            const json = (e as AxiosError).toJSON() as { message: string };
+
+            return thunkAPI.rejectWithValue(
+                new Error(`${json.message}: ${(e as AxiosError)?.response?.data.error}` || ''),
+            );
+        }
     },
 );
 

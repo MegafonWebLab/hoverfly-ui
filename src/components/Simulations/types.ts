@@ -31,7 +31,7 @@ export type SimulationHeadersQueryState = {
 };
 
 export type SimulationHtmlState = {
-    request: Array<HoverflyMatcher & { type: MirrorBodyType }>;
+    request: Partial<HoverflyMatcher> & { type: MirrorBodyType };
     response: Partial<HoverflyMatcher> & { type: MirrorBodyType };
 };
 

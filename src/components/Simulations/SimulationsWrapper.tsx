@@ -18,7 +18,6 @@ const SimulationsWrapper: React.FC = (): JSX.Element => {
     const simulationStore = useSelector(state => state.simulation);
 
     const nav = useNavigate();
-    const [routeIndex, setRouteIndex] = React.useState<number | undefined>(undefined);
     const [isUpdating, setIsUpdating] = React.useState<boolean>(false);
 
     function removeSimulation(index: number) {
@@ -41,8 +40,7 @@ const SimulationsWrapper: React.FC = (): JSX.Element => {
     function handleChangeSimulation(index: number | undefined, type: 'edit' | 'delete' | 'new') {
         switch (type) {
             case 'edit': {
-                setRouteIndex(index);
-                nav(SimulationRoutes.EDIT);
+                nav(`${SimulationRoutes.EDIT}/${index}`);
                 break;
             }
             case 'delete': {
@@ -76,18 +74,9 @@ const SimulationsWrapper: React.FC = (): JSX.Element => {
         }
     }, [isUpdating, simulationStore.type, nav]);
 
-    useEffect(() => {
-        if (window.location.pathname === SimulationRoutes.EDIT && routeIndex === undefined) {
-            nav(SimulationRoutes.INDEX);
-        }
-    }, [routeIndex, nav]);
-
     return (
         <Routes>
-            <Route
-                path="/edit"
-                element={<Simulation routeIndex={routeIndex} onBack={handleBack} onChange={handleChange} />}
-            />
+            <Route path="/edit/:routeIndex" element={<Simulation onBack={handleBack} onChange={handleChange} />} />
             <Route path="/new" element={<Simulation onBack={handleBack} onChange={handleChange} />} />
             <Route path="/" element={<Simulations onChange={handleChangeSimulation} />} />
         </Routes>

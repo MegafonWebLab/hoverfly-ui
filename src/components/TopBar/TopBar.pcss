@@ -15,6 +15,10 @@ $(b) {
         flex-direction: column;
     }
 
+    @media (--mobileSM) {
+        height: 100px;
+    }
+
     &__versions {
         display: flex;
         flex-wrap: wrap;
@@ -44,6 +48,11 @@ $(b) {
         white-space: nowrap;
     }
 
+    &__right {
+        display: flex;
+        justify-content: flex-end;
+    }
+
     &__buttons {
         display: flex;
         align-items: center;
@@ -54,11 +63,6 @@ $(b) {
         @media (--mobile) {
             justify-content: center;
         }
-        @media (--mobileS) {
-            flex-direction: column;
-            gap: 20px;
-            align-items: flex-end;
-        }
     }
 
     &__button {
@@ -68,15 +72,6 @@ $(b) {
         min-width: 110px;
 
         cursor: pointer;
-
-        @media (--mobileMB) {
-            &:first-child {
-                margin-right: 8px;
-            }
-        }
-        @media (--mobileS) {
-            flex-direction: row-reverse;
-        }
     }
 
     &__button:hover,
@@ -93,15 +88,10 @@ $(b) {
     &__clear-icon {
         width: 18px;
         height: 18px;
+        margin-right: 5px;
 
         fill: #FFA717;
 
-        @media (--mobileMU) {
-            margin-right: 5px;
-        }
-        @media (--mobileS) {
-            margin-left: 8px;
-        }
     }
 
     &__clear-icon_disabled {
@@ -111,28 +101,16 @@ $(b) {
     &__shut-down-icon {
         width: 16px;
         height: 16px;
-
-        @media (--mobileMU) {
-            margin-right: 5px;
-        }
-        @media (--mobileS) {
-            margin-left: 8px;
-        }
+        margin-right: 5px;
     }
 
     &__profile {
-        display: flex;
+        position: relative;
 
+        display: flex;
         justify-content: flex-end;
 
         cursor: pointer;
-
-        @media (--mobileM) {
-            justify-content: flex-start;
-        }
-        @media (--mobileS) {
-            margin-top: 20px;
-        }
 
         &_hidden {
             display: none;
@@ -159,5 +137,11 @@ $(b) {
         margin-top: 1px;
 
         fill: #00B956;
+    }
+
+    &__divider {
+        height: 25px;
+        border-left: 1px solid #CCCCCC;
+        margin-right: 16px;
     }
 }
