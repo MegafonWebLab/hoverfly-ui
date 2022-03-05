@@ -3,7 +3,7 @@ import { useAlert } from 'react-alert';
 import NotificationContent from 'components/NotificationContent/NotificationContent';
 import { useSelector } from 'store/hooks';
 
-const MAX_MESSAGE_LENGTH = 120;
+const MAX_MESSAGE_LENGTH = 250;
 
 type DetailType = Event & {
     detail: {
