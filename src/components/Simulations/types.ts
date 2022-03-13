@@ -5,6 +5,8 @@ export type RouteItem = {
     name: string;
     method: string;
     index: number;
+    isRequiresState: boolean;
+    isNewState: boolean;
 };
 
 export type ServerState = {

@@ -70,16 +70,12 @@ $(b) {
         border-radius: 12px;
     }
 
-    &__tile {
-        margin-bottom: 32px;
-        padding: 36px 22px;
-    }
-
     &__list {
         display: flex;
         flex-direction: column;
 
         gap: 16px;
+        margin-bottom: 32px;
     }
 
     &__item {
@@ -146,8 +142,8 @@ $(b) {
         color: #FFFFFF;
 
         font-weight: 600;
-        text-transform: uppercase;
         text-align: center;
+        text-transform: uppercase;
 
         background: #999999;
 
@@ -170,6 +166,13 @@ $(b) {
 
     &__item-route {
         font-weight: 600;
+    }
+
+    &__item-text {
+        overflow: hidden;
+
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     &__edit-btn {
@@ -222,9 +225,64 @@ $(b) {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        padding: 10px 16px 10px 0;
     }
 
     &__preloader-circle {
         margin-right: 12px;
+    }
+
+    &__item-buttons {
+        display: flex;
+        align-items: center;
+    }
+
+    &__badge {
+        display: flex;
+        height: 32px;
+        margin-right: 8px;
+        padding: 4px 8px;
+        border-radius: 8px;
+
+        background: #FFFFFF;
+
+        &:not(:last-child) {
+            margin-right: 24px;
+        }
+
+        &_type_require {
+            width: 132px;
+        }
+
+        &_type_new {
+            width: 113px;
+        }
+
+        &_method_get {
+            box-shadow: 0 0 0 1px #34AAF2;
+        }
+
+        &_method_post {
+            box-shadow: 0 0 0 1px #00B956;
+        }
+
+        &_method_delete {
+            box-shadow: 0 0 0 1px #F62434;
+        }
+
+        &_method_put {
+            box-shadow: 0 0 0 1px #FFA717;
+        }
+    }
+
+    &__badge-icon {
+        width: 24px;
+        height: 24px;
+        margin-right: 8px;
+    }
+
+    &__badges {
+        display: flex;
+        margin-right: 16px;
     }
 }

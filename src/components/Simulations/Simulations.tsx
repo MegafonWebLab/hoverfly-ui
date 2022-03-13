@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Header, TextField, Select, Tile, Pagination, Preloader, Button, Paragraph } from '@megafon/ui-core';
+import { Header, TextField, Select, Pagination, Button, Paragraph } from '@megafon/ui-core';
 import type { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Select';
 import { cnCreate } from '@megafon/ui-helpers';
 import { ReactComponent as DeleteIcon } from '@megafon/ui-icons/basic-16-delete_16.svg';
+import { ReactComponent as AttensionIcon } from '@megafon/ui-icons/system-24-attention_24.svg';
+import { ReactComponent as GagIcon } from '@megafon/ui-icons/system-24-gag_24.svg';
 import Skeleton from 'react-loading-skeleton';
 import { ReactComponent as PlusIcon } from 'static/favicon/plus.svg';
 import { useSelector } from 'store/hooks';
@@ -16,6 +18,10 @@ const sortTypeItems = [{ title: 'By require', value: 'By require' }];
 // eslint-disable-next-line no-magic-numbers
 const SKELETON_LIST = [80, 120, 60, 80, 120, 80, 120, 60, 80, 120, 80, 120, 60, 80, 120];
 const WIDTH_MULTIPLIER = 3;
+const BADGE_ICON = {
+    require: GagIcon,
+    new: AttensionIcon,
+} as const;
 
 interface ISimulationsProps {
     onChange: (index: number | undefined, type: 'edit' | 'delete' | 'new') => void;
@@ -106,13 +112,24 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
     const renderPreloader = () =>
         SKELETON_LIST.map(width => (
             <div className={cn('preloader-item')}>
-                <Skeleton width={width * WIDTH_MULTIPLIER} height={22} />
+                <Skeleton width={width * WIDTH_MULTIPLIER} height={24} />
                 <Skeleton className={cn('preloader-circle')} circle width={22} height={22} />
             </div>
         ));
 
+    const renderBadge = (text: string, type: 'require' | 'new', method: string) => {
+        const Icon = BADGE_ICON[type];
+
+        return (
+            <div className={cn('badge', { method, type })}>
+                <Icon className={cn('badge-icon')} />
+                {text}
+            </div>
+        );
+    };
+
     const renderSimulationList = () =>
-        simulationListOnPage.map(({ method, name, index }) => (
+        simulationListOnPage.map(({ method, name, index, isNewState, isRequiresState }) => (
             <li
                 className={cn('item', { method })}
                 key={`${index + name}`}
@@ -122,13 +139,14 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
                 <div className={cn('item-text')}>
                     <span className={cn('item-method', { method })}>{method}</span>
                     <span className={cn('item-route')}>{name}</span>
-                    {!isOpen && index === deleteIndex && (
-                        <div className={cn('delete-loader')}>
-                            <Preloader color="black" />
-                        </div>
-                    )}
                 </div>
                 <div className={cn('item-buttons')}>
+                    {(isRequiresState || isNewState) && (
+                        <div className={cn('badges')}>
+                            {isRequiresState && renderBadge('require state', 'require', method)}
+                            {isNewState && renderBadge('new state', 'new', method)}
+                        </div>
+                    )}
                     <button
                         className={cn('delete-btn', { disabled: (!isOpen && index === deleteIndex) || !statusState })}
                         type="button"
@@ -178,11 +196,9 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
                     />
                 </div>
             </div>
-            <Tile className={cn('tile')} radius="rounded" shadowLevel="high">
-                <ul className={cn('list')}>
-                    {simulationStore.type === 'pending' ? renderPreloader() : renderSimulationList()}
-                </ul>
-            </Tile>
+            <ul className={cn('list')}>
+                {simulationStore.type === 'pending' ? renderPreloader() : renderSimulationList()}
+            </ul>
             {simulations.length > MAX_SIMULATIONS_ON_PAGE && (
                 <div className={cn('pagination-wrap')}>
                     <Pagination

@@ -24,11 +24,14 @@ export const getRouteList = (pairs: SimulationItem[]): RouteItem[] =>
         const pathValue = pair.request.path?.[0].value;
         const method = pair.request.method?.[0].value || 'GET';
         const isRequiresState = !!pair.request.requiresState;
+        const isNewState = !!pair.response.transitionsState;
 
         return {
-            name: `${pathValue}${isRequiresState ? ' [stateful]' : ''}`,
+            name: `${pathValue}`,
             index,
             method: method.toLowerCase(),
+            isRequiresState,
+            isNewState,
         };
     });
 
