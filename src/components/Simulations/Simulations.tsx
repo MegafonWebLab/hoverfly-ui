@@ -226,7 +226,7 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
                 </Paragraph>
                 <div className={cn('popup-buttons')}>
                     <Button
-                        className={cn('popup-button')}
+                        className={cn('popup-button', { delete: true })}
                         sizeAll="small"
                         type="outline"
                         actionType="button"
@@ -234,7 +234,7 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
                     >
                         Delete
                     </Button>
-                    <Button sizeAll="small" actionType="button" onClick={handleClose}>
+                    <Button sizeAll="small" type="outline" actionType="button" onClick={handleClose}>
                         Cancel
                     </Button>
                 </div>

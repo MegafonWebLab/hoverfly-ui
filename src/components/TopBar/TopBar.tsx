@@ -49,8 +49,10 @@ const TopBar: React.FC<{ isLogin?: boolean }> = ({ isLogin }) => {
         return (
             <Grid className={cn()} vAlign="center" hAlign="between">
                 <GridColumn all="2" tablet="3" mobile="5" className={cn('logo-wrapper')}>
-                    <img src={hoverflyLeftIcon} alt="Hoverfly" width="45" height="45" className={cn('fly')} />
-                    <img src={hoverflyIcon} alt="Hoverfly" width="130" height="25" />
+                    <img src={hoverflyLeftIcon} alt="Hoverfly" width="75" height="75" className={cn('fly')} />
+                    <div className={cn('logo-text')}>
+                        <img src={hoverflyIcon} alt="Hoverfly" width="130" height="25" />
+                    </div>
                 </GridColumn>
             </Grid>
         );
@@ -59,8 +61,8 @@ const TopBar: React.FC<{ isLogin?: boolean }> = ({ isLogin }) => {
     return (
         <Grid className={cn()} vAlign="center" hAlign="between">
             <GridColumn all="7" tablet="7" mobile="12" className={cn('logo-wrapper')}>
-                <img src={hoverflyLeftIcon} alt="Hoverfly" width="45" height="45" className={cn('fly')} />
-                <div>
+                <img src={hoverflyLeftIcon} alt="Hoverfly" width="75" height="75" className={cn('fly')} />
+                <div className={cn('logo-text')}>
                     <img src={hoverflyIcon} alt="Hoverfly" width="130" height="25" />
                     <div className={cn('versions')}>
                         <span className={cn('version')}>Server {versionServer}</span>
