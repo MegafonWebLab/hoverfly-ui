@@ -121,8 +121,9 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
     }, [simulationStore.type]);
 
     const renderPreloader = () =>
-        SKELETON_LIST.map(width => (
-            <div className={cn('preloader-item')}>
+        SKELETON_LIST.map((width, index) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <div className={cn('preloader-item')} key={index}>
                 <Skeleton width={width * WIDTH_MULTIPLIER} height={24} />
                 <Skeleton className={cn('preloader-circle')} circle width={22} height={22} />
             </div>
