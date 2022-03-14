@@ -25,22 +25,27 @@ const SimulationsWrapper: React.FC = (): JSX.Element => {
     const nav = useNavigate();
     const [isUpdating, setIsUpdating] = useState<boolean>(false);
     const [pathValue, setPathValue] = useState<string>('');
-    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [{ value: isOpen, type: popupType }, setIsOpen] = useState<{ type: string; value: boolean }>({
+        type: '',
+        value: false,
+    });
     const [deleteIndex, setDeleteIndex] = useState<number | undefined>(undefined);
 
-    function handlePopupDelete(index: number) {
-        if (simulationStore.type === 'success') {
-            const pair = simulationStore.value.data.pairs[index];
+    function handlePopupDelete(type: string) {
+        return (index: number) => {
+            if (simulationStore.type === 'success') {
+                const pair = simulationStore.value.data.pairs[index];
 
-            setPathValue(`${pair.request?.method?.[0].value || ''} ${pair.request?.path?.[0].value}`);
-            setDeleteIndex(index);
-            setIsOpen(true);
-        }
+                setPathValue(`${pair.request?.method?.[0].value || ''} ${pair.request?.path?.[0].value}`);
+                setDeleteIndex(index);
+                setIsOpen({ value: true, type });
+            }
+        };
     }
 
     const handleClose = useCallback(() => {
         setDeleteIndex(undefined);
-        setIsOpen(false);
+        setIsOpen({ value: false, type: '' });
     }, []);
 
     function removeSimulation(index: number) {
@@ -78,9 +83,12 @@ const SimulationsWrapper: React.FC = (): JSX.Element => {
     }
 
     function handleDelete() {
-        setIsOpen(false);
+        setIsOpen({ type: '', value: false });
         deleteIndex !== undefined && handleChangeSimulation(deleteIndex, 'delete');
-        nav(`/simulations`);
+
+        if (popupType === 'detail') {
+            nav(-1);
+        }
     }
 
     function handleChange(newState: SimulationResponse) {
@@ -89,7 +97,7 @@ const SimulationsWrapper: React.FC = (): JSX.Element => {
     }
 
     function handleBack() {
-        nav(SimulationRoutes.INDEX);
+        nav(-1);
     }
 
     useEffect(() => {
@@ -105,7 +113,7 @@ const SimulationsWrapper: React.FC = (): JSX.Element => {
 
     useEffect(() => {
         if (simulationStore.type === 'success' && isUpdating) {
-            nav(SimulationRoutes.INDEX);
+            nav(-1);
             setIsUpdating(false);
         }
     }, [isUpdating, simulationStore.type, nav]);
@@ -115,15 +123,27 @@ const SimulationsWrapper: React.FC = (): JSX.Element => {
             <Routes>
                 <Route
                     path="/edit/:routeIndex"
-                    element={<Simulation onBack={handleBack} onChange={handleChange} onDelete={handlePopupDelete} />}
+                    element={
+                        <Simulation
+                            onBack={handleBack}
+                            onChange={handleChange}
+                            onDelete={handlePopupDelete('detail')}
+                        />
+                    }
                 />
                 <Route
                     path="/new"
-                    element={<Simulation onBack={handleBack} onChange={handleChange} onDelete={handlePopupDelete} />}
+                    element={
+                        <Simulation
+                            onBack={handleBack}
+                            onChange={handleChange}
+                            onDelete={handlePopupDelete('detail')}
+                        />
+                    }
                 />
                 <Route
                     path="/"
-                    element={<Simulations onDelete={handlePopupDelete} onChange={handleChangeSimulation} />}
+                    element={<Simulations onDelete={handlePopupDelete('list')} onChange={handleChangeSimulation} />}
                 />
             </Routes>
             <Popup open={isOpen} onClose={handleClose}>
