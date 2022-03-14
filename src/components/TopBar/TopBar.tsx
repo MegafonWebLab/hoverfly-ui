@@ -4,6 +4,7 @@ import { cnCreate } from '@megafon/ui-helpers';
 import { ReactComponent as ProfileIcon } from '@megafon/ui-icons/basic-16-profile_16.svg';
 import { ReactComponent as ClearIcon } from '@megafon/ui-icons/system-16-refresh_16.svg';
 import disabledDownIcon from 'static/favicon/disabled_shut_down.svg';
+import hoverflyLeftIcon from 'static/favicon/hoverfly-img.png';
 import hoverflyIcon from 'static/favicon/hoverfly.png';
 import shutDownIcon from 'static/favicon/shut_down.svg';
 import { setUserName } from 'store/auth/authSlice';
@@ -47,7 +48,8 @@ const TopBar: React.FC<{ isLogin?: boolean }> = ({ isLogin }) => {
     if (isLogin) {
         return (
             <Grid className={cn()} vAlign="center" hAlign="between">
-                <GridColumn all="2" tablet="3" mobile="5">
+                <GridColumn all="2" tablet="3" mobile="5" className={cn('logo-wrapper')}>
+                    <img src={hoverflyLeftIcon} alt="Hoverfly" width="45" height="45" className={cn('fly')} />
                     <img src={hoverflyIcon} alt="Hoverfly" width="130" height="25" />
                 </GridColumn>
             </Grid>
@@ -56,11 +58,14 @@ const TopBar: React.FC<{ isLogin?: boolean }> = ({ isLogin }) => {
 
     return (
         <Grid className={cn()} vAlign="center" hAlign="between">
-            <GridColumn all="7" tablet="7" mobile="12">
-                <img src={hoverflyIcon} alt="Hoverfly" width="130" height="25" />
-                <div className={cn('versions')}>
-                    <span className={cn('version')}>Server {versionServer}</span>
-                    <span className={cn('version')}>UI v{VERSION}</span>
+            <GridColumn all="7" tablet="7" mobile="12" className={cn('logo-wrapper')}>
+                <img src={hoverflyLeftIcon} alt="Hoverfly" width="45" height="45" className={cn('fly')} />
+                <div>
+                    <img src={hoverflyIcon} alt="Hoverfly" width="130" height="25" />
+                    <div className={cn('versions')}>
+                        <span className={cn('version')}>Server {versionServer}</span>
+                        <span className={cn('version')}>UI v{VERSION}</span>
+                    </div>
                 </div>
             </GridColumn>
             <GridColumn all="5" tablet="5" mobile="12" className={cn('right')}>
