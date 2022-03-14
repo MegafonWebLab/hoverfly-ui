@@ -243,7 +243,7 @@ const Journal: React.FC<{ isActive: boolean }> = ({ isActive }) => {
                         classes={{ icon: cn('checkbox'), inner: cn('checkbox-inner') }}
                         checked={filterState.isAllErrors}
                         onChange={handleChangeAllErrors}
-                        fontSize="small"
+                        fontSize="regular"
                     >
                         Show only errors
                     </Checkbox>

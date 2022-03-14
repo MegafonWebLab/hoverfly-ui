@@ -14,7 +14,6 @@ $(b) {
     @media (--mobileS) {
         flex-direction: column;
     }
-
     @media (--mobileSM) {
         height: 100px;
     }
@@ -91,7 +90,6 @@ $(b) {
         margin-right: 5px;
 
         fill: #FFA717;
-
     }
 
     &__clear-icon_disabled {
@@ -141,7 +139,11 @@ $(b) {
 
     &__divider {
         height: 25px;
-        border-left: 1px solid #CCCCCC;
         margin-right: 16px;
+        border-left: 1px solid #CCCCCC;
+    }
+
+    &__button-wrap:first-child {
+        margin-right: 12px;
     }
 }

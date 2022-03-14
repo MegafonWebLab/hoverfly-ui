@@ -6,6 +6,7 @@ import { ReactComponent as DeleteIcon } from '@megafon/ui-icons/basic-16-delete_
 import { ReactComponent as AttensionIcon } from '@megafon/ui-icons/system-24-attention_24.svg';
 import { ReactComponent as GagIcon } from '@megafon/ui-icons/system-24-gag_24.svg';
 import Skeleton from 'react-loading-skeleton';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ReactComponent as PlusIcon } from 'static/favicon/plus.svg';
 import { useSelector } from 'store/hooks';
 import Popup from '../Popup/Popup';
@@ -13,7 +14,7 @@ import type { RouteItem } from './types';
 import { getRouteList } from './utils';
 import './Simulations.pcss';
 
-const MAX_SIMULATIONS_ON_PAGE = 16;
+const MAX_SIMULATIONS_ON_PAGE = 50;
 const sortTypeItems = [{ title: 'By require', value: 'By require' }];
 // eslint-disable-next-line no-magic-numbers
 const SKELETON_LIST = [80, 120, 60, 80, 120, 80, 120, 60, 80, 120, 80, 120, 60, 80, 120];
@@ -31,11 +32,14 @@ const cn = cnCreate('simulations');
 const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
     const simulationStore = useSelector(state => state.simulation);
     const statusState = !!useSelector(state => state.status.value);
+    const nav = useNavigate();
+    const [searchParams] = useSearchParams();
+    const page = searchParams.get('page') || '1';
 
     const [pathValue, setPathValue] = useState<string>('');
     const [search, setSearch] = useState<string>('');
     const [sortType, setSortType] = useState<ISelectItem<string>>(sortTypeItems[0]);
-    const [activePage, setActivePage] = useState<number>(1);
+    const [activePage, setActivePage] = useState<number>(Number(page));
     const [simulations, setSimulations] = useState<RouteItem[]>([]);
     const [deleteIndex, setDeleteIndex] = useState<number | undefined>(undefined);
     const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -66,7 +70,7 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
             if (deleteIndex === undefined && simulationStore.type === 'success') {
                 const pair = simulationStore.value.data.pairs[index];
 
-                setPathValue(`${pair.request?.method?.[0].value} ${pair.request?.path?.[0].value}`);
+                setPathValue(`${pair.request?.method?.[0].value || ''} ${pair.request?.path?.[0].value}`);
                 setDeleteIndex(index);
                 handleOpen();
             }
@@ -83,6 +87,7 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
     }
 
     function handlePaginationChange(currentPage: number) {
+        nav(`/simulations?page=${currentPage}`);
         setActivePage(currentPage);
     }
 
@@ -95,11 +100,17 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
 
     function handleChangeSearch(e: React.ChangeEvent<HTMLInputElement>) {
         if (activePage !== 1) {
-            setActivePage(1);
+            nav(`/simulations`);
         }
 
         setSearch(e.target.value);
     }
+
+    useEffect(() => {
+        if (Number(page) !== activePage) {
+            setActivePage(Number(page));
+        }
+    }, [page, activePage]);
 
     useEffect(() => {
         if (simulationStore.type === 'success') {
@@ -209,7 +220,9 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
                 </div>
             )}
             <Popup open={isOpen} onClose={handleClose}>
-                <Paragraph align="center">Delete {pathValue}?</Paragraph>
+                <Paragraph className={cn('popup-text')} align="center">
+                    Delete {pathValue}?
+                </Paragraph>
                 <div className={cn('popup-buttons')}>
                     <Button
                         className={cn('popup-button')}

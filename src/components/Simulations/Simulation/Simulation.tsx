@@ -90,7 +90,7 @@ const Simulation: React.FC<ISimulationProps> = ({ onBack, onChange }) => {
     const { transitionsState, requiresState } = serverState;
 
     function handleSubmit() {
-        if (state) {
+        if (state && simulationStore.type !== 'pending') {
             const pair = currentPair
                 ? mergeServerStateToCurrentPair(
                       mergeHeaderStateToCurrentPair(mergeBodyStateToCurrentPair(currentPair, body), headerQuery),
@@ -278,14 +278,14 @@ const Simulation: React.FC<ISimulationProps> = ({ onBack, onChange }) => {
                             <div className={cn('collapse-content')}>
                                 <SimulationFieldsBlock
                                     hasAddButton
-                                    title="Require states"
+                                    title="Require state"
                                     onAddButtonClick={handleToggleServerState('requiresState')}
                                 >
                                     {!!requiresState.length && renderFieldList(requiresState, 'requiresState')}
                                 </SimulationFieldsBlock>
                                 <SimulationFieldsBlock
                                     hasAddButton
-                                    title="New states"
+                                    title="New state"
                                     onAddButtonClick={handleToggleServerState('transitionsState')}
                                 >
                                     {!!transitionsState.length && renderFieldList(transitionsState, 'transitionsState')}

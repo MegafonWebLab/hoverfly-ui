@@ -48,7 +48,7 @@ const TopBar: React.FC<{ isLogin?: boolean }> = ({ isLogin }) => {
         return (
             <Grid className={cn()} vAlign="center" hAlign="between">
                 <GridColumn all="2" tablet="3" mobile="5">
-                    <img src={hoverflyIcon} alt="Hoverfly" width="137" height="21" />
+                    <img src={hoverflyIcon} alt="Hoverfly" width="130" height="25" />
                 </GridColumn>
             </Grid>
         );
@@ -57,7 +57,7 @@ const TopBar: React.FC<{ isLogin?: boolean }> = ({ isLogin }) => {
     return (
         <Grid className={cn()} vAlign="center" hAlign="between">
             <GridColumn all="7" tablet="7" mobile="12">
-                <img src={hoverflyIcon} alt="Hoverfly" width="137" height="21" />
+                <img src={hoverflyIcon} alt="Hoverfly" width="130" height="25" />
                 <div className={cn('versions')}>
                     <span className={cn('version')}>Server {versionServer}</span>
                     <span className={cn('version')}>UI v{VERSION}</span>
