@@ -64,12 +64,13 @@ type ChangeCurrentNames = keyof Omit<PairItemRequest, 'headers' | 'query' | 'req
 const useZeroMemo = (el: JSX.Element) => useMemo(() => el, []);
 
 interface ISimulationProps {
+    onDelete: (index: number) => void;
     onChange: (state: SimulationResponse) => void;
     onBack: () => void;
 }
 
 const cn = cnCreate('simulation');
-const Simulation: React.FC<ISimulationProps> = ({ onBack, onChange }) => {
+const Simulation: React.FC<ISimulationProps> = ({ onBack, onChange, onDelete }) => {
     const { routeIndex: paramIndex } = useParams<{ routeIndex?: string }>();
     const routeIndex = paramIndex !== undefined ? Number(paramIndex) : undefined;
     const simulationStore = useSelector(state => state.simulation);
@@ -174,6 +175,10 @@ const Simulation: React.FC<ISimulationProps> = ({ onBack, onChange }) => {
         };
     }
 
+    function handleDelete(_e: React.MouseEvent<HTMLButtonElement>) {
+        paramIndex && onDelete(Number(paramIndex));
+    }
+
     useEffect(() => {
         simulationStore.type === 'success' && setState(simulationStore.value);
     }, [simulationStore]);
@@ -265,6 +270,11 @@ const Simulation: React.FC<ISimulationProps> = ({ onBack, onChange }) => {
                         >
                             {routeIndex === undefined ? 'Create' : 'Update'}
                         </Button>
+                        {routeIndex !== undefined && (
+                            <Button className={cn('delete')} type="outline" onClick={handleDelete}>
+                                Delete
+                            </Button>
+                        )}
                     </div>
                 </div>
                 <div className={cn('content')}>

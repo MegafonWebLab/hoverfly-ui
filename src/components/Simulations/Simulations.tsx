@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Header, TextField, Select, Pagination, Button, Paragraph } from '@megafon/ui-core';
+import React, { useEffect, useState } from 'react';
+import { Header, TextField, Select, Pagination } from '@megafon/ui-core';
 import type { ISelectItem } from '@megafon/ui-core/dist/lib/components/Select/Select';
 import { cnCreate } from '@megafon/ui-helpers';
 import { ReactComponent as DeleteIcon } from '@megafon/ui-icons/basic-16-delete_16.svg';
@@ -9,7 +9,6 @@ import Skeleton from 'react-loading-skeleton';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ReactComponent as PlusIcon } from 'static/favicon/plus.svg';
 import { useSelector } from 'store/hooks';
-import Popup from '../Popup/Popup';
 import type { RouteItem } from './types';
 import { getRouteList } from './utils';
 import './Simulations.pcss';
@@ -25,24 +24,22 @@ const BADGE_ICON = {
 } as const;
 
 interface ISimulationsProps {
+    onDelete: (index: number) => void;
     onChange: (index: number | undefined, type: 'edit' | 'delete' | 'new') => void;
 }
 
 const cn = cnCreate('simulations');
-const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
+const Simulations: React.FC<ISimulationsProps> = ({ onChange, onDelete }) => {
     const simulationStore = useSelector(state => state.simulation);
     const statusState = !!useSelector(state => state.status.value);
     const nav = useNavigate();
     const [searchParams] = useSearchParams();
     const page = searchParams.get('page') || '1';
 
-    const [pathValue, setPathValue] = useState<string>('');
     const [search, setSearch] = useState<string>('');
     const [sortType, setSortType] = useState<ISelectItem<string>>(sortTypeItems[0]);
     const [activePage, setActivePage] = useState<number>(Number(page));
     const [simulations, setSimulations] = useState<RouteItem[]>([]);
-    const [deleteIndex, setDeleteIndex] = useState<number | undefined>(undefined);
-    const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const searchSimulations = React.useMemo(
         () => simulations.filter(({ name }) => name.search(search) !== -1),
@@ -54,12 +51,6 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
     const simulationListOnPage = searchSimulations.slice(firstSimulationOnPageIndex, lastSimulationOnPageIndex);
     const totalSimulationPages = Math.ceil(searchSimulations.length / MAX_SIMULATIONS_ON_PAGE);
 
-    const handleOpen = useCallback(() => setIsOpen(true), []);
-    const handleClose = useCallback(() => {
-        setDeleteIndex(undefined);
-        setIsOpen(false);
-    }, []);
-
     function handleSimulationEditButtonClick(index: number) {
         return () => onChange(index, 'edit');
     }
@@ -67,23 +58,12 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
     function handleSimulationDeleteButtonClick(index: number) {
         return (e: React.MouseEvent<HTMLButtonElement>) => {
             e.stopPropagation();
-            if (deleteIndex === undefined && simulationStore.type === 'success') {
-                const pair = simulationStore.value.data.pairs[index];
-
-                setPathValue(`${pair.request?.method?.[0].value || ''} ${pair.request?.path?.[0].value}`);
-                setDeleteIndex(index);
-                handleOpen();
-            }
+            onDelete(index);
         };
     }
 
     function handleAdd() {
         onChange(undefined, 'new');
-    }
-
-    function handleDelete() {
-        setIsOpen(false);
-        deleteIndex !== undefined && onChange(deleteIndex, 'delete');
     }
 
     function handlePaginationChange(currentPage: number) {
@@ -115,7 +95,6 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
     useEffect(() => {
         if (simulationStore.type === 'success') {
             setSimulations(getRouteList(simulationStore.value.data.pairs));
-            setDeleteIndex(undefined);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [simulationStore.type]);
@@ -160,9 +139,9 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
                         </div>
                     )}
                     <button
-                        className={cn('delete-btn', { disabled: (!isOpen && index === deleteIndex) || !statusState })}
+                        className={cn('delete-btn', { disabled: !statusState })}
                         type="button"
-                        disabled={index === deleteIndex || !statusState}
+                        disabled={!statusState}
                         onClick={handleSimulationDeleteButtonClick(index)}
                     >
                         <DeleteIcon />
@@ -220,25 +199,6 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange }) => {
                     />
                 </div>
             )}
-            <Popup open={isOpen} onClose={handleClose}>
-                <Paragraph className={cn('popup-text')} align="center">
-                    Delete {pathValue}?
-                </Paragraph>
-                <div className={cn('popup-buttons')}>
-                    <Button
-                        className={cn('popup-button', { delete: true })}
-                        sizeAll="small"
-                        type="outline"
-                        actionType="button"
-                        onClick={handleDelete}
-                    >
-                        Delete
-                    </Button>
-                    <Button sizeAll="small" type="outline" actionType="button" onClick={handleClose}>
-                        Cancel
-                    </Button>
-                </div>
-            </Popup>
         </div>
     );
 };

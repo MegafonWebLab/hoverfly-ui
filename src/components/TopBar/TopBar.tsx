@@ -13,6 +13,8 @@ import { useDispatch, useSelector } from 'store/hooks';
 import { deleteShutdownAsync } from 'store/shutdown/shutdownSlice';
 import './TopBar.pcss';
 
+const HOVERFLY_URL = 'https://hoverfly.io';
+
 const cn = cnCreate('topbar');
 const TopBar: React.FC<{ isLogin?: boolean }> = ({ isLogin }) => {
     const dispatch = useDispatch();
@@ -49,7 +51,9 @@ const TopBar: React.FC<{ isLogin?: boolean }> = ({ isLogin }) => {
         return (
             <Grid className={cn()} vAlign="center" hAlign="between">
                 <GridColumn all="2" tablet="3" mobile="5" className={cn('logo-wrapper')}>
-                    <img src={hoverflyLeftIcon} alt="Hoverfly" width="75" height="75" className={cn('fly')} />
+                    <a href={HOVERFLY_URL} target="_blank" rel="noopener noreferrer">
+                        <img src={hoverflyLeftIcon} alt="Hoverfly" width="75" height="75" className={cn('fly')} />
+                    </a>
                     <div className={cn('logo-text')}>
                         <img src={hoverflyIcon} alt="Hoverfly" width="130" height="25" />
                     </div>
@@ -61,7 +65,9 @@ const TopBar: React.FC<{ isLogin?: boolean }> = ({ isLogin }) => {
     return (
         <Grid className={cn()} vAlign="center" hAlign="between">
             <GridColumn all="7" tablet="7" mobile="12" className={cn('logo-wrapper')}>
-                <img src={hoverflyLeftIcon} alt="Hoverfly" width="75" height="75" className={cn('fly')} />
+                <a href={HOVERFLY_URL} target="_blank" rel="noopener noreferrer">
+                    <img src={hoverflyLeftIcon} alt="Hoverfly" width="75" height="75" className={cn('fly')} />
+                </a>
                 <div className={cn('logo-text')}>
                     <img src={hoverflyIcon} alt="Hoverfly" width="130" height="25" />
                     <div className={cn('versions')}>

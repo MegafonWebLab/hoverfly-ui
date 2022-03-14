@@ -14,6 +14,8 @@ $(b) {
         top: 20px;
 
         height: 100px;
+
+        padding-right: 16px;
     }
 
     &__back-link {
@@ -65,16 +67,33 @@ $(b) {
     }
 
     &__title {
-        margin-bottom: 48px;
+        margin-top: 24px;
+        margin-bottom: 32px;
 
         font-weight: bold;
         font-size: 32px;
+        line-height: 38px;
     }
 
     &__action-button {
         display: flex;
+        flex-direction: column;
 
-        justify-content: center;
+        gap: 20px;
+    }
+
+    & &__delete {
+        color: var(--fury);
+
+        box-shadow: inset 0 0 0 1px var(--fury);
+
+        &:hover {
+            color: var(--base) !important;
+
+            background: var(--warmRedC80) !important;
+
+            box-shadow: none !important;
+        }
     }
 
     &__delete-btn {
