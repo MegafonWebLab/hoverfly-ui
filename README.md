@@ -1,20 +1,34 @@
-# Hoverfly-ui
+# Hoverfly UI
 
-## Install dependencies
-```bash
+Hoverfly is developed by [SpectoLabs](https://specto.io/) and used to virtualize services. This project adds a neat UI
+interface for working with the server.
+
+## How does it look?
+
+![Dashboard](images/dashboard.png)
+![Simulations](images/simulations.png)
+![Simulation](images/simulation.png)
+![Settings](images/settings.png)
+
+## Development
+
+To prepare the dev environment, first thing is to install dependencies:
+
+```shell
 $ yarn install
 ```
 
-## Run lint
-```bash
-$ yarn lint
+Then all you need to do is to start it via simple command:
+
+```shell
+$ yarn start
 ```
 
-## Development
-Before run project need to start any hoverfly server.
+It starts a webpack server on port `4200`.
 
-### Run hoverfly server
-```bash
+Since it uses Hoverfly API, the hoverfly itself has to be started, for example:
+
+```shell
 $ hoverfly -webserver -dev
 
 # or run with auth
@@ -22,9 +36,10 @@ $ hoverfly -webserver -dev
 $ hoverlfy -webserver -dev -auth -username admin -password admin
 ```
 
-### Run project
-```bash
-$ yarn start
+There's also a special command to run the linter:
+
+```shell
+$ yarn lint
 ```
 
 ## Contributing
