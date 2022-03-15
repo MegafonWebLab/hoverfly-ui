@@ -3,7 +3,7 @@ import { TextLink } from '@megafon/ui-core';
 import { cnCreate } from '@megafon/ui-helpers';
 import './Footer.pcss';
 
-const GITHUB_LINK = 'https://github.com/MegafonWebLab/hoverfly-ui';
+const GITHUB_LINK = 'https://github.com/MegafonWebLab';
 const SPECTOLAB_LINK = 'https://specto.io';
 const cn = cnCreate('footer');
 const Footer: React.FC = () => (
