@@ -38,3 +38,4 @@ jobs:
           file: target/release/build
           asset_name: build
           repo_token: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ github.ref }}
