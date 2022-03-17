@@ -35,7 +35,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          file: target/release/build
+          file: build
           asset_name: build
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           tag: ${{ github.ref }}
