@@ -35,5 +35,5 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          file: target/release/build
+          file: build
           asset_name: build
