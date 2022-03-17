@@ -1,0 +1,42 @@
+name: test and release
+
+on: push
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.x'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn build
+
+      - name: Linting sources
+        run: yarn lint
+
+      - name: Typecheck
+        run: yarn typecheck
+
+      - name: Tests
+        run: yarn test
+
+      - name: Zip artifact for deployment
+        run: zip release.zip ./build/* -r
+        if: startsWith(github.ref, 'refs/tags/')
+
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: release.zip

@@ -29,12 +29,12 @@ const Logs: React.FC<{ isActive: boolean }> = ({ isActive }) => {
     const [time, setTime] = React.useState<Date | undefined>(undefined);
     const [fieldLimit, setFieldLimit] = React.useState<number | undefined>(undefined);
     const [limit, setLimit] = React.useState<number | undefined>(undefined);
-    const [isChanged, setIsChaged] = React.useState<boolean>(false);
+    const [isChanged, setIsChanged] = React.useState<boolean>(false);
     const tmpDiv = React.useRef<HTMLDivElement>(document.createElement('div'));
     // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleChangeLimit = React.useCallback(
         debounce((value: number | undefined) => {
-            setIsChaged(true);
+            setIsChanged(true);
             setLimit(value);
         }, DEBOUNCE_MILLISECONDS),
         [],
@@ -43,15 +43,15 @@ const Logs: React.FC<{ isActive: boolean }> = ({ isActive }) => {
     const handleChangeFieldLimit = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const value = getNumber(e.target.value);
         setFieldLimit(value);
-        setIsChaged(true);
+        setIsChanged(true);
         handleChangeLimit(value);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleSubmit = useCallback(() => {
-        setIsChaged(false);
+        setIsChanged(false);
         dispatch(getLogsAsync(time ? { from: time.getTime() / TIMESTAMP_DIVIDER, limit } : { limit }));
-    }, [limit, time]);
+    }, [dispatch, limit, time]);
 
     function handleChangeTime(value: Date) {
         setTime(value);
@@ -70,6 +70,7 @@ const Logs: React.FC<{ isActive: boolean }> = ({ isActive }) => {
         if (logsStore.type === 'success') {
             setState(logsStore.value.logs || []);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [logsStore.type]);
 
     const renderAdditional = (log: LogsItem) => {
@@ -125,7 +126,7 @@ const Logs: React.FC<{ isActive: boolean }> = ({ isActive }) => {
                 />
             </div>
         ),
-        [time, statusState, fieldLimit, isChanged, handleChangeFieldLimit, handleSubmit, logsStore.type],
+        [time, statusState, fieldLimit, isChanged, handleChangeFieldLimit, handleSubmit],
     );
 
     const renderLogs = useMemo(

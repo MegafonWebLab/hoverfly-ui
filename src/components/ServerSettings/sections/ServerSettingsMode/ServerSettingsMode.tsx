@@ -89,6 +89,7 @@ const ServerSettingsMode: React.FC = (): JSX.Element => {
         if (modeState.type === 'success') {
             setModeState(modeState.value.mode);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [modeState.type, setModeState]);
 
     useEffect(() => {
