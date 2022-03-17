@@ -43,7 +43,7 @@ const TopBar: React.FC<{ isLogin?: boolean }> = ({ isLogin }) => {
         if (mainInfo.type === 'success') {
             dispatch(setUserName());
         }
-    }, [mainInfo.type]);
+    }, [dispatch, mainInfo.type]);
 
     const preloader = <Preloader sizeAll="small" color="black" className={cn('button-preloader')} />;
 

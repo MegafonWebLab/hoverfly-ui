@@ -5,7 +5,8 @@
   "scripts": {
     "start": "PORT=4200 node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js",
+    "test": "CI=1 node scripts/test.js --passWithNoTests",
+    "typecheck": "tsc",
     "lint": "yarn lint:style && yarn lint:js",
     "lint:js": "eslint --ext .ts,.tsx src --max-warnings=0",
     "lint:style": "stylelint \"**/*.(pcss)\"",
@@ -150,7 +151,7 @@
       "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
     ],
     "testEnvironment": "jsdom",
-    "testRunner": "/Users/ifonin/mp/mf/hoverfly-ui/node_modules/jest-circus/runner.js",
+    "testRunner": "<rootDir>/node_modules/jest-circus/runner.js",
     "transform": {
       "^.+\\.(js|jsx|mjs|cjs|ts|tsx)$": "<rootDir>/config/jest/babelTransform.js",
       "^.+\\.p?css$": "<rootDir>/config/jest/cssTransform.js",
