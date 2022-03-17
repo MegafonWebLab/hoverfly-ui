@@ -32,7 +32,8 @@ jobs:
         run: yarn test
 
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: svenstaro/upload-release-action@v2
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: build
+          file: target/release/build
+          asset_name: build
