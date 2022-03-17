@@ -1,6 +1,6 @@
 {
   "name": "hoverfly-ui",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "scripts": {
     "start": "PORT=4200 node scripts/start.js",
