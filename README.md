@@ -10,6 +10,10 @@ interface for working with the server.
 ![Simulation](images/simulation.png)
 ![Settings](images/settings.png)
 
+## Usage
+
+For now, the UI is available within hoverfly from [our fork](https://github.com/MegafonWebLab/hoverfly) and we do our best to keep it up-to-date.
+
 ## Development
 
 To prepare the dev environment, first thing is to install dependencies:
