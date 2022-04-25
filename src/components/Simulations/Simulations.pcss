@@ -18,10 +18,13 @@ $(b) {
     }
 
     &__active-simulations {
-        display: grid;
-        grid-template-columns: 186px 103px;
+        display: flex;
         gap: 16px;
         align-items: center;
+    }
+
+    &__menu-button {
+        width: 120px;
     }
 
     &__fields {
@@ -279,5 +282,48 @@ $(b) {
     &__badges {
         display: flex;
         margin-right: 16px;
+    }
+
+    &__import-popup {
+        width: 600px;
+    }
+
+    &__import-popup-wrapper {
+        padding: 36px;
+    }
+
+    &__import-title {
+        margin-bottom: 12px;
+    }
+
+    &__import-dropzone {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        margin-bottom: 24px;
+        border-width: 2px;
+        border-radius: 2px;
+        border-color: #eeeeee;
+        border-style: dashed;
+        background-color: #fafafa;
+        color: #bdbdbd;
+        outline: none;
+        transition: border .24s ease-in-out;
+    }
+
+    &__import-file {
+        margin-bottom: 24px;
+    }
+
+    &__import-pairs,
+    &__import-errors {
+        margin-bottom: 24px;
+    }
+
+    &__import-buttons {
+        display: flex;
+        justify-content: space-around;
     }
 }

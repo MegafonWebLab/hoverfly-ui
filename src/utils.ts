@@ -57,3 +57,16 @@ export const showNotification = (title: string, message?: string, isError = true
 };
 
 export const hightlightHtml = (code: string): AutoHighlightResult => hljs.highlightAuto(code, ['json', 'html', 'xml']);
+
+export const downloadFile = (data: BlobPart, filename: string, type = 'application/json'): void => {
+    const file = new Blob([data], { type });
+    const a = document.createElement('a');
+    const url = URL.createObjectURL(file);
+
+    a.href = url;
+    a.download = filename;
+    a.click();
+    setTimeout(() => {
+        window.URL.revokeObjectURL(url);
+    }, 0);
+};

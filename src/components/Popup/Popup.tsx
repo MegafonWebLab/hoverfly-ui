@@ -6,13 +6,17 @@ import './Popup.pcss';
 const HEIGHT_DELIMETER = 4;
 
 interface IPopupProps {
+    classes?: {
+        root?: string;
+        wrapper?: string;
+    };
     open: boolean;
     fade?: boolean;
     onClose?: () => void;
 }
 
 const cn = cnCreate('popup');
-const Popup: React.FC<IPopupProps> = ({ open, children, fade, onClose }) => {
+const Popup: React.FC<IPopupProps> = ({ open, children, fade, onClose, classes }) => {
     const [offsetTop, setOffsetTop] = React.useState<number>(0);
     const nodeWrapperRef = React.useRef<HTMLDivElement | null>(null);
 
@@ -42,7 +46,7 @@ const Popup: React.FC<IPopupProps> = ({ open, children, fade, onClose }) => {
     return (
         <Modal
             isOpen={open}
-            className={cn('content')}
+            className={cn('content', [classes?.root])}
             portalClassName={cn()}
             overlayClassName={cn('overlay')}
             bodyOpenClassName="popup-open"
@@ -52,7 +56,7 @@ const Popup: React.FC<IPopupProps> = ({ open, children, fade, onClose }) => {
             ariaHideApp={false}
             onRequestClose={handleClose}
         >
-            <div className={cn('wrapper')}>{children}</div>
+            <div className={cn('wrapper', [classes?.wrapper])}>{children}</div>
             {fade && <div className={cn('background')} />}
         </Modal>
     );

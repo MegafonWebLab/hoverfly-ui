@@ -259,3 +259,131 @@ export const addOrRemoveEl = <T>(list: T[], data: { add: T; remove?: number }): 
 
     return newList;
 };
+
+export type ValidateImport = {
+    type: 'success' | 'error';
+    message: string;
+};
+
+const MATCHERS = ['exact', 'glob', 'regex', 'xml', 'xpath', 'json', 'jsonPartial', 'jsonpath'];
+function inValidMatcher(data: any): boolean {
+    if (Array.isArray(data)) {
+        return data.reduce((acc, item) => {
+            if (typeof item.mather != null && item.value != null) {
+                acc = !MATCHERS.includes(item.matcher);
+            }
+
+            return acc;
+        }, true);
+    }
+
+    return true;
+}
+
+export function validateImport(data: unknown): ValidateImport {
+    const result: ValidateImport = { type: 'success', message: '' };
+    const messages: string[] = [];
+    if (!Array.isArray(data)) {
+        return { type: 'error', message: 'Root element should be array of simulations' };
+    }
+
+    data.forEach((elem: any, index: number) => {
+        if (typeof elem !== 'object' && Array.isArray(elem)) {
+            messages.push('Element of array should be object with request and response keys');
+
+            return;
+        }
+        if (
+            typeof elem === 'object' &&
+            elem != null &&
+            typeof elem.request !== 'object' &&
+            typeof elem.response !== 'object'
+        ) {
+            messages.push(`index[${index}] element should have request and response keys`);
+
+            // eslint-disable-next-line no-useless-return
+            return;
+        }
+
+        if (elem.request.path) {
+            inValidMatcher(elem.request.path) && messages.push(`index[${index}] not valid path`);
+        }
+
+        inValidMatcher(elem.request.method) && messages.push(`index[${index}] not valid method`);
+
+        if (elem.request.destination) {
+            inValidMatcher(elem.request.destination) && messages.push(`index[${index}] not valid destination`);
+        }
+
+        if (elem.request.scheme) {
+            inValidMatcher(elem.request.scheme) && messages.push(`index[${index}] not valid scheme`);
+        }
+
+        if (elem.request.body) {
+            inValidMatcher(elem.request.body) && messages.push(`index[${index}] not valid body`);
+        }
+
+        const { headers, query, requiresState } = elem.request;
+        if (headers && typeof headers === 'object' && Object.keys(headers).length > 0) {
+            Object.entries(headers).forEach(([_, header]) => {
+                inValidMatcher(header) && messages.push(`index[${index}] not valid headers`);
+            });
+        }
+
+        if (query && typeof query === 'object' && Object.keys(query).length > 0) {
+            Object.entries(query).forEach(([_, queryVal]) => {
+                inValidMatcher(queryVal) && messages.push(`index[${index}] not valid query`);
+            });
+        }
+
+        if (requiresState && typeof query === 'object' && Object.keys(query).length > 0) {
+            Object.entries(requiresState).forEach(([_, state]) => {
+                if (typeof state !== 'string') messages.push(`index[${index}] not valid requiresState`);
+            });
+        }
+
+        if (typeof elem.response.status !== 'number') {
+            messages.push(`index[${index}] not valid response.status`);
+        }
+
+        if (elem.response.fixedDelay != null && typeof elem.response.fixedDelay !== 'number') {
+            messages.push(`index[${index}] not valid response.fixedDelay`);
+        }
+
+        if (typeof elem.response.body !== 'string') {
+            messages.push(`index[${index}] not valid response.body`);
+        }
+
+        if (elem.response.encodedBody != null && typeof elem.response.encodedBody !== 'boolean') {
+            messages.push(`index[${index}] not valid response.encodedBody`);
+        }
+
+        if (elem.response.headers != null && typeof elem.response.headers === 'object') {
+            Object.entries(elem.response.headers).forEach(([_, state]) => {
+                if (!Array.isArray(state)) messages.push(`index[${index}] not valid response.headers`);
+            });
+        }
+
+        if (elem.response.templated != null && typeof elem.response.templated !== 'boolean') {
+            messages.push(`index[${index}] not valid response.templated`);
+        }
+
+        if (elem.response.removesState != null) {
+            !Array.isArray(elem.response.removesState) &&
+                messages.push(`index[${index}] not valid response.removesState`);
+        }
+
+        if (elem.response.transitionsState != null && typeof elem.response.transitionsState === 'object') {
+            Object.entries(elem.response.transitionsState).forEach(([_, state]) => {
+                if (typeof state !== 'string') messages.push(`index[${index}] not valid response.transitionsState`);
+            });
+        }
+    });
+
+    if (messages.length > 0) {
+        result.type = 'error';
+        result.message = messages.join('<br />');
+    }
+
+    return result;
+}

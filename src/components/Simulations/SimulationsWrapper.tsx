@@ -96,6 +96,10 @@ const SimulationsWrapper: React.FC = (): JSX.Element => {
         dispatch(createSimulationAsync({ data: newState, type: 'simulation' }));
     }
 
+    function handleImport(newState: SimulationResponse) {
+        dispatch(createSimulationAsync({ data: newState, type: 'simulation' }));
+    }
+
     function handleBack() {
         nav(-1);
     }
@@ -143,7 +147,13 @@ const SimulationsWrapper: React.FC = (): JSX.Element => {
                 />
                 <Route
                     path="/"
-                    element={<Simulations onDelete={handlePopupDelete('list')} onChange={handleChangeSimulation} />}
+                    element={
+                        <Simulations
+                            onDelete={handlePopupDelete('list')}
+                            onChange={handleChangeSimulation}
+                            onImport={handleImport}
+                        />
+                    }
                 />
             </Routes>
             <Popup open={isOpen} onClose={handleClose}>
