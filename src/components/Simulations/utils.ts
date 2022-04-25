@@ -266,6 +266,7 @@ export type ValidateImport = {
 };
 
 const MATCHERS = ['exact', 'glob', 'regex', 'xml', 'xpath', 'json', 'jsonPartial', 'jsonpath'];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function inValidMatcher(data: any): boolean {
     if (Array.isArray(data)) {
         return data.reduce((acc, item) => {
@@ -287,6 +288,7 @@ export function validateImport(data: unknown): ValidateImport {
         return { type: 'error', message: 'Root element should be array of simulations' };
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data.forEach((elem: any, index: number) => {
         if (typeof elem !== 'object' && Array.isArray(elem)) {
             messages.push('Element of array should be object with request and response keys');
