@@ -64,7 +64,7 @@ const TopBar: React.FC<{ isLogin?: boolean }> = ({ isLogin }) => {
 
     return (
         <Grid className={cn()} vAlign="center" hAlign="between">
-            <GridColumn all="7" tablet="7" mobile="12" className={cn('logo-wrapper')}>
+            <GridColumn all="7" tablet="7" mobile="7" className={cn('logo-wrapper')}>
                 <a href={HOVERFLY_URL} target="_blank" rel="noopener noreferrer">
                     <img src={hoverflyLeftIcon} alt="Hoverfly" width="75" height="75" className={cn('fly')} />
                 </a>
@@ -76,7 +76,7 @@ const TopBar: React.FC<{ isLogin?: boolean }> = ({ isLogin }) => {
                     </div>
                 </div>
             </GridColumn>
-            <GridColumn all="5" tablet="5" mobile="12" className={cn('right')}>
+            <GridColumn all="5" tablet="5" mobile="5" className={cn('right')}>
                 <div className={cn('buttons')}>
                     <div className={cn('button-wrap')}>
                         <button
