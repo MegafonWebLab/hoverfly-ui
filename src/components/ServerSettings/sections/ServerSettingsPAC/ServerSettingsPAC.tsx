@@ -5,6 +5,7 @@ import CollapseWrapper from 'components/CollapseWrapper/CollapseWrapper';
 import { useDispatch, useSelector } from 'store/hooks';
 import { deletePacAsync, getPacAsync, updatePacAsync } from 'store/pac/pacSlice';
 import ServerSettingsButton from '../ServerSettingsButton/ServerSettingsButton';
+import './ServerSettingsPAC.pcss';
 
 const cn = cnCreate('server-settings-pac');
 const ServerSettingsPAC: React.FC = () => {
@@ -42,7 +43,13 @@ const ServerSettingsPAC: React.FC = () => {
     return (
         <div className={cn()}>
             <CollapseWrapper title="PAC">
-                <TextField value={script} textarea="flexible" onChange={handleFileChange} />
+                <TextField
+                    classes={{ input: cn('input') }}
+                    value={script}
+                    textarea="flexible"
+                    onChange={handleFileChange}
+                    isControlled
+                />
                 <ServerSettingsButton text="Set PAC file" disabled={!statusState} onClick={handleFileSubmit} />
             </CollapseWrapper>
         </div>
