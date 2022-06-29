@@ -42,6 +42,8 @@ export const omitKey = <T extends Record<string, unknown>>(object: T, key: strin
 
 export const getDigits = (string: string): string => string.replace(/[^0-9]/g, '');
 
+export const convertStringToInteger = (string: string): number => parseInt(string, 10);
+
 export const showNotification = (title: string, message?: string, isError = true): void => {
     setTimeout(() => {
         document.dispatchEvent(

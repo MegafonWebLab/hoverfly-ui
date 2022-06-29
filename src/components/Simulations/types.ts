@@ -47,3 +47,12 @@ export type SimulationCodeMirrorOptions = {
               json: boolean;
           };
 };
+
+export type SimulationFieldsErrorState = {
+    statusCode: string;
+};
+
+export type VerificationFieldsType = {
+    verification?: 'error' | 'valid';
+    noticeText?: string;
+};

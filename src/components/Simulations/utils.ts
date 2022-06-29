@@ -7,7 +7,8 @@ import type {
     PairItemResponse,
     HoverflyMatcherValues,
 } from 'api/types';
-import type { MirrorBodyType } from 'utils';
+import { convertStringToInteger, MirrorBodyType } from 'utils';
+import { STATUS_CODE_VALID_VALUE } from './constants';
 import type {
     ServerState,
     SimulationsServerState,
@@ -16,6 +17,8 @@ import type {
     SimulationCodeMirrorOptions,
     SimulationHtmlState,
     RouteItem,
+    SimulationFieldsErrorState,
+    VerificationFieldsType,
 } from './types';
 
 // eslint-disable-next-line import/prefer-default-export
@@ -100,6 +103,20 @@ const headerStateToObjectReduce = (acc: Record<string, HoverflyMatcher[]>, item:
     return acc;
 };
 
+const addMatcherValueOrDefalutValue = (acc: HoverflyMatcher[], item: HoverflyMatcher) => {
+    if (item.value) {
+        acc = [
+            ...acc,
+            {
+                value: item.value,
+                matcher: item.matcher || 'exact',
+            },
+        ];
+    }
+
+    return acc;
+};
+
 export const mergeCurrentStateToMainState = (
     state: SimulationResponse,
     currentState: SimulationItem,
@@ -144,6 +161,20 @@ export const mergeBodyStateToCurrentPair = (state: SimulationItem, bodyState: Si
         ? [{ value: bodyState.request.value, matcher: bodyState.request.matcher || 'exact' }]
         : undefined;
     newState.response.body = bodyState.response.value as string;
+
+    return newState;
+};
+
+export const mergeMatcherValueToCurrentPair = (state: SimulationItem): SimulationItem => {
+    const newState = cloneDeep(state);
+
+    if (newState.request.path) {
+        newState.request.path = newState.request.path.reduce(addMatcherValueOrDefalutValue, []);
+    }
+
+    if (newState.request.destination) {
+        newState.request.destination = newState.request.destination.reduce(addMatcherValueOrDefalutValue, []);
+    }
 
     return newState;
 };
@@ -259,6 +290,25 @@ export const addOrRemoveEl = <T>(list: T[], data: { add: T; remove?: number }): 
 
     return newList;
 };
+
+export const isFiledsError = (errorName: keyof SimulationFieldsErrorState, value: string): boolean => {
+    switch (errorName) {
+        case 'statusCode': {
+            const { minValue, maxValue } = STATUS_CODE_VALID_VALUE;
+
+            const numberValue: number = convertStringToInteger(value);
+
+            return numberValue < minValue || numberValue > maxValue;
+        }
+        default:
+            return true;
+    }
+};
+
+export const getVerificationFields = (errorMessage?: string): VerificationFieldsType => ({
+    verification: errorMessage ? 'error' : undefined,
+    noticeText: errorMessage || '',
+});
 
 export type ValidateImport = {
     type: 'success' | 'error';
