@@ -3,6 +3,7 @@ import type { SimulationResponse, SimulationItem } from 'api/types';
 import type { MirrorBodyType } from 'utils';
 import {
     ServerState,
+    SimulationFieldsErrorState,
     SimulationHeadersQueryState,
     SimulationHeaderState,
     SimulationHtmlState,
@@ -74,6 +75,15 @@ export const STATUS_CODES: Array<ISelectItem<number>> = [
     },
 ];
 
+export const FIELDS_ERROR: SimulationFieldsErrorState = {
+    statusCode: 'Response status code is not valid. Status code should between 100 and 599',
+};
+
+export const STATUS_CODE_VALID_VALUE = {
+    minValue: 100,
+    maxValue: 600,
+} as const;
+
 export const initialState: SimulationResponse = {
     data: {
         pairs: [],
@@ -122,6 +132,8 @@ export const initialBodyState: SimulationHtmlState = {
     request: { value: '', type: 'json', matcher: 'exact' },
     response: { value: '', type: 'json' },
 };
+
+export const initialFieldsError: SimulationFieldsErrorState = { statusCode: '' };
 
 export const BODY_FORMATS: Array<ISelectItem<MirrorBodyType>> = [
     {
