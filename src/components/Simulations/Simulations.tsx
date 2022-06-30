@@ -15,6 +15,7 @@ import { ReactComponent as PlusIcon } from 'static/favicon/plus.svg';
 import { useSelector } from 'store/hooks';
 import { downloadFile } from 'utils';
 import Popup from '../Popup/Popup';
+import exampleData from './exampleData';
 import type { RouteItem } from './types';
 import { getRouteList, validateImport } from './utils';
 import './Simulations.pcss';
@@ -122,6 +123,10 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange, onDelete, onImport
 
             downloadFile(JSON.stringify(exportSimulations, null, 2), 'test.json');
         }
+    }
+
+    function handleExample() {
+        downloadFile(JSON.stringify(exampleData, null, 2), 'example.json');
     }
 
     function handleSimulationEditButtonClick(index: number) {
@@ -260,6 +265,16 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange, onDelete, onImport
                             onClick={handleOpenImport}
                         >
                             Import
+                        </Button>
+                        <Button
+                            className={cn('menu-button', { example: true })}
+                            sizeAll="small"
+                            type="outline"
+                            theme="black"
+                            actionType="button"
+                            onClick={handleExample}
+                        >
+                            Example
                         </Button>
                     </div>
                     <div className={cn('fields')}>
