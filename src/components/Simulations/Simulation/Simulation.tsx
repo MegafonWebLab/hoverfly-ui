@@ -49,7 +49,7 @@ import {
     getResponseHeaderStateList,
     getTransitionStateList,
     getVerificationFields,
-    isFiledsError,
+    isFieldsError,
     mergeBodyStateToCurrentPair,
     mergeCurrentStateToMainState,
     mergeHeaderStateToCurrentPair,
@@ -188,7 +188,7 @@ const Simulation: React.FC<ISimulationProps> = ({ onBack, onChange, onDelete }) 
 
     function handleBlurCurrentResponse(errorName: keyof SimulationFieldsErrorState) {
         return (e: InputFocus) => {
-            const isFieldError: boolean = isFiledsError(errorName, e.target.value);
+            const isFieldError: boolean = isFieldsError(errorName, e.target.value);
 
             if (isFieldError) {
                 setFieldsError(prev => ({ ...prev, [errorName]: FIELDS_ERROR[errorName] }));

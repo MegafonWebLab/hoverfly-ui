@@ -76,7 +76,7 @@ export const STATUS_CODES: Array<ISelectItem<number>> = [
 ];
 
 export const FIELDS_ERROR: SimulationFieldsErrorState = {
-    statusCode: 'Response status code is not valid. Status code should between 100 and 600',
+    statusCode: 'Response status code is not valid. Status code should between 100 and 599',
 };
 
 export const STATUS_CODE_VALID_VALUE = {

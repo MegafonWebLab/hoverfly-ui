@@ -291,14 +291,14 @@ export const addOrRemoveEl = <T>(list: T[], data: { add: T; remove?: number }): 
     return newList;
 };
 
-export const isFiledsError = (errorName: keyof SimulationFieldsErrorState, value: string): boolean => {
+export const isFieldsError = (errorName: keyof SimulationFieldsErrorState, value: string): boolean => {
     switch (errorName) {
         case 'statusCode': {
             const { minValue, maxValue } = STATUS_CODE_VALID_VALUE;
 
             const numberValue: number = convertStringToInteger(value);
 
-            return numberValue < minValue || numberValue > maxValue;
+            return numberValue < minValue || numberValue >= maxValue;
         }
         default:
             return true;
