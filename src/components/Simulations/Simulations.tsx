@@ -266,16 +266,6 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange, onDelete, onImport
                         >
                             Import
                         </Button>
-                        <Button
-                            className={cn('menu-button', { example: true })}
-                            sizeAll="small"
-                            type="outline"
-                            theme="black"
-                            actionType="button"
-                            onClick={handleExample}
-                        >
-                            Example
-                        </Button>
                     </div>
                     <div className={cn('fields')}>
                         <TextField
@@ -330,6 +320,15 @@ const Simulations: React.FC<ISimulationsProps> = ({ onChange, onDelete, onImport
                         <div className={cn('import-pairs')}>File have {importData.pairs.length} valid simulations</div>
                     )}
                     <div className={cn('import-buttons')}>
+                        <Button
+                            className={cn('import-button', { example: true })}
+                            type="outline"
+                            theme="black"
+                            actionType="button"
+                            onClick={handleExample}
+                        >
+                            Example
+                        </Button>
                         <Button
                             disabled={importData.pairs.length === 0}
                             actionType="button"
